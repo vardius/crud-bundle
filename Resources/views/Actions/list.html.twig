@@ -1,0 +1,85 @@
+{% extends 'VardiusCrudBundle::layout.html.twig' %}
+
+{% block title %}List{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            {% for action in listView.actions if actions.type == 'global' %}
+                {% if loop.first %}
+                    <div class="btn-group pull-right" role="group">
+                {% endif %}
+                <a href="{{ path('home') }}" class="btn btn-default" role="button">
+                    {% if action.icon is not null %}
+                        <i class="fa {{ action.icon }}"></i>
+                    {% endif %}
+                    {% if action.name is not null %}
+                        {{ action.name }}
+                    {% endif %}
+                </a>
+                {% if loo.last %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    {% set hasFilters = (listView.filterForms is not empty) %}
+    <div class="row">
+        <div class="col-md-{{ hasFilters ? '8' : '12' }}">
+            <table class="table table-striped table-hover table-condensed">
+                <thead>
+                <tr>
+                    {% for column in listView.columns %}
+                        <td>{{ column.name|upper }}</td>
+                    {% endfor %}
+                    {% if listView.rowActions is not empty %}
+                        <td></td>
+                    {% endif %}
+                </thead>
+                <tbody>
+                {% for entity in data %}
+                    <tr class='list-view-item'>
+                        {% for column in listView.columns %}
+                            <td>{{ column.data(entity) }}</td>
+                        {% endfor %}
+                        {% for action in listView.actions if actions.type == 'row' %}
+                            {% if loop.first %}
+                                <td>
+                            {% endif %}
+                            <a href="{{ path(action.path, {'id' : entity.id}) }}"
+                               class="btn btn-default"
+                               role="button">
+                                {% if action.icon is not null %}
+                                    <i class="fa {{ action.icon }}"></i>
+                                {% endif %}
+                                {% if action.name is not null %}
+                                    {{ action.name }}
+                                {% endif %}
+                            </a>
+                            {% if loop.last %}
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if hasFilters %}
+            <div class="col-md-4">
+                {% for form in listView.filterForms %}
+                    {{ form(form) }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-12 pull-right">
+            {{ 'PAGINATOR' }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}
