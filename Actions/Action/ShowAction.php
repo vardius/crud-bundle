@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 

@@ -8,8 +8,8 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
+
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vardius\Bundle\CrudBundle\Actions\Action;

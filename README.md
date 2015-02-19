@@ -9,7 +9,7 @@ ABOUT
 ==================================================
 Contributors:
 
-* [Rafał Lorenz](https://rafallorenz.com)
+* [Rafał Lorenz](http://rafallorenz.com)
 
 Want to contribute ? Feel free to send pull requests!
 

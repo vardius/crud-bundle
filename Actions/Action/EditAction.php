@@ -8,8 +8,8 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
+
 
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvents;
