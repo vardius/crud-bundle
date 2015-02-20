@@ -36,7 +36,7 @@
                 <tbody>
                 {% for entity in data %}
                     <tr class='list-view-item'>
-                        {% for column in .columns %}
+                        {% for column in columns %}
                             <td>{{ column.getData(entity)|raw }}</td>
                         {% endfor %}
                     </tr>
