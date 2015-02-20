@@ -3,13 +3,14 @@
 {% block title %}List{% endblock %}
 
 {% block content %}
+    {% set hasFilters = (listView.filterForms is not empty) %}
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-{{ hasFilters ? '8' : '12' }}">
             {% for action in listView.actions %}
                 {% if loop.first %}
                     <div class="btn-group pull-right" role="group">
                 {% endif %}
-                <a href="{{ path(action.path) }}" class="btn btn-default" role="button">
+                <a href="{{ path(action.path, action.parameters) }}" class="btn btn-default" role="button">
                     {% if action.icon is not null %}
                         <i class="fa {{ action.icon }}"></i>
                     {% endif %}
@@ -17,20 +18,19 @@
                         {{ action.name }}
                     {% endif %}
                 </a>
-                {% if loo.last %}
+                {% if loop.last %}
                     </div>
                 {% endif %}
             {% endfor %}
         </div>
     </div>
-    {% set hasFilters = (listView.filterForms is not empty) %}
     <div class="row">
         <div class="col-md-{{ hasFilters ? '8' : '12' }}">
             <table class="table table-striped table-hover table-condensed">
                 <thead>
                 <tr>
                     {% for column in listView.columns %}
-                        <td>{{ column.property|upper }}</td>
+                        <td>{{ column.label|raw }}</td>
                     {% endfor %}
                     {% if listView.rowActions is not empty %}
                         <td></td>
@@ -52,21 +52,62 @@
                     {% set previousPage = (currentPage > 1 ? (currentPage - 1) : 1) %}
                     {% set lastPage = listView.lastPage %}
                     {% set nextPage = (currentPage < lastPage ? lastPage + 1 : lastPage) %}
-                    <div class="paginator pull-right">
-                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': previousPage}) ) }}">
-                            <i class="fa fa-caret-square-o-left"></i>
-                        </a>
-                        {% if previousPage <  currentPage %}
-                            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': previousPage}) ) }}">{{ previousPage }}</a>
-                        {% endif %}
-                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': currentPage}) ) }}">{{ currentPage }}</a>
-                        {% if nextPage >  currentPage %}
-                            <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': nextPage}) ) }}">{{ nextPage }}</a>
-                        {% endif %}
-                        <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': nextPage}) ) }}"
-                           class="last {% if lastPage == currentPage %} current{% endif %}">
-                            <i class="fa fa-caret-square-o-right"></i>
-                        </a>
+                    <div class="pull-right pagination">
+                        <ul class="pagination">
+                            <li class="page-first{% if 1 >=  (currentPage-1) %} disabled{% endif %}">
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': 1}) ) }}">
+                                    &lt;&lt;
+                                </a>
+                            </li>
+                            <li class="page-pre{% if previousPage >=  currentPage %} disabled{% endif %}">
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': previousPage}) ) }}">
+                                    &lt;
+                                </a>
+                            </li>
+                            {% if (previousPage -1) >=  1 %}
+                                <li class="page-number">
+                                    <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': previousPage-1}) ) }}">
+                                        {{ previousPage -1 }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if previousPage <  currentPage %}
+                                <li class="page-number">
+                                    <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': previousPage}) ) }}">
+                                        {{ previousPage }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li class="page-number active disabled">
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': currentPage}) ) }}">
+                                {{ currentPage }}
+                                </a>
+                            </li>
+                            {% if nextPage >  currentPage %}
+                                <li class="page-number">
+                                    <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': nextPage}) ) }}">
+                                        {{ nextPage }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if (nextPage +1) <=  lastPage %}
+                                <li class="page-number">
+                                    <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': nextPage+1}) ) }}">
+                                        {{ nextPage + 1 }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li class="page-next{% if nextPage <=  currentPage %} disabled{% endif %}">
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': nextPage}) ) }}">
+                                    &gt;
+                                </a>
+                            </li>
+                            <li class="page-last{% if (nextPage +1) <=  (currentPage+1) %} disabled{% endif %}">
+                                <a href="{{ path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')|merge({'page': lastPage}) ) }}">
+                                    &gt;&gt;
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
