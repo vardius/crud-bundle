@@ -45,9 +45,14 @@ class ListAction extends Action
 
         $params = [];
         if ($listView !== null) {
+            $data = $listView->getData(new ListDataEvent($repository, $event->getRequest()));
             $params = [
-                'data' => $listView->getData(new ListDataEvent($repository, $event->getRequest())),
-                'listView' => $listView,
+                'data' => $data['results'],
+                'filterForms' => $data['filterForms'],
+                'paginator' => $data['paginator'],
+                'columns' => $listView->getColumns(),
+                'actions' => $listView->getActions(),
+                'title' => $listView->getTitle(),
             ];
         }
 
