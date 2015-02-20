@@ -17,8 +17,7 @@ use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\Form\AbstractType;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 use Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider;
-use Vardius\Bundle\ListBundle\ListView\ListView;
-use Vardius\Bundle\ListBundle\ListView\Provider\ListViewProvider;
+use Vardius\Bundle\ListBundle\ListView\Provider\ListViewProviderInterface;
 
 /**
  * CrudControllerFactory
@@ -46,15 +45,15 @@ class CrudControllerFactory
     /**
      * @param $routePrefix
      * @param $entityName
+     * @param ListViewProviderInterface $listViewProvider
      * @param AbstractType $formType
-     * @param ListViewProvider $listViewProvider
      * @param $view
      * @param array $actions
      *
      * @throws EntityNotFoundException
      * @return CrudController
      */
-    public function get($entityName, $routePrefix = '', ListViewProvider $listViewProvider = null, AbstractType $formType = null, $view = null, array $actions = [])
+    public function get($entityName, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, $view = null, array $actions = [])
     {
         $repo = $this->entityManager->getRepository($entityName);
 
@@ -63,7 +62,7 @@ class CrudControllerFactory
         }
 
         $dataProvider = new DataProvider($repo, $this->entityManager);
-        $controller = new CrudController($dataProvider, $routePrefix, $listViewProvider->buildListView(), $formType, $view);
+        $controller = new CrudController($dataProvider, $routePrefix, $listViewProvider, $formType, $view);
 
         if (empty($actions)) {
             $controller->setActions($this->actions);

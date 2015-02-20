@@ -20,6 +20,7 @@ use Vardius\Bundle\CrudBundle\Actions\ActionInterface;
 use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\ListBundle\ListView\ListView;
+use Vardius\Bundle\ListBundle\ListView\Provider\ListViewProviderInterface;
 
 /**
  * CrudController
@@ -43,17 +44,17 @@ class CrudController extends Controller
     /**
      * @param DataProviderInterface $dataProvider
      * @param string $routePrefix
+     * @param ListViewProviderInterface $listViewProvider
      * @param AbstractType $formType
-     * @param ListView $listView
      * @param $view
      */
-    function __construct(DataProviderInterface $dataProvider, $routePrefix = '', ListView $listView = null, AbstractType $formType = null, $view = null)
+    function __construct(DataProviderInterface $dataProvider, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, $view = null)
     {
         $this->dataProvider = $dataProvider;
         $this->routePrefix = $routePrefix;
         $this->view = $view;
         $this->formType = $formType;
-        $this->listView = $listView;
+        $this->listView = $listViewProvider->buildListView();
         $this->actions = new ArrayCollection();
     }
 
