@@ -3,7 +3,7 @@ Vardius - Crud Bundle
 
 Crud Bundle provides crud actions
 
-This is currently a work in progress.
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/b96120a7-5502-4dc4-9e90-f1ac88a7b6c9/big.png)](https://insight.sensiolabs.com/projects/b96120a7-5502-4dc4-9e90-f1ac88a7b6c9)
 
 ABOUT
 ==================================================
