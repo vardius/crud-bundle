@@ -12,7 +12,6 @@ namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 
 use Doctrine\ORM\EntityNotFoundException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;

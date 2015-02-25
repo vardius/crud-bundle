@@ -89,7 +89,7 @@ Enable the bundle in the kernel:
         </service>
 
 ### 5. Build your list view
-Follow the steps from documentation [VardiusLIstViewBundle](https://github.com/Vardius/list-bundle)
+Follow the steps from documentation [Vardius List View Bundle](https://github.com/Vardius/list-bundle)
 
 ### 6. Set up your crud actions
 Default:

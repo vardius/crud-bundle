@@ -14,17 +14,10 @@
           "homepage": "http://rafallorenz.com"
         }
     ],
-    "maintainers": [
-        {
-          "name": "Rafał Lorenz",
-          "email": "vardius@gmail.com",
-          "homepage": "http://rafallorenz.com"
-        }
-    ],
     "require": {
         "php": ">=5.4",
         "symfony/symfony": "2.6.*",
-        "vardius/list-bundle": "dev-master"
+        "vardius/list-bundle": "0.1.*@dev"
     },
     "target-dir": "Vardius/Bundle/CrudBundle",
     "autoload": {
