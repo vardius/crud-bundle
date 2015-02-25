@@ -1,12 +1,11 @@
 {
     "name": "vardius/crud-bundle",
-    "title": "Crud Bundle",
     "description": "Provides crud actions",
     "keywords": [
-        "crud", "crud bundle"
+        "crud", "crud bundle", "symfony2", "bundle", "symfony"
     ],
     "license": "MIT",
-    "homepage": "http://rafallorenz.com",
+    "homepage": "https://github.com/Vardius/crud-bundle",
     "authors": [
         {
           "name": "Rafał Lorenz",
