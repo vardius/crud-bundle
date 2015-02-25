@@ -26,11 +26,6 @@ use Vardius\Bundle\CrudBundle\Event\CrudEvents;
 class ShowAction extends Action
 {
     /**
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
-
-    /**
      * {@inheritdoc}
      */
     public function call(ActionEvent $event)
@@ -46,7 +41,6 @@ class ShowAction extends Action
         }
         $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController());
         $this->dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
-        $this->dispatchEvent($crudEvent);
 
         return $this->getResponse($event->getView(), [
             'data' => $data,
@@ -82,22 +76,6 @@ class ShowAction extends Action
     public function getTemplateName()
     {
         return 'show';
-    }
-
-    /**
-     * @param EventDispatcherInterface $eventDispatcher
-     */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->dispatcher = $eventDispatcher;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dispatchEvent(CrudEvent $crudEvent)
-    {
-        $this->dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
     }
 
 }

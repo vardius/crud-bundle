@@ -10,13 +10,15 @@
     "authors": [
         {
           "name": "Rafał Lorenz",
-          "url": "http://rafallorenz.com"
+          "email": "vardius@gmail.com",
+          "homepage": "http://rafallorenz.com"
         }
     ],
     "maintainers": [
         {
           "name": "Rafał Lorenz",
-          "url": "http://rafallorenz.com"
+          "email": "vardius@gmail.com",
+          "homepage": "http://rafallorenz.com"
         }
     ],
     "require": {

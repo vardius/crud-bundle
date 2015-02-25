@@ -42,17 +42,4 @@ class AddAction extends SaveAction
         return array('pattern' => '/add');
     }
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function dispatchEvent(CrudEvent $crudEvent, $type)
-    {
-        if ($type === 'PRE') {
-            $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_ADD, $crudEvent);
-        } elseif ($type === 'POST') {
-            $this->dispatcher->dispatch(CrudEvents::CRUD_POST_ADD, $crudEvent);
-        }
-    }
-
 }

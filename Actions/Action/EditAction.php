@@ -47,16 +47,4 @@ class EditAction extends SaveAction
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function dispatchEvent(CrudEvent $crudEvent, $type)
-    {
-        if ($type === 'PRE') {
-            $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_EDIT, $crudEvent);
-        } elseif ($type === 'POST') {
-            $this->dispatcher->dispatch(CrudEvents::CRUD_POST_EDIT, $crudEvent);
-        }
-    }
-
 }

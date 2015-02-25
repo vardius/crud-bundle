@@ -59,45 +59,6 @@ final class CrudEvents
     const CRUD_POST_SAVE = 'crud.post.save';
 
     /**
-     * The crud.pre.add event is thrown each time an add action is called
-     *
-     * The event listener receives an
-     * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
-     *
-     * @var string
-     */
-    const CRUD_PRE_ADD = 'crud.pre.add';
-
-    /**
-     * The crud.post.add event is thrown each time an add action is called
-     *
-     * The event listener receives an
-     * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
-     *
-     * @var string
-     */
-    const CRUD_POST_ADD = 'crud.post.add';
-    /**
-     * The crud.pre.edit event is thrown each time an edit action is called
-     *
-     * The event listener receives an
-     * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
-     *
-     * @var string
-     */
-    const CRUD_PRE_EDIT = 'crud.pre.edit';
-
-    /**
-     * The crud.post.edit event is thrown each time an edit action is called
-     *
-     * The event listener receives an
-     * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
-     *
-     * @var string
-     */
-    const CRUD_POST_EDIT = 'crud.post.edit';
-
-    /**
      * The crud.list event is thrown each time an list action is called
      *
      * The event listener receives an

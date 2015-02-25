@@ -14,6 +14,7 @@ namespace Vardius\Bundle\CrudBundle\Actions;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Action
@@ -28,6 +29,8 @@ abstract class Action implements ActionInterface
     protected $templating;
     /** @var string  */
     protected $templateEngine = '.html.twig';
+    /** @var EventDispatcherInterface */
+    protected $dispatcher;
 
     /**
      * @param TwigEngine $templating
@@ -64,10 +67,18 @@ abstract class Action implements ActionInterface
             }
         }
 
-        if ($template == null) {
+        if ($template === null) {
             throw new ResourceNotFoundException('ResponseHandler: Wrong template path');
         }
 
         return new Response($this->templating->render($template, $params));
+    }
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->dispatcher = $eventDispatcher;
     }
 }

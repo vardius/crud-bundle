@@ -30,8 +30,6 @@ use Vardius\Bundle\CrudBundle\Event\CrudEvents;
  */
 class DeleteAction extends Action
 {
-    /** @var EventDispatcherInterface */
-    protected $dispatcher;
     /** @var FormFactory */
     protected $formFactory;
     /** @var  EntityManager */
@@ -74,7 +72,6 @@ class DeleteAction extends Action
 
             $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController());
             $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
-            $this->dispatchEvent($crudEvent, 'PRE');
 
             try {
                 if ($data instanceof Entity) {
@@ -92,8 +89,6 @@ class DeleteAction extends Action
             }
 
             $this->dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
-            $this->dispatchEvent($crudEvent, 'POST');
-
 
             return $this->getResponse($event->getView(), $params);
         }
@@ -104,7 +99,7 @@ class DeleteAction extends Action
      */
     protected function getFlashBag(Request $request)
     {
-        return $request->get('session')->getFlashBag();
+        return $request->getSession()->getFlashBag();
     }
 
     /**
@@ -136,27 +131,6 @@ class DeleteAction extends Action
                 'id' => '\d+'
             )
         );
-    }
-
-    /**
-     * @param EventDispatcherInterface $eventDispatcher
-     */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->dispatcher = $eventDispatcher;
-    }
-
-    /**
-     * @param CrudEvent $crudEvent
-     * @param $type
-     */
-    public function dispatchEvent(CrudEvent $crudEvent, $type)
-    {
-        if ($type === 'PRE') {
-            $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
-        } elseif ($type === 'POST') {
-            $this->dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
-        }
     }
 
 }

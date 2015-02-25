@@ -12,7 +12,6 @@ namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 
 use Symfony\Bridge\Twig\TwigEngine;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
@@ -26,8 +25,6 @@ use Vardius\Bundle\CrudBundle\Form\Provider\FormProvider;
  */
 abstract class SaveAction extends Action
 {
-    /** @var EventDispatcherInterface */
-    protected $dispatcher;
     /** @var FormProvider */
     protected $formProvider;
 
@@ -59,7 +56,6 @@ abstract class SaveAction extends Action
 
         $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $form);
         $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_SAVE, $crudEvent);
-        $this->dispatchEvent($crudEvent, 'PRE');
 
         if ($request->isMethod('POST')) {
             $form->handleRequest($request);
@@ -80,7 +76,6 @@ abstract class SaveAction extends Action
         }
 
         $this->dispatcher->dispatch(CrudEvents::CRUD_POST_SAVE, $crudEvent);
-        $this->dispatchEvent($crudEvent, 'POST');
 
         return $this->getResponse($event->getView(), [
             'form' => $form->createView(),
@@ -106,18 +101,4 @@ abstract class SaveAction extends Action
         return 'edit';
     }
 
-    /**
-     * @param EventDispatcherInterface $eventDispatcher
-     */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->dispatcher = $eventDispatcher;
-    }
-
-    /**
-     * @param CrudEvent $crudEvent
-     * @param $type
-     * @return mixed
-     */
-    abstract public function dispatchEvent(CrudEvent $crudEvent, $type);
 }

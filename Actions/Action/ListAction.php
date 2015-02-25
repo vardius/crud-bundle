@@ -26,11 +26,6 @@ use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 class ListAction extends Action
 {
     /**
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
-
-    /**
      * {@inheritdoc}
      */
     public function call(ActionEvent $event)
@@ -39,7 +34,6 @@ class ListAction extends Action
 
         $crudEvent = new CrudEvent($repository, $event->getController());
         $this->dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
-        $this->dispatchEvent($crudEvent);
 
         $listView = $event->getListView();
 
@@ -96,22 +90,6 @@ class ListAction extends Action
     public function getTemplateName()
     {
         return 'list';
-    }
-
-    /**
-     * @param EventDispatcherInterface $eventDispatcher
-     */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->dispatcher = $eventDispatcher;
-    }
-
-    /**
-     * @param CrudEvent $crudEvent
-     */
-    public function dispatchEvent(CrudEvent $crudEvent)
-    {
-        $this->dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
     }
 
 }
