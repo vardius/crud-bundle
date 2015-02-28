@@ -32,7 +32,7 @@ Installation
 
 ### 1. Download using composer
 
-Install the package through composer::
+Install the package through composer:
 
     php composer.phar require vardius/crud-bundle:*
 
