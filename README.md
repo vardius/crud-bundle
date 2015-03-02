@@ -34,13 +34,16 @@ Installation
 
 Install the package through composer:
 
+``` bash
     php composer.phar require vardius/crud-bundle:*
+```
 
 REQUIRED: `vardius/list-bundle`
 
 ### 2. Enable the VardiusCrudBundle
 Enable the bundle in the kernel:
 
+``` php
     <?php
     // app/AppKernel.php
 
@@ -51,9 +54,11 @@ Enable the bundle in the kernel:
             new Vardius\Bundle\ListBundle\VardiusCrudBundle(),
         );
     }
+```
 
 ### 3. Create your entity class
 
+``` php
     /**
      * Product
      *
@@ -81,12 +86,15 @@ Enable the bundle in the kernel:
 
         // setters and getters...
     }
+```
 
 ### 4. Create your form type
 
-        <service id="app.form.type.product" class="App\MainBundle\Form\Type\ProductType">
-            <tag name="form.type" alias="product"/>
-        </service>
+``` xml
+    <service id="app.form.type.product" class="App\MainBundle\Form\Type\ProductType">
+        <tag name="form.type" alias="product"/>
+    </service>
+```
 
 ### 5. Build your list view
 Follow the steps from documentation [Vardius List View Bundle](https://github.com/Vardius/list-bundle)
@@ -94,40 +102,48 @@ Follow the steps from documentation [Vardius List View Bundle](https://github.co
 ### 6. Set up your crud actions
 Default:
 
-        <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
-            <argument>AppMainBundle:Product</argument>
-            <argument>/products</argument>
-            <argument type="service" id="app_main.product.list_view"/>
-            <argument type="service" id="app_main.form.type.product"/>
+``` xml
+    <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
+        <argument>AppMainBundle:Product</argument>
+        <argument>/products</argument>
+        <argument type="service" id="app_main.product.list_view"/>
+        <argument type="service" id="app_main.form.type.product"/>
 
-            <tag name="vardius_crud.controller" />
-        </service>
+        <tag name="vardius_crud.controller" />
+    </service>
+```
 
 or set only provided actions
 
-        <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
-            <argument>AppBundle:Category</argument>
-            <argument>/category</argument>
-            <argument>NULL</argument>
-            <argument>NULL</argument>
-            <argument>NULL</argument>
-            <argument type="collection">
-                <argument type="service" key="add" id="vardius_crud.action_show"/>
-            </argument>
+``` xml
+    <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
+        <argument>AppBundle:Category</argument>
+        <argument>/category</argument>
+        <argument>NULL</argument>
+        <argument>NULL</argument>
+        <argument>NULL</argument>
+        <argument type="collection">
+            <argument type="service" key="add" id="vardius_crud.action_show"/>
+        </argument>
 
-            <tag name="vardius_crud.controller" />
-        </service>
+        <tag name="vardius_crud.controller" />
+    </service>
+```
 
 ### 7. Include scripts
 Include styles in your view
 
+``` html
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+```
 
 and javascripts
 
+``` html
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+```
 
 or get latest from
 
