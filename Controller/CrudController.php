@@ -29,12 +29,11 @@ use Vardius\Bundle\ListBundle\ListView\Provider\ListViewProviderInterface;
  */
 class CrudController extends Controller
 {
-
     /** @var  DataProviderInterface */
     protected $dataProvider;
-    /** @var string  */
+    /** @var string */
     protected $routePrefix;
-    /** @var string  */
+    /** @var string */
     protected $view;
     /** @var AbstractType */
     protected $formType;
@@ -158,6 +157,10 @@ class CrudController extends Controller
     public function getListView()
     {
         return $this->listView;
+    }
+
+    public function redirectToPath($routeName, array $params){
+        return $this->redirect($this->generateUrl($routeName, $params));
     }
 
 }

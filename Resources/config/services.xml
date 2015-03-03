@@ -31,7 +31,7 @@
                 <argument type="service" key="edit" id="vardius_crud.action_edit"/>
                 <argument type="service" key="delete" id="vardius_crud.action_delete"/>
             </argument>
-            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="service_container"/>
         </service>
         <!--ACTIONS-->
         <service id="vardius_crud.action_list" class="%vardius_crud.action_list.class%">

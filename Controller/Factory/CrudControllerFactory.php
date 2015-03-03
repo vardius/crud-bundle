@@ -14,6 +14,7 @@ namespace Vardius\Bundle\CrudBundle\Controller\Factory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 use Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider;
@@ -28,18 +29,20 @@ class CrudControllerFactory
 {
     /** @var  ArrayCollection */
     protected $actions;
-
     /** @var  EntityManager */
     protected $entityManager;
+    /** @var  ContainerInterface */
+    protected $container;
 
     /**
      * @param array $actions
-     * @param EntityManager $entityManager
+     * @param ContainerInterface $container
      */
-    function __construct(array $actions, EntityManager $entityManager)
+    function __construct(array $actions, ContainerInterface $container)
     {
         $this->actions = new ArrayCollection($actions);
-        $this->entityManager = $entityManager;
+        $this->container = $container;
+        $this->entityManager = $this->container->get('doctrine.orm.entity_manager');
     }
 
     /**
@@ -63,6 +66,7 @@ class CrudControllerFactory
 
         $dataProvider = new DataProvider($repo, $this->entityManager);
         $controller = new CrudController($dataProvider, $routePrefix, $listViewProvider, $formType, $view);
+        $controller->setContainer($this->container);
 
         if (!empty($actions)) {
             $controller->setActions(new ArrayCollection($actions));

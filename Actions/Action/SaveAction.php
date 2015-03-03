@@ -68,8 +68,13 @@ abstract class SaveAction extends Action
                 }
 
                 $controller = $event->getController();
+                $routeName = rtrim(rtrim($request->get('_route'), 'edit'), 'add') . 'show';
 
-                return $controller->redirect($controller->generateUrl('', [
+                if (!$controller->get('router')->getRouteCollection()->get($routeName)) {
+                    $routeName = rtrim($routeName, 'show') . 'list';
+                }
+
+                return $controller->redirect($controller->generateUrl($routeName, [
                     'id' => $data->getId()
                 ]));
             }
