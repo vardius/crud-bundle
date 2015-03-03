@@ -32,7 +32,9 @@ class CrudController extends Controller
 
     /** @var  DataProviderInterface */
     protected $dataProvider;
+    /** @var string  */
     protected $routePrefix;
+    /** @var string  */
     protected $view;
     /** @var AbstractType */
     protected $formType;
@@ -46,15 +48,15 @@ class CrudController extends Controller
      * @param string $routePrefix
      * @param ListViewProviderInterface $listViewProvider
      * @param AbstractType $formType
-     * @param $view
+     * @param string $view
      */
     function __construct(DataProviderInterface $dataProvider, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, $view = null)
     {
         $this->dataProvider = $dataProvider;
         $this->routePrefix = $routePrefix;
-        $this->view = $view;
+        $this->listView = $listViewProvider ? $listViewProvider->buildListView() : $listViewProvider;
         $this->formType = $formType;
-        $this->listView = $listViewProvider->buildListView();
+        $this->view = $view;
         $this->actions = new ArrayCollection();
     }
 
@@ -135,7 +137,7 @@ class CrudController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getView()
     {

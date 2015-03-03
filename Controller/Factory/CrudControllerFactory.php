@@ -47,7 +47,7 @@ class CrudControllerFactory
      * @param $entityName
      * @param ListViewProviderInterface $listViewProvider
      * @param AbstractType $formType
-     * @param $view
+     * @param string $view
      * @param array $actions
      *
      * @throws EntityNotFoundException
@@ -64,7 +64,9 @@ class CrudControllerFactory
         $dataProvider = new DataProvider($repo, $this->entityManager);
         $controller = new CrudController($dataProvider, $routePrefix, $listViewProvider, $formType, $view);
 
-        if (empty($actions)) {
+        if (!empty($actions)) {
+            $controller->setActions(new ArrayCollection($actions));
+        } else {
             $controller->setActions($this->actions);
         }
 

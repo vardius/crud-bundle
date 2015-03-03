@@ -63,7 +63,7 @@ class ActionEvent
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getView()
     {
