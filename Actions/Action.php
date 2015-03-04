@@ -23,7 +23,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 abstract class Action implements ActionInterface
 {
-    const TEMPLATE_DIR = 'VardiusCrudBundle:Actions:';
+    protected static $TEMPLATE_DIR = 'VardiusCrudBundle:Actions:';
 
     /** @var TwigEngine */
     protected $templating;
@@ -61,7 +61,7 @@ abstract class Action implements ActionInterface
         }
 
         if ($template === null) {
-            $templateDir = self::TEMPLATE_DIR . $this->getTemplateName() . $this->templateEngine;
+            $templateDir = static::$TEMPLATE_DIR . $this->getTemplateName() . $this->templateEngine;
             if ($this->templating->exists($templateDir)) {
                 $template = $templateDir;
             }
