@@ -22,10 +22,10 @@ use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
  */
 class DataProvider implements DataProviderInterface
 {
-    /** @var EntityManager */
-    protected $entityManager;
     /** @var EntityRepository */
     protected $source;
+    /** @var EntityManager */
+    protected $entityManager;
 
     /**
      * @param EntityRepository $repository
