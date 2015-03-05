@@ -12,6 +12,7 @@ namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 
 use Symfony\Bridge\Twig\TwigEngine;
+use Symfony\Component\HttpFoundation\Request;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
@@ -80,7 +81,11 @@ abstract class SaveAction extends Action
                 }
 
                 if (!$controller->get('router')->getRouteCollection()->get($routeName)) {
-                    return $this->getRefererUrl($controller, $request);
+                    $this->getFlashBag($request)->add('success', 'save.success');
+
+                    return $controller->redirect($this->getRefererUrl($controller, $request, [
+                        'id' => $data->getId()
+                    ]));
                 }
 
                 return $controller->redirect($controller->generateUrl($routeName, [
@@ -93,6 +98,14 @@ abstract class SaveAction extends Action
             'form' => $form->createView(),
             'data' => $data,
         ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getFlashBag(Request $request)
+    {
+        return $request->getSession()->getFlashBag();
     }
 
     /**

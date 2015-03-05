@@ -79,19 +79,22 @@ abstract class Action implements ActionInterface
     /**
      * @param CrudController $controller
      * @param Request $request
+     * @param array $params
      * @return mixed
      */
-    protected function getRefererUrl(CrudController $controller, Request $request)
+    protected function getRefererUrl(CrudController $controller, Request $request, $params = [])
     {
         $referer = $request->headers->get('referer');
-        $lastPath = substr($referer, strpos($referer, $request->getBaseUrl()));
-        $lastPath = str_replace($request->getBaseUrl(), '', $lastPath);
+        $baseUrl = $request->getBaseUrl();
+
+        $lastPath = substr($referer, strpos($referer, $baseUrl));
+        $lastPath = str_replace($baseUrl, '', $lastPath);
 
         $matcher = $controller->get('router')->getMatcher();
         $parameters = $matcher->match($lastPath);
         $route = $parameters['_route'];
 
-        return $controller->generateUrl($route);
+        return $controller->generateUrl($route, $params);
     }
 
     /**
