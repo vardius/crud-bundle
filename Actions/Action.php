@@ -12,9 +12,11 @@ namespace Vardius\Bundle\CrudBundle\Actions;
 
 
 use Symfony\Bridge\Twig\TwigEngine;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Vardius\Bundle\CrudBundle\Controller\CrudController;
 
 /**
  * Action
@@ -27,7 +29,7 @@ abstract class Action implements ActionInterface
 
     /** @var TwigEngine */
     protected $templating;
-    /** @var string  */
+    /** @var string */
     protected $templateEngine = '.html.twig';
     /** @var EventDispatcherInterface */
     protected $dispatcher;
@@ -72,6 +74,24 @@ abstract class Action implements ActionInterface
         }
 
         return new Response($this->templating->render($template, $params));
+    }
+
+    /**
+     * @param CrudController $controller
+     * @param Request $request
+     * @return mixed
+     */
+    protected function getRefererUrl(CrudController $controller, Request $request)
+    {
+        $referer = $request->headers->get('referer');
+        $lastPath = substr($referer, strpos($referer, $request->getBaseUrl()));
+        $lastPath = str_replace($request->getBaseUrl(), '', $lastPath);
+
+        $matcher = $controller->get('router')->getMatcher();
+        $parameters = $matcher->match($lastPath);
+        $route = $parameters['_route'];
+
+        return $controller->generateUrl($route);
     }
 
     /**

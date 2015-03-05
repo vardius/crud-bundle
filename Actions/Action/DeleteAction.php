@@ -53,44 +53,36 @@ class DeleteAction extends Action
     {
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
+        $controller = $event->getController();
         $id = $request->get('id');
 
-        $params = [];
-        if ($request->isMethod("GET")) {
-            $form = $this->formFactory->createBuilder()
-                ->add('submit', 'submit')
-                ->getForm();
+        $data = $dataProvider->get($id);
 
-            $params['form'] = $form->createView();
-        } else {
-            $data = $dataProvider->get($id);
-
-            if ($data === null) {
-                throw new EntityNotFoundException('Not found error');
-            }
-
-            $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController());
-            $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
-
-            try {
-                if ($data instanceof Entity) {
-                    $dataProvider->remove($data);
-                }
-            } catch (\Exception $e) {
-                $message = null;
-                if (is_object($data) && method_exists($data, '__toString')) {
-                    $message = 'Error while deleting "' . $data . '"';
-                } else {
-                    $message = 'Error while deleting element with id "' . $id . '"';
-                }
-
-                $this->getFlashBag($request)->add('error', $message);
-            }
-
-            $this->dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
-
-            return $this->getResponse($event->getView(), $params);
+        if ($data === null) {
+            throw new EntityNotFoundException('Not found error');
         }
+
+        $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $data);
+        $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
+
+        try {
+            if ($data instanceof Entity) {
+                $dataProvider->remove($data);
+            }
+        } catch (\Exception $e) {
+            $message = null;
+            if (is_object($data) && method_exists($data, '__toString')) {
+                $message = 'Error while deleting "' . $data . '"';
+            } else {
+                $message = 'Error while deleting element with id "' . $id . '"';
+            }
+
+            $this->getFlashBag($request)->add('error', $message);
+        }
+
+        $this->dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
+
+        return $this->getRefererUrl($controller, $request);
     }
 
     /**

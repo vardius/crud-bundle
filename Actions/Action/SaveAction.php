@@ -45,6 +45,7 @@ abstract class SaveAction extends Action
     {
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
+        $controller = $event->getController();
 
         if ($id = $request->get('id')) {
             $data = $dataProvider->get($id);
@@ -54,7 +55,7 @@ abstract class SaveAction extends Action
 
         $form = $this->formProvider->createForm($event->getFormType(), $data);
 
-        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $form);
+        $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $form);
         $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_SAVE, $crudEvent);
 
         if ($request->isMethod('POST')) {
@@ -62,16 +63,24 @@ abstract class SaveAction extends Action
 
             if ($form->isValid()) {
                 if ($data->getId()) {
+                    $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_UPDATE, $crudEvent);
                     $dataProvider->update($data);
+                    $this->dispatcher->dispatch(CrudEvents::CRUD_POST_UPDATE, $crudEvent);
                 } else {
+                    $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_CREATE, $crudEvent);
                     $dataProvider->add($data);
+                    $this->dispatcher->dispatch(CrudEvents::CRUD_POST_CREATE, $crudEvent);
                 }
 
-                $controller = $event->getController();
-                $routeName = rtrim(rtrim($request->get('_route'), 'edit'), 'add') . 'show';
+                $this->dispatcher->dispatch(CrudEvents::CRUD_POST_SAVE, $crudEvent);
 
+                $routeName = rtrim(rtrim($request->get('_route'), 'edit'), 'add') . 'show';
                 if (!$controller->get('router')->getRouteCollection()->get($routeName)) {
                     $routeName = rtrim($routeName, 'show') . 'list';
+                }
+
+                if (!$controller->get('router')->getRouteCollection()->get($routeName)) {
+                    return $this->getRefererUrl($controller, $request);
                 }
 
                 return $controller->redirect($controller->generateUrl($routeName, [
@@ -79,8 +88,6 @@ abstract class SaveAction extends Action
                 ]));
             }
         }
-
-        $this->dispatcher->dispatch(CrudEvents::CRUD_POST_SAVE, $crudEvent);
 
         return $this->getResponse($event->getView(), [
             'form' => $form->createView(),

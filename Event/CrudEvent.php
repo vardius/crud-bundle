@@ -8,12 +8,11 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Vardius\Bundle\CrudBundle\Event;
-
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\Form\FormInterface;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 
 /**
@@ -23,29 +22,23 @@ use Vardius\Bundle\CrudBundle\Controller\CrudController;
  */
 class CrudEvent extends Event
 {
-    /**
-     * @var EntityRepository
-     */
+    /** @var EntityRepository */
     protected $source;
-
-    /**
-     * @var null|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface
-     */
-    protected $form;
-
+    /** @var FormInterface|mixed */
+    protected $data;
     /** @var CrudController */
     protected $controller;
 
     /**
      * @param EntityRepository $source
-     * @param \Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface|null $form
      * @param CrudController $controller
+     * @param FormInterface|mixed $data
      */
-    function __construct($source, CrudController $controller, $form = null)
+    function __construct($source, CrudController $controller, $data = null)
     {
         $this->source = $source;
         $this->controller = $controller;
-        $this->form = $form;
+        $this->data = $data;
     }
 
     /**
@@ -57,11 +50,11 @@ class CrudEvent extends Event
     }
 
     /**
-     * @return null|\Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface
+     * @return FormInterface|mixed
      */
-    public function getForm()
+    public function getData()
     {
-        return $this->form;
+        return $this->data;
     }
 
     /**

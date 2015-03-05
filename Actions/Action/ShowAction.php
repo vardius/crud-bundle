@@ -38,7 +38,8 @@ class ShowAction extends Action
         if ($data === null) {
             throw new EntityNotFoundException('Not found error');
         }
-        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController());
+
+        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $data);
         $this->dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
 
         return $this->getResponse($event->getView(), [
