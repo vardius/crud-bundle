@@ -15,7 +15,7 @@
                         <i class="fa {{ action.icon }}"></i>
                     {% endif %}
                     {% if action.name is not null %}
-                        {{ action.name }}
+                        {{ action.name|trans }}
                     {% endif %}
                 </a>
                 {% if loop.last %}

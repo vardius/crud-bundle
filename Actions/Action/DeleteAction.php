@@ -10,10 +10,8 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
-
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
-use Doctrine\ORM\Mapping\Entity;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,9 +64,7 @@ class DeleteAction extends Action
         $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
 
         try {
-            if ($data instanceof Entity) {
-                $dataProvider->remove($data);
-            }
+            $dataProvider->remove($data->getId());
         } catch (\Exception $e) {
             $message = null;
             if (is_object($data) && method_exists($data, '__toString')) {
@@ -82,7 +78,7 @@ class DeleteAction extends Action
 
         $this->dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
 
-        return $this->getRefererUrl($controller, $request);
+        return $controller->redirect($this->getRefererUrl($controller, $request));
     }
 
     /**

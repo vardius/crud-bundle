@@ -74,7 +74,7 @@ class DataProvider implements DataProviderInterface
      */
     public function remove($id, $flush = true)
     {
-        $this->entityManager->remove($this->source->findById($id));
+        $this->entityManager->remove($this->source->findOneById($id));
 
         if ($flush) {
             $this->entityManager->flush();
