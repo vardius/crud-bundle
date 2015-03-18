@@ -30,7 +30,7 @@
                 <thead>
                 <tr>
                     {% for column in columns %}
-                        <td>{{ column.label|raw }}</td>
+                        <td>{{ column.label|raw|trans }}</td>
                     {% endfor %}
                 </thead>
                 <tbody>
