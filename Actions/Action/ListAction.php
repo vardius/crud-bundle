@@ -10,7 +10,7 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
-
+use Symfony\Component\HttpFoundation\Response;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
@@ -35,21 +35,12 @@ class ListAction extends Action
         $this->dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
 
         $listView = $event->getListView();
+        $listDataEvent = new ListDataEvent($repository, $event->getRequest());
 
-        $params = [];
-        if ($listView !== null) {
-            $data = $listView->getData(new ListDataEvent($repository, $event->getRequest()));
-            $params = [
-                'data' => $data['results'],
-                'filterForms' => $data['filterForms'],
-                'paginator' => $data['paginator'],
-                'columns' => $listView->getColumns(),
-                'actions' => $listView->getActions(),
-                'title' => $listView->getTitle(),
-            ];
-        }
-
-        return $this->getResponse($event->getView(), $params);
+        return new Response($this->getResponse($event->getView(), [
+            'list' => $listView,
+            'listDataEvent' => $listDataEvent,
+        ]));
     }
 
     /**

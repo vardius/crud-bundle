@@ -154,7 +154,7 @@ RELEASE NOTES
 ==================================================
 **0.1.0**
 
-- First public release of list-bundle
+- First public release of crud-bundle
 
 **0.2.0**
 

@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions;
 
-
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 
 /**

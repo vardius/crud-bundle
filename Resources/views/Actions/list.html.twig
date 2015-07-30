@@ -1,62 +1,9 @@
 {% extends 'VardiusCrudBundle::layout.html.twig' %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ list.title }}{% endblock %}
 
 {% block content %}
-    {% set hasFilters = (filterForms is not empty) %}
-    <div class="row">
-        <div class="col-md-{{ hasFilters ? '8' : '12' }}">
-            {% for action in actions %}
-                {% if loop.first %}
-                    <div class="btn-group pull-right" role="group">
-                {% endif %}
-                <a href="{{ path(action.path, action.parameters) }}" class="btn btn-default" role="button">
-                    {% if action.icon is not null %}
-                        <i class="fa {{ action.icon }}"></i>
-                    {% endif %}
-                    {% if action.name is not null %}
-                        {{ action.name|trans }}
-                    {% endif %}
-                </a>
-                {% if loop.last %}
-                    </div>
-                {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-{{ hasFilters ? '8' : '12' }}">
-            <table class="table table-striped table-hover table-condensed">
-                <thead>
-                <tr>
-                    {% for column in columns %}
-                        <td>{{ column.label|raw|trans }}</td>
-                    {% endfor %}
-                </thead>
-                <tbody>
-                {% for entity in data %}
-                    <tr class='list-view-item'>
-                        {% for column in columns %}
-                            <td>{{ column.getData(entity)|raw }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            <div class="row">
-                <div class="col-md-12">
-                    {{ paginator|raw }}
-                </div>
-            </div>
-        </div>
-        {% if hasFilters %}
-            <div class="col-md-4">
-                {% for form in filterForms %}
-                    {{ form(form) }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
+    {{ list.renderView(listDataEvent)|raw }}
 {% endblock %}
 
 {% block javascripts %}
