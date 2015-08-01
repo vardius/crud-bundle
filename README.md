@@ -25,9 +25,8 @@ Installation
 2. Enable the VardiusCrudBundle
 3. Create your entity class
 4. Create your form type
-5. Build your list view
-6. Set up your crud actions
-7. Include scripts
+5. Set up your crud actions
+6. Include scripts
 
 
 ### 1. Download using composer
@@ -96,10 +95,7 @@ Enable the bundle in the kernel:
     </service>
 ```
 
-### 5. Build your list view
-Follow the steps from documentation [Vardius List View Bundle](https://github.com/Vardius/list-bundle)
-
-### 6. Set up your crud actions
+### 5. Set up your crud actions
 Default:
 
 ``` xml
@@ -130,7 +126,7 @@ or set only provided actions
     </service>
 ```
 
-### 7. Include scripts
+### 6. Include scripts
 Include styles in your view
 
 ``` html
