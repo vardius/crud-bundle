@@ -40,17 +40,17 @@ interface DataProviderInterface
     public function create();
 
     /**
-     * Removes the element from data source by id
+     * Removes the element from data source
+     * Accepts element as object or it's id
      *
-     * @param $id
-     * @return mixed
+     * @param $data
+     * @throws \InvalidArgumentException
      */
-    public function remove($id);
+    public function remove($data);
 
     /**
      * Adds element to data source
      * @param $data
-     * @return mixed
      */
     public function add($data);
 
@@ -58,7 +58,6 @@ interface DataProviderInterface
      * Updates element of data source
      *
      * @param $data
-     * @return mixed
      */
     public function update($data);
 }

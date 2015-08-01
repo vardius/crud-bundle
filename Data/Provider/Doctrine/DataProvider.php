@@ -10,9 +10,9 @@
 
 namespace Vardius\Bundle\CrudBundle\Data\Provider\Doctrine;
 
-
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
 
 /**
@@ -26,15 +26,19 @@ class DataProvider implements DataProviderInterface
     protected $source;
     /** @var EntityManager */
     protected $entityManager;
+    /** @var CrudManagerInterface */
+    protected $crudManager;
 
     /**
      * @param EntityRepository $repository
      * @param EntityManager $entityManager
+     * @param CrudManagerInterface $crudManager
      */
-    function __construct(EntityRepository $repository, EntityManager $entityManager)
+    function __construct(EntityRepository $repository, EntityManager $entityManager, CrudManagerInterface $crudManager = null)
     {
         $this->source = $repository;
         $this->entityManager = $entityManager;
+        $this->crudManager = $crudManager;
     }
 
     /**
@@ -45,7 +49,13 @@ class DataProvider implements DataProviderInterface
     {
         if ($id !== null) {
 
-            return $this->source->findOneById($id);
+            $query = $this->source->createQueryBuilder('entity');
+
+            return $query
+                ->andWhere('entity.id = :id')
+                ->setParameter('id', $id)
+                ->getQuery()
+                ->getOneOrNullResult();
         }
 
         return null;
@@ -72,9 +82,22 @@ class DataProvider implements DataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function remove($id, $flush = true)
+    public function remove($data, $flush = true)
     {
-        $this->entityManager->remove($this->source->findOneById($id));
+        $entity = null;
+        if (is_object($data)) {
+            $entity = $data;
+        } elseif (is_numeric($data)) {
+            $entity = $this->source->findOneById($data);
+        } else {
+            throw new \InvalidArgumentException('Argument passed is not an object or it\'s id');
+        }
+
+        if ($this->crudManager instanceof CrudManagerInterface) {
+            $this->crudManager->remove($entity);
+        } else {
+            $this->entityManager->remove($entity);
+        }
 
         if ($flush) {
             $this->entityManager->flush();
@@ -86,7 +109,12 @@ class DataProvider implements DataProviderInterface
      */
     public function add($data)
     {
-        $this->entityManager->persist($data);
+        if ($this->crudManager instanceof CrudManagerInterface) {
+            $this->crudManager->add($data);
+        } else {
+            $this->entityManager->persist($data);
+        }
+
         $this->entityManager->flush($data);
     }
 
@@ -95,7 +123,12 @@ class DataProvider implements DataProviderInterface
      */
     public function update($data)
     {
-        $this->entityManager->persist($data);
+        if ($this->crudManager instanceof CrudManagerInterface) {
+            $this->crudManager->update($data);
+        } else {
+            $this->entityManager->persist($data);
+        }
+
         $this->entityManager->flush($data);
     }
 }

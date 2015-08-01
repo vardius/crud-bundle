@@ -10,13 +10,13 @@
 
 namespace Vardius\Bundle\CrudBundle\Controller\Factory;
 
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
+use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider;
 use Vardius\Bundle\ListBundle\ListView\Provider\ListViewProviderInterface;
 
@@ -50,13 +50,14 @@ class CrudControllerFactory
      * @param $entityName
      * @param ListViewProviderInterface $listViewProvider
      * @param AbstractType $formType
+     * @param CrudManagerInterface $crudManager
      * @param string $view
      * @param array $actions
      *
      * @throws EntityNotFoundException
      * @return CrudController
      */
-    public function get($entityName, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, $view = null, array $actions = [])
+    public function get($entityName, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, array $actions = [])
     {
         $repo = $this->entityManager->getRepository($entityName);
 
@@ -64,7 +65,7 @@ class CrudControllerFactory
             throw new EntityNotFoundException('CrudFactory: Invalid entity alias "' . $entityName . '"');
         }
 
-        $dataProvider = new DataProvider($repo, $this->entityManager);
+        $dataProvider = new DataProvider($repo, $this->entityManager, $crudManager);
         $controller = new CrudController($dataProvider, $routePrefix, $listViewProvider, $formType, $view);
         $controller->setContainer($this->container);
 
