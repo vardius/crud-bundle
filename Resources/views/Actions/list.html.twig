@@ -1,9 +1,9 @@
 {% extends 'VardiusCrudBundle::layout.html.twig' %}
 
-{% block title %}{{ list.title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    {{ list.renderView(listDataEvent)|raw }}
+    {{ list|raw }}
 {% endblock %}
 
 {% block javascripts %}

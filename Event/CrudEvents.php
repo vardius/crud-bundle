@@ -8,7 +8,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Vardius\Bundle\CrudBundle\Event;
 
 /**
@@ -19,102 +18,112 @@ namespace Vardius\Bundle\CrudBundle\Event;
 final class CrudEvents
 {
     /**
-     * The crud.pre.delete event is thrown each time an delete action is called
+     * The vardius_crud.pre.delete event is thrown each time an delete action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_PRE_DELETE = 'crud.pre.delete';
+    const CRUD_PRE_DELETE = 'vardius_crud.pre.delete';
 
     /**
-     * The crud.post.delete event is thrown each time an delete action is called
+     * The vardius_crud.post.delete event is thrown each time an delete action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_POST_DELETE = 'crud.post.delete';
+    const CRUD_POST_DELETE = 'vardius_crud.post.delete';
 
     /**
-     * The crud.pre.save event is thrown each time an save action is called
+     * The vardius_crud.pre.save event is thrown each time an save action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_PRE_SAVE = 'crud.pre.save';
+    const CRUD_PRE_SAVE = 'vardius_crud.pre.save';
 
     /**
-     * The crud.post.save event is thrown each time an save action is called
+     * The vardius_crud.post.save event is thrown each time an save action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_POST_SAVE = 'crud.post.save';
+    const CRUD_POST_SAVE = 'vardius_crud.post.save';
 
     /**
-     * The crud.pre.update event is thrown each time an update action is called
+     * The vardius_crud.pre.update event is thrown each time an update action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_PRE_UPDATE = 'crud.pre.update';
+    const CRUD_PRE_UPDATE = 'vardius_crud.pre.update';
 
     /**
-     * The crud.post.update event is thrown each time an update action is called
+     * The vardius_crud.post.update event is thrown each time an update action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_POST_UPDATE = 'crud.post.update';
+    const CRUD_POST_UPDATE = 'vardius_crud.post.update';
 
     /**
-     * The crud.pre.create event is thrown each time an create action is called
+     * The vardius_crud.pre.create event is thrown each time an create action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_PRE_CREATE = 'crud.pre.create';
+    const CRUD_PRE_CREATE = 'vardius_crud.pre.create';
 
     /**
-     * The crud.post.create event is thrown each time an create action is called
+     * The vardius_crud.post.create event is thrown each time an create action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_POST_CREATE = 'crud.post.create';
+    const CRUD_POST_CREATE = 'vardius_crud.post.create';
 
     /**
-     * The crud.list event is thrown each time an list action is called
+     * The vardius_crud.list event is thrown each time an list action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_LIST = 'crud.list';
+    const CRUD_LIST = 'vardius_crud.list';
 
     /**
-     * The crud.show event is thrown each time an show action is called
+     * The vardius_crud.show event is thrown each time an show action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_SHOW = 'crud.show';
+    const CRUD_SHOW = 'vardius_crud.show';
+
+    /**
+     * The vardius_crud.export event is thrown each time an export action is called
+     *
+     * The event listener receives an
+     * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
+     *
+     * @var string
+     */
+    const CRUD_EXPORT = 'vardius_crud.export';
 }

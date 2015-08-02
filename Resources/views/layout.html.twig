@@ -3,8 +3,8 @@
 <head>
     <meta charset="{{ _charset }}"/>
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/vardiuscrud/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/vardiuscrud/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
     {% block head %}{% endblock %}
 </head>
 <body>
@@ -24,8 +24,8 @@
             </div>
 
             {% block javascripts %}
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+                <script src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/vardiuscrud/js/jquery.js') }}"></script>
+                <script src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/vardiuscrud/js/bootstrap.min.js') }}"></script>
             {% endblock %}
         </div>
     </div>

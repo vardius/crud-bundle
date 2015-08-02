@@ -16,7 +16,8 @@
     "require": {
         "php": ">=5.4",
         "symfony/symfony": ">=2.6",
-        "vardius/list-bundle": "0.3.*@dev"
+        "vardius/list-bundle": "0.3.*@dev",
+        "knplabs/knp-snappy-bundle": "dev-master"
     },
     "target-dir": "Vardius/Bundle/CrudBundle",
     "autoload": {
@@ -24,7 +25,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2.x-dev"
+            "dev-master": "0.3.x-dev"
         }
     }
 }

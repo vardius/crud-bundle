@@ -27,7 +27,8 @@ Installation
 4. Create your form type
 5. Set up your crud actions
 6. Add custom logic
-7. Include scripts
+7. CSV export data
+8. Include scripts
 
 
 ### 1. Download using composer
@@ -51,9 +52,20 @@ Enable the bundle in the kernel:
     {
         $bundles = array(
             // ...
+            new Vardius\Bundle\ListBundle\VardiusListBundle(),
             new Vardius\Bundle\ListBundle\VardiusCrudBundle(),
+            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
         );
     }
+```
+
+``` yml
+    # app/config/config.yml
+    knp_snappy:
+        pdf:
+            enabled:    true
+            binary:     /usr/local/bin/wkhtmltopdf
+            options:    []
 ```
 
 ### 3. Create your entity class
@@ -125,6 +137,42 @@ or set only provided actions
 
         <tag name="vardius_crud.controller" />
     </service>
+```
+
+add action to enabled by default
+
+``` xml
+    <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
+        <argument>AppMainBundle:Product</argument>
+        <argument>/products</argument>
+        <argument type="service" id="app_main.product.list_view"/>
+        <argument type="service" id="app_main.form.type.product"/>
+
+        <call method="addAction">
+            <argument>export</argument>
+            <argument type="service" id="vardius_crud.action_export"/>
+        </call>
+        
+        <tag name="vardius_crud.controller" />
+    </service>
+```
+
+Action `vardius_crud.action_export` is not enabled by default. If you want to use it add it same way as in example before.
+
+Default enabled actions:
+
+``` xml
+    <argument type="service" key="list" id="vardius_crud.action_list"/>
+    <argument type="service" key="show" id="vardius_crud.action_show"/>
+    <argument type="service" key="add" id="vardius_crud.action_add"/>
+    <argument type="service" key="edit" id="vardius_crud.action_edit"/>
+    <argument type="service" key="delete" id="vardius_crud.action_delete"/>
+```
+
+Default disabled actions:
+
+``` xml
+    <argument type="service" key="export" id="vardius_crud.action_export"/>
 ```
 
 ### 6. Add custom logic
@@ -200,7 +248,54 @@ Declare is at a service and pass it to your controller. Example:
     </service>
 ```
 
-### 7. Include scripts
+### 7. CSV export data
+In case of export data to CSV file implement toArray() method in your entity class or override controller methods
+
+``` xml    
+    <service id="app.product_controller" class="App\DemoBundle\Controller\ProductController" factory-service="vardius_crud.controller.factory" factory-method="get">
+        <argument>AppMainBundle:Product</argument>
+        <argument>/products</argument>
+        <argument type="service" id="app_main.product.list_view"/>
+        <argument type="service" id="app_main.form.type.product"/>
+
+        <tag name="vardius_crud.controller" />
+    </service>
+```
+
+``` php
+    class ProductController extends CrudController
+    {
+        /**
+         * Returns array from entity object
+         * Used in export action
+         *
+         * @param $entity
+         * @return array
+         */
+        public function getRow($entity)
+        {
+            return [
+                $entity->getId(),
+                $entity->getName(),
+            ];
+        }
+    
+        /**
+         * Returns headers for export action (CSV file case)
+         *
+         * @return array
+         */
+        public function getHeaders()
+        {
+            return [
+                'ID',
+                'Name',
+            ];
+        }
+    }
+```
+
+### 8. Include scripts
 Include styles in your view
 
 ``` html

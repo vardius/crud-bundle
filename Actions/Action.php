@@ -48,6 +48,16 @@ abstract class Action implements ActionInterface
      */
     protected function getResponse($view, $params)
     {
+        return new Response($this->getHtml($view, $params));
+    }
+
+    /**
+     * @param $view
+     * @param $params
+     * @return string
+     */
+    protected function getHtml($view, $params)
+    {
         $template = null;
         if ($this->templating->exists($this->getTemplateName())) {
             $template = $this->getTemplateName();
@@ -72,7 +82,7 @@ abstract class Action implements ActionInterface
             throw new ResourceNotFoundException('ResponseHandler: Wrong template path');
         }
 
-        return new Response($this->templating->render($template, $params));
+        return $this->templating->render($template, $params);
     }
 
     /**

@@ -159,7 +159,30 @@ class CrudController extends Controller
         return $this->listView;
     }
 
-    public function redirectToPath($routeName, array $params){
+    /**
+     * Returns array from entity object
+     * Used in export action
+     *
+     * @param $entity
+     * @return array
+     */
+    public function getRow($entity)
+    {
+        return method_exists($entity, 'toArray') ? $entity->toArray() : [];
+    }
+
+    /**
+     * Returns headers for export action (CSV file case)
+     *
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return [];
+    }
+
+    public function redirectToPath($routeName, array $params)
+    {
         return $this->redirect($this->generateUrl($routeName, $params));
     }
 

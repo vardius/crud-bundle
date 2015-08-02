@@ -14,6 +14,7 @@
         <parameter key="vardius_crud.action_add.class">Vardius\Bundle\CrudBundle\Actions\Action\AddAction</parameter>
         <parameter key="vardius_crud.action_edit.class">Vardius\Bundle\CrudBundle\Actions\Action\EditAction</parameter>
         <parameter key="vardius_crud.action_delete.class">Vardius\Bundle\CrudBundle\Actions\Action\DeleteAction</parameter>
+        <parameter key="vardius_crud.action_export.class">Vardius\Bundle\CrudBundle\Actions\Action\ExportAction</parameter>
         <!--DATA-->
         <parameter key="vardius_crud.data.provider.doctrine.class">Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider</parameter>
         <!--FORM-->
@@ -67,6 +68,15 @@
         <service id="vardius_crud.action_delete" class="%vardius_crud.action_delete.class%">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="form.factory"/>
+            <argument type="service" id="templating"/>
+
+            <call method="setEventDispatcher">
+                <argument type="service" id="event_dispatcher" />
+            </call>
+        </service>
+        <service id="vardius_crud.action_export" class="%vardius_crud.action_export.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="knp_snappy.pdf"/>
             <argument type="service" id="templating"/>
 
             <call method="setEventDispatcher">
