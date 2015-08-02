@@ -1,7 +1,7 @@
 Vardius - Crud Bundle
 ======================================
 
-Installation
+Configuration
 ----------------
 1. Create your entity class
 2. Create your form type
