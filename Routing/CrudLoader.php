@@ -59,11 +59,15 @@ class CrudLoader implements LoaderInterface
                 $defaults = isset($actionRouting['defaults']) ? $actionRouting['defaults'] : array();
                 $requirements = isset($actionRouting['requirements']) ? $actionRouting['requirements'] : array();
                 $options = @$actionRouting['options'] ?: array();
+                $host = @$actionRouting['host'] ?: '';
+                $schemes = @$actionRouting['schemes'] ?: array();
+                $methods = @$actionRouting['methods'] ?: array();
+                $condition = @$actionRouting['condition'] ?: '';
 
                 $defaults['_controller'] = $controllerKey . ':' . 'callAction';
                 $defaults['_action'] = $actionKey;
 
-                $route = new Route($pattern, $defaults, $requirements, $options);
+                $route = new Route($pattern, $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
                 $routes->add($controllerKey . '.' . $actionKey, $route);
             }
         }

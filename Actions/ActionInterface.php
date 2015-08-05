@@ -30,21 +30,42 @@ interface ActionInterface
     /**
      * Returns name of action's events
      *
-     * @return mixed
+     * @return string
      */
     public function getEventsNames();
 
     /**
-     * Returns route definitions for action
-     *
-     * @return mixed
-     */
-    public function getRouteDefinition();
-
-    /**
      * Returns action's template name
      *
-     * @return mixed
+     * @return string
      */
     public function getTemplateName();
+
+    /**
+     * Returns route definitions for action
+     *
+     * Available array options:
+     * return array(
+     *      'pattern' => '',
+     *      'defaults' => array(),
+     *      'requirements' => array(),
+     *      'options' => array(),
+     *      'host' => '',
+     *      'schemes' => array(),
+     *      'methods' => array(),
+     *      'condition' => ''
+     * );
+     *
+     * string           pattern         The path pattern to match
+     * array            defaults        An array of default parameter values
+     * array            requirements    An array of requirements for parameters (regexes)
+     * array            options         An array of options
+     * string           host            The host pattern to match
+     * string|array     schemes         A required URI scheme or an array of restricted schemes
+     * string|array     methods         A required HTTP method or an array of restricted methods
+     * string           condition       A condition that should evaluate to true for the route to match
+     *
+     * @return array
+     */
+    public function getRouteDefinition();
 }
