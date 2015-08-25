@@ -37,10 +37,10 @@ class ListAction extends Action
         $listView = $event->getListView();
         $listDataEvent = new ListDataEvent($repository, $event->getRequest());
 
-        return new Response($this->getResponse($event->getView(), [
+        return $this->getResponse($event->getView(), [
             'list' => $listView->render($listDataEvent),
             'title' => $listView->getTitle(),
-        ]));
+        ]);
     }
 
     /**
