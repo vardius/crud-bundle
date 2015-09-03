@@ -49,13 +49,17 @@ class DataProvider implements DataProviderInterface
     {
         if ($id !== null) {
 
-            $query = $this->source->createQueryBuilder('entity');
+            if ($this->crudManager instanceof CrudManagerInterface) {
+                $this->crudManager->get($id);
+            } else {
+                $query = $this->source->createQueryBuilder('entity');
 
-            return $query
-                ->andWhere('entity.id = :id')
-                ->setParameter('id', $id)
-                ->getQuery()
-                ->getOneOrNullResult();
+                return $query
+                    ->andWhere('entity.id = :id')
+                    ->setParameter('id', $id)
+                    ->getQuery()
+                    ->getOneOrNullResult();
+            }
         }
 
         return null;
