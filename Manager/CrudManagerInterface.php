@@ -18,6 +18,13 @@ namespace Vardius\Bundle\CrudBundle\Manager;
 interface CrudManagerInterface
 {
     /**
+     * Get entity custom logic
+     *
+     * @param $id
+     */
+    public function get($id);
+
+    /**
      * Remove entity custom logic
      *
      * @param $entity
