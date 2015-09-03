@@ -19,16 +19,16 @@ We are using the github [issue tracker](https://github.com/vardius/crud-bundle/i
 HOW TO USE
 ==================================================
 
-* [Installation](https://github.com/Vardius/crud-bundle/blob/master/Resources/doc/installation.md)
-* [Configuration](https://github.com/Vardius/crud-bundle/blob/master/Resources/doc/configuration.md)
+* [Installation](Resources/doc/installation.md)
+* [Configuration](Resources/doc/configuration.md)
 
 RELEASE NOTES
 ==================================================
-See [notes](https://github.com/Vardius/crud-bundle/blob/master/Resources/doc/notes.md) file.
+See [notes](Resources/doc/notes.md) file.
 
 License
 -------
 
 This bundle is released under the MIT license. See the complete license in the bundle:
 
-    LICENSE
+[LICENSE](LICENSE)
