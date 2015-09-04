@@ -11,6 +11,7 @@
 namespace Vardius\Bundle\CrudBundle\Event;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Form\FormInterface;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
@@ -22,7 +23,7 @@ use Vardius\Bundle\CrudBundle\Controller\CrudController;
  */
 class CrudEvent extends Event
 {
-    /** @var EntityRepository */
+    /** @var EntityRepository|QueryBuilder */
     protected $source;
     /** @var FormInterface|mixed */
     protected $data;
@@ -30,7 +31,7 @@ class CrudEvent extends Event
     protected $controller;
 
     /**
-     * @param EntityRepository $source
+     * @param EntityRepository|QueryBuilder $source
      * @param CrudController $controller
      * @param FormInterface|mixed $data
      */
@@ -42,7 +43,7 @@ class CrudEvent extends Event
     }
 
     /**
-     * @return EntityRepository
+     * @return EntityRepository|QueryBuilder
      */
     public function getSource()
     {
