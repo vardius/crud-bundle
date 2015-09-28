@@ -64,12 +64,11 @@ class ListAction extends Action
                 'page' => 1,
                 'limit' => 1,
                 'column' => null,
-                'sort' => 'asc'
+                'sort' => null
             ),
             'requirements' => array(
                 'page' => '\d+',
-                'limit' => '\d+',
-                'sort' => 'asc|desc'
+                'limit' => '\d+'
             )
         );
     }
