@@ -32,6 +32,8 @@ class ExportAction extends Action
     protected $entityManager;
     /** @var  GeneratorInterface */
     protected $snappy;
+    /** @var int */
+    protected $id = null;
 
     /**
      * @param EntityManager $entityManager
@@ -57,14 +59,13 @@ class ExportAction extends Action
         $crudEvent = new CrudEvent($repository, $controller);
         $this->dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);
 
-        $listView = $event->getListView();
-        $listDataEvent = new ListDataEvent($repository, $request);
+        $this->id = $request->get('id');
 
-        $type = $request->get('type');
-        if ($type === 'pdf') {
+        if (is_numeric($this->id)) {
+            $dataProvider = $event->getDataProvider();
             $html = $this->getHtml($event->getView(), [
-                'list' => $listView->render($listDataEvent, false),
-                'title' => $listView->getTitle()
+                'data' => $dataProvider->get($this->id),
+                'ui' => false
             ]);
             $response = new Response(
                 $this->snappy->getOutputFromHtml($html, [
@@ -80,33 +81,58 @@ class ExportAction extends Action
                 )
             );
         } else {
-            $response = new StreamedResponse();
-            $queryBuilder = $listView->getData($listDataEvent, true, true);
+            $listView = $event->getListView();
+            $listDataEvent = new ListDataEvent($repository, $request);
 
-            $response->setCallback(
-                function () use ($queryBuilder, $controller) {
-                    $handle = fopen('php://output', 'w+');
+            $type = $request->get('type');
+            if ($type === 'pdf') {
+                $html = $this->getHtml($event->getView(), [
+                    'list' => $listView->render($listDataEvent, false),
+                    'title' => $listView->getTitle(),
+                    'ui' => false
+                ]);
+                $response = new Response(
+                    $this->snappy->getOutputFromHtml($html, [
+                        'margin-bottom' => 3,
+                        'margin-top' => 3,
+                        'margin-left' => 4,
+                        'margin-right' => 14
+                    ]),
+                    200,
+                    array(
+                        'Content-Type' => 'application/pdf',
+                        'Content-Disposition' => 'attachment; filename="export.pdf"'
+                    )
+                );
+            } else {
+                $response = new StreamedResponse();
+                $queryBuilder = $listView->getData($listDataEvent, true, true);
 
-                    $headers = $controller->getHeaders();
-                    if (!empty($headers)) {
-                        fputcsv($handle, $headers, ';');
+                $response->setCallback(
+                    function () use ($queryBuilder, $controller) {
+                        $handle = fopen('php://output', 'w+');
+
+                        $headers = $controller->getHeaders();
+                        if (!empty($headers)) {
+                            fputcsv($handle, $headers, ';');
+                        }
+
+                        $results = $queryBuilder->getQuery()->iterate();
+                        while (false !== ($row = $results->next())) {
+                            $element = $controller->getRow($row[0]);
+                            $this->entityManager->detach($row[0]);
+
+                            fputcsv($handle, $element);
+                        }
+
+                        fclose($handle);
                     }
+                );
 
-                    $results = $queryBuilder->getQuery()->iterate();
-                    while (false !== ($row = $results->next())) {
-                        $element = $controller->getRow($row[0]);
-                        $this->entityManager->detach($row[0]);
-
-                        fputcsv($handle, $element);
-                    }
-
-                    fclose($handle);
-                }
-            );
-
-            $response->setStatusCode(200);
-            $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
-            $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
+                $response->setStatusCode(200);
+                $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+                $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
+            }
         }
 
         return $response;
@@ -125,7 +151,7 @@ class ExportAction extends Action
      */
     public function getTemplateName()
     {
-        return 'list';
+        return (is_numeric($this->id) ? 'show' : 'list');
     }
 
     /**
@@ -134,12 +160,13 @@ class ExportAction extends Action
     public function getRouteDefinition()
     {
         return array(
-            'pattern' => '/export/{type}',
+            'pattern' => '/export/{type}/{id}',
             'requirements' => [
-                'id' => 'pdf|csv'
+                'type' => 'pdf|csv'
             ],
             'defaults' => [
-                "type" => 'pdf'
+                "type" => 'pdf',
+                "id" => null
             ]
         );
     }
