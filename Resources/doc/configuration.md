@@ -118,7 +118,7 @@ Default disabled actions:
     <argument type="service" key="export" id="vardius_crud.action_export"/>
 ```
 
-### 4. Set up your crud actions
+### 4. Provide custom config for actions
 In case you want to use rest routes or provide some config for actions you can create ActionsProvider class
 
 Here is a simple example explaining how to add actions and provide custom config for it.
