@@ -10,16 +10,14 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
-use Doctrine\ORM\EntityManager;
-use Knp\Snappy\GeneratorInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvents;
 use Vardius\Bundle\ListBundle\Event\ListDataEvent;
-use Symfony\Bridge\Twig\TwigEngine;
 
 /**
  * ExportAction
@@ -28,24 +26,8 @@ use Symfony\Bridge\Twig\TwigEngine;
  */
 class ExportAction extends Action
 {
-    /** @var  EntityManager */
-    protected $entityManager;
-    /** @var  GeneratorInterface */
-    protected $snappy;
     /** @var int */
     protected $id = null;
-
-    /**
-     * @param EntityManager $entityManager
-     * @param $snappy
-     * @param TwigEngine $templating
-     */
-    function __construct(EntityManager $entityManager, GeneratorInterface $snappy, TwigEngine $templating)
-    {
-        parent::__construct($templating);
-        $this->entityManager = $entityManager;
-        $this->snappy = $snappy;
-    }
 
     /**
      * {@inheritdoc}
@@ -55,20 +37,24 @@ class ExportAction extends Action
         $repository = $event->getDataProvider()->getSource();
         $request = $event->getRequest();
         $controller = $event->getController();
+        $dispatcher = $controller->get('event_dispatcher');
+        $snappy = $controller->get('knp_snappy.pdf');
+        $responseHandler = $this->getResponseHandler($controller);
 
         $crudEvent = new CrudEvent($repository, $controller);
-        $this->dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);
 
         $this->id = $request->get('id');
+        $options['template'] = !empty($this->options['template'] ?: (is_numeric($this->id) ? 'show' : 'list'));
 
         if (is_numeric($this->id)) {
             $dataProvider = $event->getDataProvider();
-            $html = $this->getHtml($event->getView(), [
+            $html = $responseHandler->getHtml($event->getView(), $this->getTemplate(), [
                 'data' => $dataProvider->get($this->id),
                 'ui' => false
             ]);
             $response = new Response(
-                $this->snappy->getOutputFromHtml($html, [
+                $snappy->getOutputFromHtml($html, [
                     'margin-bottom' => 3,
                     'margin-top' => 3,
                     'margin-left' => 4,
@@ -86,13 +72,13 @@ class ExportAction extends Action
 
             $type = $request->get('type');
             if ($type === 'pdf') {
-                $html = $this->getHtml($event->getView(), [
+                $html = $responseHandler->getHtml($event->getView(), $this->getTemplate(), [
                     'list' => $listView->render($listDataEvent, false),
                     'title' => $listView->getTitle(),
                     'ui' => false
                 ]);
                 $response = new Response(
-                    $this->snappy->getOutputFromHtml($html, [
+                    $snappy->getOutputFromHtml($html, [
                         'margin-bottom' => 3,
                         'margin-top' => 3,
                         'margin-left' => 4,
@@ -117,10 +103,12 @@ class ExportAction extends Action
                             fputcsv($handle, $headers, ';');
                         }
 
+                        $entityManager = $controller->get('doctrine.orm.entity_manager');
+
                         $results = $queryBuilder->getQuery()->iterate();
                         while (false !== ($row = $results->next())) {
                             $element = $controller->getRow($row[0]);
-                            $this->entityManager->detach($row[0]);
+                            $entityManager->detach($row[0]);
 
                             fputcsv($handle, $element);
                         }
@@ -139,36 +127,30 @@ class ExportAction extends Action
     }
 
     /**
+     * @inheritDoc
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefault('pattern', '/export/{type}/{id}');
+
+        $resolver->setDefault('requirements', [
+            'type' => 'pdf|csv'
+        ]);
+
+        $resolver->setDefault('defaults', [
+            "type" => 'pdf',
+            "id" => null
+        ]);
+    }
+
+    /**
      * {@inheritdoc}
      */
-    public function getEventsNames()
+    public function getName()
     {
         return 'export';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTemplateName()
-    {
-        return (is_numeric($this->id) ? 'show' : 'list');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRouteDefinition()
-    {
-        return array(
-            'pattern' => '/export/{type}/{id}',
-            'requirements' => [
-                'type' => 'pdf|csv'
-            ],
-            'defaults' => [
-                "type" => 'pdf',
-                "id" => null
-            ]
-        );
     }
 
 }

@@ -10,7 +10,8 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
@@ -29,54 +30,63 @@ class ListAction extends Action
      */
     public function call(ActionEvent $event)
     {
+        $controller = $event->getController();
         $repository = $event->getDataProvider()->getSource();
 
+        $dispatcher = $controller->get('event_dispatcher');
         $crudEvent = new CrudEvent($repository, $event->getController());
-        $this->dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
 
         $listView = $event->getListView();
         $listDataEvent = new ListDataEvent($repository, $event->getRequest());
 
-        return $this->getResponse($event->getView(), [
-            'list' => $listView->render($listDataEvent),
-            'title' => $listView->getTitle(),
+        return $this->getResponseHandler($controller)
+            ->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), [
+                'list' => $listView->render($listDataEvent),
+                'title' => $listView->getTitle(),
+            ]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefault('defaults', [
+            'page' => 1,
+            'limit' => 1,
+            'column' => null,
+            'sort' => null
         ]);
+
+        $resolver->setDefault('requirements', [
+            'page' => '\d+',
+            'limit' => '\d+'
+        ]);
+
+        $resolver->setDefault('pattern', function (Options $options) {
+            if ($options['rest_route']) {
+                return '/{page}/{limit}/{column}/{sort}';
+            }
+
+            return '/list/{page}/{limit}/{column}/{sort}';
+        });
+
+        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+            if ($options['rest_route']) {
+                return ['GET'];
+            }
+
+            return $previousValue;
+        });
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getEventsNames()
-    {
-        return [
-            'list',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRouteDefinition()
-    {
-        return array(
-            'pattern' => '/list/{page}/{limit}/{column}/{sort}',
-            'defaults' => array(
-                'page' => 1,
-                'limit' => 1,
-                'column' => null,
-                'sort' => null
-            ),
-            'requirements' => array(
-                'page' => '\d+',
-                'limit' => '\d+'
-            )
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTemplateName()
+    public function getName()
     {
         return 'list';
     }

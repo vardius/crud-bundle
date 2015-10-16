@@ -10,6 +10,8 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions;
 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 
 /**
@@ -23,49 +25,36 @@ interface ActionInterface
      * Action body, method is invoked when the action is called from controller
      *
      * @param ActionEvent $event
-     * @return mixed
+     * @return Response
      */
     public function call(ActionEvent $event);
 
     /**
-     * Returns name of action's events
+     * Adjust the configuration of the options
      *
-     * @return string
+     * @param OptionsResolver $resolver
      */
-    public function getEventsNames();
+    public function configureOptions(OptionsResolver $resolver);
 
     /**
-     * Returns action's template name
-     *
-     * @return string
-     */
-    public function getTemplateName();
-
-    /**
-     * Returns route definitions for action
-     *
-     * Available array options:
-     * return array(
-     *      'pattern' => '',
-     *      'defaults' => array(),
-     *      'requirements' => array(),
-     *      'options' => array(),
-     *      'host' => '',
-     *      'schemes' => array(),
-     *      'methods' => array(),
-     *      'condition' => ''
-     * );
-     *
-     * string           pattern         The path pattern to match
-     * array            defaults        An array of default parameter values
-     * array            requirements    An array of requirements for parameters (regexes)
-     * array            options         An array of options
-     * string           host            The host pattern to match
-     * string|array     schemes         A required URI scheme or an array of restricted schemes
-     * string|array     methods         A required HTTP method or an array of restricted methods
-     * string           condition       A condition that should evaluate to true for the route to match
+     * Returns configuration array
      *
      * @return array
      */
-    public function getRouteDefinition();
+    public function getOptions();
+
+    /**
+     * Set the configuration array
+     *
+     * @param array $options
+     */
+    public function setOptions(array $options = []);
+
+    /**
+     * Returns action name
+     *
+     * @return string
+     */
+    public function getName();
+
 }

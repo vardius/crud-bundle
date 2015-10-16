@@ -10,8 +10,9 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
-
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
@@ -31,6 +32,8 @@ class ShowAction extends Action
     {
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
+        $controller = $event->getController();
+        $dispatcher = $controller->get('event_dispatcher');
         $id = $request->get('id');
 
         $data = $dataProvider->get($id);
@@ -40,40 +43,44 @@ class ShowAction extends Action
         }
 
         $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $data);
-        $this->dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
 
-        return $this->getResponse($event->getView(), [
-            'data' => $data,
-        ]);
+        return $this->getResponseHandler($controller)
+            ->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), [
+                'data' => $data,
+            ]);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function getEventsNames()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return [
-            'show',
-        ];
+        parent::configureOptions($resolver);
+
+        $resolver->setDefault('requirements', ['id' => '\d+']);
+
+        $resolver->setDefault('pattern', function (Options $options) {
+            if ($options['rest_route']) {
+                return '/{id}';
+            }
+
+            return '/show/{id}';
+        });
+
+        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+            if ($options['rest_route']) {
+                return ['GET'];
+            }
+
+            return $previousValue;
+        });
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRouteDefinition()
-    {
-        return array(
-            'pattern' => '/show/{id}',
-            'requirements' => array(
-                'id' => '\d+'
-            )
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTemplateName()
+    public function getName()
     {
         return 'show';
     }

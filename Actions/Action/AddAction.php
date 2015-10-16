@@ -10,6 +10,8 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * AddAction
@@ -19,24 +21,35 @@ namespace Vardius\Bundle\CrudBundle\Actions\Action;
 class AddAction extends SaveAction
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function getEventsNames()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return array_merge(
-            [
-                'add',
-            ],
-            parent::getEventsNames()
-        );
+        parent::configureOptions($resolver);
+
+        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+            if ($options['rest_route']) {
+                return ['POST'];
+            }
+
+            return $previousValue;
+        });
+
+        $resolver->setDefault('pattern', function (Options $options) {
+            if ($options['rest_route']) {
+                return '/';
+            }
+
+            return '/add';
+        });
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRouteDefinition()
+    public function getName()
     {
-        return array('pattern' => '/add');
+        return 'add';
     }
 
 }

@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
+use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider;
@@ -52,12 +53,12 @@ class CrudControllerFactory
      * @param AbstractType $formType
      * @param CrudManagerInterface $crudManager
      * @param string $view
-     * @param array $actions
+     * @param array|ActionsProvider $actions
      *
      * @throws EntityNotFoundException
      * @return CrudController
      */
-    public function get($entityName, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, array $actions = [])
+    public function get($entityName, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [])
     {
         $repo = $this->entityManager->getRepository($entityName);
 
@@ -69,7 +70,9 @@ class CrudControllerFactory
         $controller = new CrudController($dataProvider, $routePrefix, $listViewProvider, $formType, $view);
         $controller->setContainer($this->container);
 
-        if (!empty($actions)) {
+        if ($actions instanceof ActionsProvider) {
+            $controller->setActions($actions->getActions());
+        } elseif (!empty($actions)) {
             $controller->setActions(new ArrayCollection($actions));
         } else {
             $controller->setActions($this->actions);

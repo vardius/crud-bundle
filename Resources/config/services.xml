@@ -9,6 +9,9 @@
         <parameter key="vardius_crud.controller.class">Vardius\Bundle\CrudBundle\Controller\CrudController</parameter>
         <parameter key="vardius_crud.controller.factory.class">Vardius\Bundle\CrudBundle\Controller\Factory\CrudControllerFactory</parameter>
         <!--ACTIONS-->
+        <parameter key="vardius_crud.action.factory.class">Vardius\Bundle\CrudBundle\Actions\Factory\ActionFactory</parameter>
+        <parameter key="vardius_crud.action.provider.class">Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider</parameter>
+        <parameter key="vardius_crud.action_pool.class">Vardius\Bundle\CrudBundle\Actions\ActionPool</parameter>
         <parameter key="vardius_crud.action_list.class">Vardius\Bundle\CrudBundle\Actions\Action\ListAction</parameter>
         <parameter key="vardius_crud.action_show.class">Vardius\Bundle\CrudBundle\Actions\Action\ShowAction</parameter>
         <parameter key="vardius_crud.action_add.class">Vardius\Bundle\CrudBundle\Actions\Action\AddAction</parameter>
@@ -19,6 +22,8 @@
         <parameter key="vardius_crud.data.provider.doctrine.class">Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider</parameter>
         <!--FORM-->
         <parameter key="vardius_crud.form.provider.class">Vardius\Bundle\CrudBundle\Form\Provider\FormProvider</parameter>
+        <!--RESPONSE-->
+        <parameter key="vardius_crud.response.handler.class">Vardius\Bundle\CrudBundle\Response\ResponseHandler</parameter>
         <!--ROUTING-->
         <parameter key="vardius_crud.routing.loader.class">Vardius\Bundle\CrudBundle\Routing\CrudLoader</parameter>
         <parameter key="vardius_crud.routing.pool.class">Vardius\Bundle\CrudBundle\Routing\CrudPool</parameter>
@@ -34,59 +39,43 @@
             </argument>
             <argument type="service" id="service_container"/>
         </service>
+        <!--ACTION POOL-->
+        <service id="vardius_crud.action_pool" class="%vardius_crud.action_pool.class%" />
+        <!--ACTION FACTORY-->
+        <service id="vardius_crud.action.factory" class="%vardius_crud.action.factory.class%">
+            <argument type="service" id="vardius_crud.action_pool"/>
+        </service>
+        <!--ACTION PROVIDER-->
+        <service id="vardius_crud.action.provider" class="%vardius_crud.action.provider.class%" abstract="true">
+            <argument type="service" id="vardius_crud.action.factory"/>
+        </service>
         <!--ACTIONS-->
         <service id="vardius_crud.action_list" class="%vardius_crud.action_list.class%">
-            <argument type="service" id="templating"/>
-
-            <call method="setEventDispatcher">
-                <argument type="service" id="event_dispatcher" />
-            </call>
+            <tag name="vardius_crud.action" />
         </service>
         <service id="vardius_crud.action_show" class="%vardius_crud.action_show.class%">
-            <argument type="service" id="templating"/>
-
-            <call method="setEventDispatcher">
-                <argument type="service" id="event_dispatcher" />
-            </call>
+            <tag name="vardius_crud.action" />
         </service>
         <service id="vardius_crud.action_add" class="%vardius_crud.action_add.class%">
-            <argument type="service" id="vardius_crud.form.provider"/>
-            <argument type="service" id="templating"/>
-
-            <call method="setEventDispatcher">
-                <argument type="service" id="event_dispatcher" />
-            </call>
+            <tag name="vardius_crud.action" />
         </service>
         <service id="vardius_crud.action_edit" class="%vardius_crud.action_edit.class%">
-            <argument type="service" id="vardius_crud.form.provider"/>
-            <argument type="service" id="templating"/>
-
-            <call method="setEventDispatcher">
-                <argument type="service" id="event_dispatcher" />
-            </call>
+            <tag name="vardius_crud.action" />
         </service>
         <service id="vardius_crud.action_delete" class="%vardius_crud.action_delete.class%">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="form.factory"/>
-            <argument type="service" id="templating"/>
-
-            <call method="setEventDispatcher">
-                <argument type="service" id="event_dispatcher" />
-            </call>
+            <tag name="vardius_crud.action" />
         </service>
         <service id="vardius_crud.action_export" class="%vardius_crud.action_export.class%">
-            <argument type="service" id="doctrine.orm.entity_manager"/>
-            <argument type="service" id="knp_snappy.pdf"/>
-            <argument type="service" id="templating"/>
-
-            <call method="setEventDispatcher">
-                <argument type="service" id="event_dispatcher" />
-            </call>
+            <tag name="vardius_crud.action" />
         </service>
         <!--FORM-->
         <service id="vardius_crud.form.provider" class="%vardius_crud.form.provider.class%">
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="form.factory"/>
+        </service>
+        <!--RESPONSE-->
+        <service id="vardius_crud.response.handler" class="%vardius_crud.response.handler.class%">
+            <argument type="service" id="templating"/>
         </service>
         <!--ROUTING-->
         <service id="vardius_crud.routing.pool" class="%vardius_crud.routing.pool.class%"/>

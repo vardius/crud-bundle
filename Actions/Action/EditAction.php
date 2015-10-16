@@ -10,6 +10,8 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * EditAction
@@ -19,29 +21,37 @@ namespace Vardius\Bundle\CrudBundle\Actions\Action;
 class EditAction extends SaveAction
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    public function getEventsNames()
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return array_merge(
-            parent::getEventsNames(),
-            [
-                'edit',
-            ]
-        );
+        parent::configureOptions($resolver);
+
+        $resolver->setDefault('requirements', ['id' => '\d+']);
+
+        $resolver->setDefault('pattern', function (Options $options) {
+            if ($options['rest_route']) {
+                return '/{id}';
+            }
+
+            return '/edit/{id}';
+        });
+
+        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+            if ($options['rest_route']) {
+                return ['PUT'];
+            }
+
+            return $previousValue;
+        });
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRouteDefinition()
+    public function getName()
     {
-        return array(
-            'pattern' => '/edit/{id}',
-            'requirements' => array(
-                'id' => '\d+'
-            )
-        );
+        return 'edit';
     }
 
 }

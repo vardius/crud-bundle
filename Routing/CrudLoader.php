@@ -8,9 +8,7 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Vardius\Bundle\CrudBundle\Routing;
-
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
@@ -52,22 +50,25 @@ class CrudLoader implements LoaderInterface
         foreach ($this->pool->getControllers() as $controllerKey => $controller) {
             /** @var CrudController $controller */
             foreach ($controller->getActions() as $actionKey => $action) {
-
                 /** @var ActionInterface $action */
-                $actionRouting = $action->getRouteDefinition();
-                $pattern = $controller->getRoutePrefix() . $actionRouting['pattern'];
-                $defaults = isset($actionRouting['defaults']) ? $actionRouting['defaults'] : array();
-                $requirements = isset($actionRouting['requirements']) ? $actionRouting['requirements'] : array();
-                $options = @$actionRouting['options'] ?: array();
-                $host = @$actionRouting['host'] ?: '';
-                $schemes = @$actionRouting['schemes'] ?: array();
-                $methods = @$actionRouting['methods'] ?: array();
-                $condition = @$actionRouting['condition'] ?: '';
+                $options = $action->getOptions();
 
+                $pattern = $controller->getRoutePrefix() . $options['pattern'];
+
+                $defaults = $options['defaults'];
                 $defaults['_controller'] = $controllerKey . ':' . 'callAction';
                 $defaults['_action'] = $actionKey;
 
-                $route = new Route($pattern, $defaults, $requirements, $options, $host, $schemes, $methods, $condition);
+                $route = new Route(
+                    $pattern,
+                    $defaults,
+                    $options['requirements'],
+                    $options['options'],
+                    $options['host'],
+                    $options['schemes'],
+                    $options['methods'],
+                    $options['condition']
+                );
                 $routes->add($controllerKey . '.' . $actionKey, $route);
             }
         }

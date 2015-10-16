@@ -6,9 +6,10 @@ Configuration
 1. Create your entity class
 2. Create your form type
 3. Set up your crud actions
-4. Add custom logic
-5. CSV export data
-6. Include scripts
+4. Provide custom config for actions
+5. Add custom logic
+6. CSV export data
+7. Include scripts
 
 ### 1. Create your entity class
 
@@ -117,7 +118,76 @@ Default disabled actions:
     <argument type="service" key="export" id="vardius_crud.action_export"/>
 ```
 
-### 4. Add custom logic
+### 4. Set up your crud actions
+In case you want to use rest routes or provide some config for actions you can create ActionsProvider class
+
+Here is a simple example explaining how to add actions and provide custom config for it.
+
+``` php
+ <?php
+    namespace App\DemoBundle\Actions;
+
+    use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider as BaseProvider;
+
+    class ProductActionsProvider extends BaseProvider
+    {
+        /**
+         * Provides actions for controller
+         */
+        public function getActions()
+        {
+            $this->actions
+                ->addAction($type, [
+                    'rest_route' => false,
+                    'response_type' => 'html', 
+                    'template' => '',
+                    'pattern' => '',
+                    'defaults' => [],
+                    'requirements' => [],
+                    'options' => [],
+                    'host' => '',
+                    'schemes' => [],
+                    'methods' => [],
+                    'condition' => '',               
+                ])
+                ->addAction($type, [])
+            ;
+            
+            return $this->actions;
+        }
+
+    }
+```
+
+You can enable rest routs by providing `rest_route` parameter as `true`. If you don't know what RESTful is you can read more about it [HERE](http://routes.readthedocs.org/en/latest/restful.html)
+`response_type` tell the action what type of response to return `xml`, `html`, or `json`.
+By `template` parameter you can provide custom location for action view.
+Other options are just routing symfony options.
+
+**COUTION: When using ActionProvider only actions provided by provider class are enabled in controller!**
+
+Remember to register you `ActionProvider` as a `service`
+
+``` xml
+    <service id="app.product.action_provider" class="App\DemoBundle\Actions\ProductActionsProvider" parent="vardius_crud.action.provider"/>
+```
+
+Anf use it in your controller definition:
+
+``` xml
+    <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
+        <argument>AppBundle:Product</argument>
+        <argument>/product</argument>
+        <argument>NULL</argument>
+        <argument>NULL</argument>
+        <argument>NULL</argument>
+        <argument type="service" id="app.product.action_provider"/>
+
+        <tag name="vardius_crud.controller" />
+    </service>
+```
+
+### 5. Add custom logic
 You can add custom logic when add, remove or edit entity. In case to do that just create CrudManager class that implements `Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface`
 
 ``` php
@@ -190,7 +260,7 @@ Declare is at a service and pass it to your controller. Example:
     </service>
 ```
 
-### 5. CSV export data
+### 6. CSV export data
 In case of export data to CSV file implement toArray() method in your entity class or override controller methods
 
 ``` xml    
@@ -237,7 +307,7 @@ In case of export data to CSV file implement toArray() method in your entity cla
     }
 ```
 
-### 6. Include scripts
+### 7. Include scripts
 Include styles in your view
 
 ``` html

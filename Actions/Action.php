@@ -10,11 +10,7 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions;
 
-use Symfony\Bridge\Twig\TwigEngine;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Exception\ResourceNotFoundException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 
 /**
@@ -24,93 +20,93 @@ use Vardius\Bundle\CrudBundle\Controller\CrudController;
  */
 abstract class Action implements ActionInterface
 {
-    protected static $TEMPLATE_DIR = 'VardiusCrudBundle:Actions:';
-
-    /** @var TwigEngine */
-    protected $templating;
-    /** @var string */
-    protected $templateEngine = '.html.twig';
-    /** @var EventDispatcherInterface */
-    protected $dispatcher;
+    /** @var  array */
+    protected $options;
 
     /**
-     * @param TwigEngine $templating
+     * @inheritDoc
      */
-    function __construct(TwigEngine $templating)
+    public function __construct(array $options = [])
     {
-        $this->templating = $templating;
+        $this->setOptions($options);
     }
 
     /**
-     * @param $view
-     * @param $params
-     * @return Response
+     * @inheritDoc
      */
-    protected function getResponse($view, $params)
+    public function setOptions(array $options = [])
     {
-        return new Response($this->getHtml($view, $params));
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+
+        $this->options = $resolver->resolve($options);
     }
 
     /**
-     * @param $view
-     * @param $params
-     * @return string
+     * @inheritDoc
      */
-    protected function getHtml($view, $params)
+    public function getOptions()
     {
-        $template = null;
-        if ($this->templating->exists($this->getTemplateName())) {
-            $template = $this->getTemplateName();
-        }
-
-        $viewPath = $view;
-        if ($template === null && $viewPath) {
-            $templateDir = $viewPath . $this->getTemplateName() . $this->templateEngine;
-            if ($this->templating->exists($templateDir)) {
-                $template = $templateDir;
-            }
-        }
-
-        if ($template === null) {
-            $templateDir = static::$TEMPLATE_DIR . $this->getTemplateName() . $this->templateEngine;
-            if ($this->templating->exists($templateDir)) {
-                $template = $templateDir;
-            }
-        }
-
-        if ($template === null) {
-            throw new ResourceNotFoundException('ResponseHandler: Wrong template path');
-        }
-
-        return $this->templating->render($template, $params);
+        return $this->options;
     }
 
     /**
+     * @inheritDoc
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults(
+            array(
+                'pattern' => '',
+                'template' => '',
+                'defaults' => [],
+                'requirements' => [],
+                'options' => [],
+                'host' => '',
+                'schemes' => [],
+                'methods' => [],
+                'condition' => '',
+                'rest_route' => false,
+                'response_type' => 'html',
+            )
+        );
+        $resolver->setAllowedTypes(
+            array(
+                'pattern' => 'string',
+                'template' => 'string',
+                'defaults' => 'array',
+                'requirements' => 'array',
+                'options' => 'array',
+                'host' => 'string',
+                'schemes' => 'array',
+                'methods' => 'array',
+                'condition' => 'string',
+                'rest_route' => 'bool',
+                'response_type' => 'string',
+            )
+        );
+        $resolver->setAllowedValues('response_type', array('html', 'xml', 'json'));
+    }
+
+    /**
+     * Returns template name
+     *
+     * @return bool
+     */
+    protected function getTemplate()
+    {
+        return !empty($this->options['template']) ?: $this->getName();
+    }
+
+    /**
+     * Returns response handler class
+     *
      * @param CrudController $controller
-     * @param Request $request
-     * @param array $params
-     * @return mixed
+     * @return \Vardius\Bundle\CrudBundle\Response\ResponseHandler
      */
-    protected function getRefererUrl(CrudController $controller, Request $request, $params = [])
+    protected function getResponseHandler(CrudController $controller)
     {
-        $referer = $request->headers->get('referer');
-        $baseUrl = $request->getBaseUrl();
-
-        $lastPath = substr($referer, strpos($referer, $baseUrl));
-        $lastPath = str_replace($baseUrl, '', $lastPath);
-
-        $matcher = $controller->get('router')->getMatcher();
-        $parameters = $matcher->match($lastPath);
-        $route = $parameters['_route'];
-
-        return $controller->generateUrl($route, $params);
+        return $controller->get('vardius_crud.response.handler');
     }
 
-    /**
-     * @param EventDispatcherInterface $eventDispatcher
-     */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->dispatcher = $eventDispatcher;
-    }
 }

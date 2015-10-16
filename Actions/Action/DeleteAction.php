@@ -10,11 +10,9 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityNotFoundException;
-use Symfony\Bridge\Twig\TwigEngine;
-use Symfony\Component\Form\FormFactory;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
@@ -27,23 +25,6 @@ use Vardius\Bundle\CrudBundle\Event\CrudEvents;
  */
 class DeleteAction extends Action
 {
-    /** @var FormFactory */
-    protected $formFactory;
-    /** @var  EntityManager */
-    protected $entityManager;
-
-    /**
-     * @param EntityManager $entityManager
-     * @param FormFactory $formFactory
-     * @param TwigEngine $templating
-     */
-    function __construct(EntityManager $entityManager, FormFactory $formFactory, TwigEngine $templating)
-    {
-        parent::__construct($templating);
-        $this->entityManager = $entityManager;
-        $this->formFactory = $formFactory;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -52,6 +33,7 @@ class DeleteAction extends Action
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
         $controller = $event->getController();
+        $dispatcher = $controller->get('event_dispatcher');
         $id = $request->get('id');
 
         $data = $dataProvider->get($id);
@@ -61,7 +43,7 @@ class DeleteAction extends Action
         }
 
         $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $data);
-        $this->dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
 
         try {
             $dataProvider->remove($data->getId());
@@ -73,51 +55,49 @@ class DeleteAction extends Action
                 $message = 'Error while deleting element with id "' . $id . '"';
             }
 
-            $this->getFlashBag($request)->add('error', $message);
+            $flashBag = $request->getSession()->getFlashBag();
+            $flashBag->add('error', $message);
         }
 
-        $this->dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
 
-        return $controller->redirect($this->getRefererUrl($controller, $request));
+        return $controller->redirect($this->getResponseHandler($controller)->getRefererUrl($controller, $request));
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    protected function getFlashBag(Request $request)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        return $request->getSession()->getFlashBag();
+        parent::configureOptions($resolver);
+
+        $resolver->setDefault('requirements', [
+            'id' => '\d+'
+        ]);
+
+        $resolver->setDefault('pattern', function (Options $options) {
+            if ($options['rest_route']) {
+                return '/{id}';
+            }
+
+            return '/delete/{id}';
+        });
+
+        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+            if ($options['rest_route']) {
+                return ['DELETE'];
+            }
+
+            return $previousValue;
+        });
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getEventsNames()
-    {
-        return [
-            'delete',
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTemplateName()
+    public function getName()
     {
         return 'delete';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRouteDefinition()
-    {
-        return array(
-            'pattern' => '/delete/{id}',
-            'requirements' => array(
-                'id' => '\d+'
-            )
-        );
     }
 
 }

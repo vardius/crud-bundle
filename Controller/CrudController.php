@@ -75,7 +75,6 @@ class CrudController extends Controller
         return $action->call($event);
     }
 
-
     /**
      * @return ArrayCollection
      */
