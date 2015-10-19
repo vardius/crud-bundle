@@ -22,7 +22,7 @@ abstract class Action implements ActionInterface
 {
     /** @var array  */
     private static $resolversByClass = array();
-    /** @var  array */
+    /** @var array */
     protected $options;
 
     /**
