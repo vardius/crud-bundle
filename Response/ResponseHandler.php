@@ -58,27 +58,30 @@ class ResponseHandler implements ResponseHandlerInterface
     public function getHtml($view, $templateName, $params)
     {
         $template = null;
-        if ($this->templating->exists($templateName)) {
-            $template = $templateName;
+        $templateDir = $templateName.$this->templateEngine;
+        if ($this->templating->exists($templateDir)) {
+            $template = $templateDir;
         }
 
         $viewPath = $view;
         if ($template === null && $viewPath) {
-            $templateDir = $viewPath . $templateName . $this->templateEngine;
+            $templateDir = $viewPath.$templateName.$this->templateEngine;
             if ($this->templating->exists($templateDir)) {
                 $template = $templateDir;
             }
         }
 
         if ($template === null) {
-            $templateDir = static::$TEMPLATE_DIR . $templateName . $this->templateEngine;
+            $templateDir = static::$TEMPLATE_DIR.$templateName.$this->templateEngine;
             if ($this->templating->exists($templateDir)) {
                 $template = $templateDir;
             }
         }
 
         if ($template === null) {
-            throw new ResourceNotFoundException('ResponseHandler: ' . static::$TEMPLATE_DIR . $templateName . $this->templateEngine . ' View does not exist!');
+            throw new ResourceNotFoundException(
+                'ResponseHandler: '.static::$TEMPLATE_DIR.$templateName.$this->templateEngine.' View does not exist!'
+            );
         }
 
         return $this->templating->render($template, $params);
