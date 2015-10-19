@@ -20,6 +20,8 @@ use Vardius\Bundle\CrudBundle\Controller\CrudController;
  */
 abstract class Action implements ActionInterface
 {
+    /** @var array  */
+    private static $resolversByClass = array();
     /** @var  array */
     protected $options;
 
