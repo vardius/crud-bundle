@@ -18,7 +18,7 @@
         "symfony/symfony": ">=2.6",
         "vardius/list-bundle": "0.3.*@dev",
         "knplabs/knp-snappy-bundle": "1.2.*@dev",
-        "symfony/options-resolver": "3.0.*@dev"
+        "symfony/options-resolver": ">=2.7"
     },
     "target-dir": "Vardius/Bundle/CrudBundle",
     "autoload": {
