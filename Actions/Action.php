@@ -36,10 +36,13 @@ abstract class Action implements ActionInterface
      */
     public function setOptions(array $options = [])
     {
-        $resolver = new OptionsResolver();
-        $this->configureOptions($resolver);
+        $class = get_class($this);
+        if (!isset(self::$resolversByClass[$class])) {
+            self::$resolversByClass[$class] = new OptionsResolver();
+            $this->configureOptions(self::$resolversByClass[$class]);
+        }
 
-        $this->options = $resolver->resolve($options);
+        $this->options = self::$resolversByClass[$class]->resolve($options);
     }
 
     /**
@@ -86,6 +89,14 @@ abstract class Action implements ActionInterface
             )
         );
         $resolver->setAllowedValues('response_type', array('html', 'xml', 'json'));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function clearOptionsConfig()
+    {
+        self::$resolversByClass = array();
     }
 
     /**
