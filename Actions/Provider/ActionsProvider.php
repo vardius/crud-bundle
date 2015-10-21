@@ -32,6 +32,7 @@ abstract class ActionsProvider implements ActionsProviderInterface
     public function __construct(ActionFactory $actionFactory)
     {
         $this->actionFactory = $actionFactory;
+        $this->actions = new ArrayCollection();
     }
 
     /**
