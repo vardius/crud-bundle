@@ -69,7 +69,9 @@ class CrudLoader implements LoaderInterface
                     $options['methods'],
                     $options['condition']
                 );
-                $routes->add($controllerKey . '.' . $actionKey, $route);
+
+                $routeSuffix = (empty($options['route_suffix']) ? $actionKey : $options['route_suffix']);
+                $routes->add($controllerKey . '.' . $routeSuffix, $route);
             }
         }
 

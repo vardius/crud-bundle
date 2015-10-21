@@ -138,6 +138,7 @@ Here is a simple example explaining how to add actions and provide custom config
         {
             $this->actions
                 ->addAction($type, [
+                    'route_suffix' => 'somesuffix' //default action name
                     'rest_route' => false,
                     'response_type' => 'html', 
                     'template' => '',
@@ -186,6 +187,9 @@ Anf use it in your controller definition:
         <tag name="vardius_crud.controller" />
     </service>
 ```
+
+Providing route_suffix as in example above will result with route name as: `app.crud_controller.somesuffix` according to this example
+Route names are builded as `$controllerKey . '.' . $actionKey` where `$controllerKey` is controller service id and `$actionKey` is `route_suffix` option or action name if route_suffix is not provided
 
 ### 5. Add custom logic
 You can add custom logic when add, remove or edit entity. In case to do that just create CrudManager class that implements `Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface`

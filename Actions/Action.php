@@ -57,6 +57,7 @@ abstract class Action implements ActionInterface
     {
         $resolver->setDefaults(
             array(
+                'route_suffix' => '',
                 'pattern' => '',
                 'template' => '',
                 'defaults' => [],
@@ -72,6 +73,7 @@ abstract class Action implements ActionInterface
         );
         $resolver->setAllowedTypes(
             array(
+                'route_suffix' => 'string',
                 'pattern' => 'string',
                 'template' => 'string',
                 'defaults' => 'array',
