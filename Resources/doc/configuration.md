@@ -136,7 +136,7 @@ Here is a simple example explaining how to add actions and provide custom config
          */
         public function getActions()
         {
-            $this->actions
+            $this
                 ->addAction($type, [
                     'rest_route' => false,
                     'response_type' => 'html', 
