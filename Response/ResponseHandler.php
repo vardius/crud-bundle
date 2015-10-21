@@ -58,6 +58,10 @@ class ResponseHandler implements ResponseHandlerInterface
     public function getHtml($view, $templateName, $params)
     {
         $template = null;
+        if ($this->templating->exists($templateName)) {
+            $template = $templateName;
+        }
+
         $templateDir = $templateName.$this->templateEngine;
         if ($this->templating->exists($templateDir)) {
             $template = $templateDir;

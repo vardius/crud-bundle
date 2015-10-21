@@ -32,6 +32,7 @@ abstract class ActionsProvider implements ActionsProviderInterface
     public function __construct(ActionFactory $actionFactory)
     {
         $this->actionFactory = $actionFactory;
+        $this->actions = new ArrayCollection();
     }
 
     /**
@@ -50,7 +51,8 @@ abstract class ActionsProvider implements ActionsProviderInterface
     protected function addAction($type, array $options=[])
     {
         $action = $this->actionFactory->get($type, $options);
-        $key = $action->getName();
+        $suffix = $action->getOptions()['route_suffix'];
+        $key = (empty($suffix) ? $action->getName() : $suffix);
         $this->actions->set($key, $action);
 
         return $this;
