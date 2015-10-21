@@ -47,7 +47,7 @@ abstract class ActionsProvider implements ActionsProviderInterface
      * @param array $options
      * @return $this
      */
-    protected function addAction($type, $options)
+    protected function addAction($type, array $options=[])
     {
         $action = $this->actionFactory->get($type, $options);
         $key = $action->getName();
