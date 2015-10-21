@@ -136,8 +136,9 @@ Here is a simple example explaining how to add actions and provide custom config
          */
         public function getActions()
         {
+            //actions: list,show,edit,add,delete,export
             $this
-                ->addAction($type, [
+                ->addAction('list', [
                     'route_suffix' => 'somesuffix' //default action name
                     'rest_route' => false,
                     'response_type' => 'html', 
@@ -151,7 +152,7 @@ Here is a simple example explaining how to add actions and provide custom config
                     'methods' => [],
                     'condition' => '',               
                 ])
-                ->addAction($type, [])
+                ->addAction('edit', [])
             ;
             
             return $this->actions;
