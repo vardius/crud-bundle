@@ -35,6 +35,11 @@ interface ActionInterface
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver);
+    
+    /**
+     * Clear options array
+     */
+    public static function clearOptionsConfig();
 
     /**
      * Returns configuration array
