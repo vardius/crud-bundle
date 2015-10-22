@@ -16,3 +16,8 @@ RELEASE NOTES
 
 - Added crud manager
 - added export action (pdf, csv)
+
+**0.4.0**
+
+- Actions more generic
+- Actions provider
