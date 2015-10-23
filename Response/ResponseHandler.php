@@ -62,9 +62,11 @@ class ResponseHandler implements ResponseHandlerInterface
             $template = $templateName;
         }
 
-        $templateDir = $templateName.$this->templateEngine;
-        if ($this->templating->exists($templateDir)) {
-            $template = $templateDir;
+        if ($template === null) {
+            $templateDir = $templateName.$this->templateEngine;
+            if ($this->templating->exists($templateDir)) {
+                $template = $templateDir;
+            }
         }
 
         $viewPath = $view;
