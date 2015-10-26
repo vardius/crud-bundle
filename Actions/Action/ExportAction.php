@@ -42,7 +42,7 @@ class ExportAction extends Action
         $responseHandler = $this->getResponseHandler($controller);
 
         $crudEvent = new CrudEvent($repository, $controller);
-        $repository = $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent)->getSource();
+        $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);
 
         $this->id = $request->get('id');
         $options['template'] = !empty($this->options['template'] ?: (is_numeric($this->id) ? 'show' : 'list'));

@@ -43,7 +43,7 @@ abstract class SaveAction extends Action
         $form = $formProvider->createForm($event->getFormType(), $data);
 
         $crudEvent = new CrudEvent($repository, $controller, $form);
-        $form = $dispatcher->dispatch(CrudEvents::CRUD_PRE_SAVE, $crudEvent)->getData();
+        $dispatcher->dispatch(CrudEvents::CRUD_PRE_SAVE, $crudEvent);
 
         $responseHandler = $this->getResponseHandler($controller);
         if ($request->isMethod('POST')) {
