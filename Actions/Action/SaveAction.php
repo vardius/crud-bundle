@@ -81,11 +81,15 @@ abstract class SaveAction extends Action
             }
         }
 
-        return $responseHandler
-            ->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), [
-                'form' => $form->createView(),
-                'data' => $data,
-            ]);
+        $params = [
+            'form' => $form->createView(),
+            'data' => $data,
+        ];
+
+        $crudEvent = new CrudEvent($repository, $event->getController(), $params);
+        $dispatcher->dispatch(CrudEvents::CRUD_SAVE_PRE_RESPONSE, $crudEvent);
+
+        return $responseHandler->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $params);
     }
 
 }
