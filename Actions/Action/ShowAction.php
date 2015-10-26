@@ -37,7 +37,6 @@ class ShowAction extends Action
         $id = $request->get('id');
 
         $data = $dataProvider->get($id);
-
         if ($data === null) {
             throw new EntityNotFoundException('Not found error');
         }
@@ -47,7 +46,7 @@ class ShowAction extends Action
         ];
 
         $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $params);
-        $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
+        $params = $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent)->getData();
 
         return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $params);
     }

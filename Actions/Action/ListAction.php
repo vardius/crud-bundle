@@ -46,9 +46,9 @@ class ListAction extends Action
         ];
 
         $crudEvent = new CrudEvent($repository, $event->getController(), $params);
-        $dispatcher->dispatch(CrudEvents::CRUD_LIST_PRE_RESPONSE, $crudEvent);
+        $params = $dispatcher->dispatch(CrudEvents::CRUD_LIST_PRE_RESPONSE, $crudEvent)->getData();
 
-        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $crudEvent->getData());
+        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $params);
     }
 
     /**

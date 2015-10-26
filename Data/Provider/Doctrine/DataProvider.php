@@ -50,7 +50,7 @@ class DataProvider implements DataProviderInterface
         if ($id !== null) {
 
             if ($this->crudManager instanceof CrudManagerInterface) {
-                
+
                 return $this->crudManager->get($id);
             } else {
                 $query = $this->source->createQueryBuilder('entity');
@@ -135,5 +135,15 @@ class DataProvider implements DataProviderInterface
         }
 
         $this->entityManager->flush($data);
+    }
+
+    /**
+     * @param EntityRepository $source
+     * @return DataProvider
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+        return $this;
     }
 }
