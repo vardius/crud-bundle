@@ -16,6 +16,7 @@ use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvents;
+use Vardius\Bundle\CrudBundle\Event\ResponseEvent;
 use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 
 /**
@@ -45,10 +46,11 @@ class ListAction extends Action
             'title' => $listView->getTitle(),
         ];
 
-        $crudEvent = new CrudEvent($repository, $event->getController(), $params);
-        $params = $dispatcher->dispatch(CrudEvents::CRUD_LIST_PRE_RESPONSE, $crudEvent)->getData();
+        $paramsEvent = new ResponseEvent($params);
+        $crudEvent = new CrudEvent($repository, $event->getController(), $paramsEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_LIST_PRE_RESPONSE, $crudEvent);
 
-        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $params);
+        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
     }
 
     /**

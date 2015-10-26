@@ -17,6 +17,7 @@ use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvents;
+use Vardius\Bundle\CrudBundle\Event\ResponseEvent;
 
 /**
  * ShowAction
@@ -45,10 +46,11 @@ class ShowAction extends Action
             'data' => $data,
         ];
 
-        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $params);
-        $params = $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent)->getData();
+        $paramsEvent = new ResponseEvent($params);
+        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $paramsEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
 
-        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $params);
+        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
     }
 
     /**
