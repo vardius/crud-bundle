@@ -138,12 +138,12 @@ final class CrudEvents
     const CRUD_LIST_PRE_RESPONSE = 'vardius_crud.list.pre_response';
 
     /**
-     * The vardius_crud.show.pre_response event is thrown each time before add/edit action response return
+     * The vardius_crud.save.pre_response event is thrown each time before add/edit action response return
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_SHOW_PRE_RESPONSE = 'vardius_crud.show.pre_response';
+    const CRUD_SAVE_PRE_RESPONSE = 'vardius_crud.save.pre_response';
 }

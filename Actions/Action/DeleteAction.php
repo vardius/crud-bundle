@@ -43,7 +43,7 @@ class DeleteAction extends Action
         }
 
         $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $data);
-        $dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
+        $data = $dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent)->getData();
 
         try {
             $dataProvider->remove($data->getId());
