@@ -42,8 +42,8 @@ class DeleteAction extends Action
             throw new EntityNotFoundException('Not found error');
         }
 
-        $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $data);
-        $data = $dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent)->getData();
+        $crudEvent = new CrudEvent($dataProvider->getSource(), $controller);
+        $dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
 
         try {
             $dataProvider->remove($data->getId());

@@ -25,7 +25,7 @@ class CrudEvent extends Event
 {
     /** @var EntityRepository|QueryBuilder */
     protected $source;
-    /** @var FormInterface|array|mixed */
+    /** @var FormInterface|ResponseEvent|mixed */
     protected $data;
     /** @var CrudController */
     protected $controller;
@@ -33,7 +33,7 @@ class CrudEvent extends Event
     /**
      * @param EntityRepository|QueryBuilder $source
      * @param CrudController $controller
-     * @param FormInterface|array|mixed $data
+     * @param FormInterface|ResponseEvent|mixed $data
      */
     function __construct($source, CrudController $controller, $data = null)
     {
@@ -51,7 +51,7 @@ class CrudEvent extends Event
     }
 
     /**
-     * @return FormInterface|array|mixed
+     * @return FormInterface|ResponseEvent|mixed
      */
     public function getData()
     {
