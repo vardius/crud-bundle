@@ -34,12 +34,12 @@ class ListAction extends Action
         $controller = $event->getController();
         $repository = $event->getDataProvider()->getSource();
 
-        $dispatcher = $controller->get('event_dispatcher');
-        $crudEvent = new CrudEvent($repository, $event->getController());
-        $dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
-
         $listView = $event->getListView();
         $listDataEvent = new ListDataEvent($repository, $event->getRequest());
+
+        $dispatcher = $controller->get('event_dispatcher');
+        $crudEvent = new CrudEvent($listView, $event->getController(), $listDataEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
 
         $params = [
             'list' => $listView->render($listDataEvent),
