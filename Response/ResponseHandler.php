@@ -86,7 +86,7 @@ class ResponseHandler implements ResponseHandlerInterface
 
         if ($template === null) {
             throw new ResourceNotFoundException(
-                'ResponseHandler: '.static::$TEMPLATE_DIR.$templateName.$this->templateEngine.' View does not exist!'
+                'ResponseHandler: View for '.$templateName.' does not exist!'
             );
         }
 
