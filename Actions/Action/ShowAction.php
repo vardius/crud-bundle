@@ -42,13 +42,14 @@ class ShowAction extends Action
             throw new EntityNotFoundException('Not found error');
         }
 
-        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $data);
+        $params = [
+            'data' => $data,
+        ];
+
+        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $params);
         $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
 
-        return $this->getResponseHandler($controller)
-            ->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), [
-                'data' => $data,
-            ]);
+        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $params);
     }
 
     /**

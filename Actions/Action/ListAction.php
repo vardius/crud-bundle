@@ -40,11 +40,15 @@ class ListAction extends Action
         $listView = $event->getListView();
         $listDataEvent = new ListDataEvent($repository, $event->getRequest());
 
-        return $this->getResponseHandler($controller)
-            ->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), [
-                'list' => $listView->render($listDataEvent),
-                'title' => $listView->getTitle(),
-            ]);
+        $params = [
+            'list' => $listView->render($listDataEvent),
+            'title' => $listView->getTitle(),
+        ];
+
+        $crudEvent = new CrudEvent($repository, $event->getController(), $params);
+        $dispatcher->dispatch(CrudEvents::CRUD_LIST_PRE_RESPONSE, $crudEvent);
+
+        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $crudEvent->getData());
     }
 
     /**

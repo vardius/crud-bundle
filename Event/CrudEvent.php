@@ -66,4 +66,28 @@ class CrudEvent extends Event
         return $this->controller;
     }
 
+    /**
+     * @param EntityRepository|QueryBuilder $source
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+    }
+
+    /**
+     * @param mixed|FormInterface $data
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+    }
+
+    /**
+     * @param CrudController $controller
+     */
+    public function setController($controller)
+    {
+        $this->controller = $controller;
+    }
+
 }
