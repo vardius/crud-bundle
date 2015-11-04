@@ -47,7 +47,19 @@ class ListAction extends Action
                 'title' => $listView->getTitle(),
             ];
         } else {
-            $params = $listView->getData($listDataEvent, true);
+            $columns = $listView->getColumns();
+            $results = $listView->getData($listDataEvent, true);
+            foreach ($results['results'] as $key => $result) {
+                $results['results'][$key] = [];
+                foreach ($columns as $column) {
+                    $columnData = $column->getData($result, $this->options['response_type']);
+                    if ($columnData) {
+                        $results['results'][$key][] = $columnData;
+                    }
+                }
+            }
+
+            $params = $results;
         }
 
         $paramsEvent = new ResponseEvent($params);
