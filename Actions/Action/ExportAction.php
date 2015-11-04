@@ -73,7 +73,7 @@ class ExportAction extends Action
             $type = $request->get('type');
             if ($type === 'pdf') {
                 $html = $responseHandler->getHtml($event->getView(), $this->getTemplate(), [
-                    'list' => $listView->render($listDataEvent, false),
+                    'list' => $listView->render($listDataEvent),
                     'title' => $listView->getTitle(),
                     'ui' => false
                 ]);
@@ -92,6 +92,7 @@ class ExportAction extends Action
                 );
             } else {
                 $response = new StreamedResponse();
+                $listView->setPagination(false);
                 $queryBuilder = $listView->getData($listDataEvent, true, true);
 
                 $response->setCallback(
