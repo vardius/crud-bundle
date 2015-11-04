@@ -47,7 +47,7 @@ class ListAction extends Action
                 'title' => $listView->getTitle(),
             ];
         } else {
-            $params = $listView->getData($listDataEvent, false, true)->getQuery()->getResult();
+            $params = $listView->getData($listDataEvent, true);
         }
 
         $paramsEvent = new ResponseEvent($params);
