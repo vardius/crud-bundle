@@ -41,10 +41,26 @@ class ListAction extends Action
         $crudEvent = new CrudEvent($listView, $event->getController(), $listDataEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
 
-        $params = [
-            'list' => $listView->render($listDataEvent),
-            'title' => $listView->getTitle(),
-        ];
+        if ($this->options['response_type'] === 'html') {
+            $params = [
+                'list' => $listView->render($listDataEvent),
+                'title' => $listView->getTitle(),
+            ];
+        } else {
+            $columns = $listView->getColumns();
+            $results = $listView->getData($listDataEvent, true);
+            foreach ($results['results'] as $key => $result) {
+                $results['results'][$key] = [];
+                foreach ($columns as $column) {
+                    $columnData = $column->getData($result, $this->options['response_type']);
+                    if ($columnData) {
+                        $results['results'][$key][] = $columnData;
+                    }
+                }
+            }
+
+            $params = $results;
+        }
 
         $paramsEvent = new ResponseEvent($params);
         $crudEvent = new CrudEvent($repository, $event->getController(), $paramsEvent);
