@@ -17,6 +17,7 @@ use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvents;
+use Vardius\Bundle\CrudBundle\Event\ResponseEvent;
 
 /**
  * ShowAction
@@ -37,18 +38,19 @@ class ShowAction extends Action
         $id = $request->get('id');
 
         $data = $dataProvider->get($id);
-
         if ($data === null) {
             throw new EntityNotFoundException('Not found error');
         }
 
-        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $data);
+        $params = [
+            'data' => $data,
+        ];
+
+        $paramsEvent = new ResponseEvent($params);
+        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
 
-        return $this->getResponseHandler($controller)
-            ->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), [
-                'data' => $data,
-            ]);
+        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
     }
 
     /**

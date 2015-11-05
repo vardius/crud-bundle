@@ -62,9 +62,11 @@ class ResponseHandler implements ResponseHandlerInterface
             $template = $templateName;
         }
 
-        $templateDir = $templateName.$this->templateEngine;
-        if ($this->templating->exists($templateDir)) {
-            $template = $templateDir;
+        if ($template === null) {
+            $templateDir = $templateName.$this->templateEngine;
+            if ($this->templating->exists($templateDir)) {
+                $template = $templateDir;
+            }
         }
 
         $viewPath = $view;
@@ -84,7 +86,7 @@ class ResponseHandler implements ResponseHandlerInterface
 
         if ($template === null) {
             throw new ResourceNotFoundException(
-                'ResponseHandler: '.static::$TEMPLATE_DIR.$templateName.$this->templateEngine.' View does not exist!'
+                'ResponseHandler: View for '.$templateName.' does not exist!'
             );
         }
 

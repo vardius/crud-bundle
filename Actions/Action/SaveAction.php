@@ -14,6 +14,7 @@ use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvents;
+use Vardius\Bundle\CrudBundle\Event\ResponseEvent;
 
 /**
  * SaveAction
@@ -39,9 +40,10 @@ abstract class SaveAction extends Action
             $data = $dataProvider->create();
         }
 
+        $repository = $dataProvider->getSource();
         $form = $formProvider->createForm($event->getFormType(), $data);
 
-        $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $form);
+        $crudEvent = new CrudEvent($repository, $controller, $form);
         $dispatcher->dispatch(CrudEvents::CRUD_PRE_SAVE, $crudEvent);
 
         $responseHandler = $this->getResponseHandler($controller);
@@ -81,11 +83,16 @@ abstract class SaveAction extends Action
             }
         }
 
-        return $responseHandler
-            ->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), [
-                'form' => $form->createView(),
-                'data' => $data,
-            ]);
+        $params = [
+            'form' => $form->createView(),
+            'data' => $data,
+        ];
+
+        $paramsEvent = new ResponseEvent($params);
+        $crudEvent = new CrudEvent($repository, $event->getController(), $paramsEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_SAVE_PRE_RESPONSE, $crudEvent);
+
+        return $responseHandler->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
     }
 
 }
