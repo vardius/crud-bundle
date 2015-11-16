@@ -150,7 +150,8 @@ Here is a simple example explaining how to add actions and provide custom config
                     'host' => '',
                     'schemes' => [],
                     'methods' => [],
-                    'condition' => '',               
+                    'condition' => '',
+                    'toArray' => false, //Default false, available only for show action, determine if use to Array method for data serialization (rest api)
                 ])
                 ->addAction('edit', [])
             ;

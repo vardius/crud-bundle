@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\CrudBundle\Response;
 
+use JMS\Serializer\Serializer;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,29 +28,33 @@ class ResponseHandler implements ResponseHandlerInterface
     protected static $TEMPLATE_DIR = 'VardiusCrudBundle:Actions:';
     /** @var TwigEngine */
     protected $templating;
+    /** @var  Serializer */
+    protected $serializer;
     /** @var string */
     protected $templateEngine = '.html.twig';
 
     /**
      * @param TwigEngine $templating
+     * @param TwigEngine $templating
      */
-    function __construct(TwigEngine $templating)
+    function __construct(TwigEngine $templating, Serializer $serializer)
     {
         $this->templating = $templating;
+        $this->serializer = $serializer;
     }
 
     /**
      * @inheritDoc
      */
-    public function getResponse($responseType, $view, $templateName, $params)
+    public function getResponse($responseType, $view, $templateName, $params, $status = 200, $headers = array())
     {
         if ($responseType === 'html') {
-            return new Response($this->getHtml($view, $templateName, $params));
-        } elseif ($responseType === 'json') {
-            return new JsonResponse($params);
-        } elseif ($responseType === 'xml') {
-            throw new \Exception('xml responses are not supported yet');
+            $response = $this->getHtml($view, $templateName, $params);
+        } else {
+            $response = $this->serializer->serialize($params, $responseType);
         }
+
+        return new Response($response, $status, $headers);
     }
 
     /**
@@ -63,7 +68,7 @@ class ResponseHandler implements ResponseHandlerInterface
         }
 
         if ($template === null) {
-            $templateDir = $templateName.$this->templateEngine;
+            $templateDir = $templateName . $this->templateEngine;
             if ($this->templating->exists($templateDir)) {
                 $template = $templateDir;
             }
@@ -71,14 +76,14 @@ class ResponseHandler implements ResponseHandlerInterface
 
         $viewPath = $view;
         if ($template === null && $viewPath) {
-            $templateDir = $viewPath.$templateName.$this->templateEngine;
+            $templateDir = $viewPath . $templateName . $this->templateEngine;
             if ($this->templating->exists($templateDir)) {
                 $template = $templateDir;
             }
         }
 
         if ($template === null) {
-            $templateDir = static::$TEMPLATE_DIR.$templateName.$this->templateEngine;
+            $templateDir = static::$TEMPLATE_DIR . $templateName . $this->templateEngine;
             if ($this->templating->exists($templateDir)) {
                 $template = $templateDir;
             }
@@ -86,7 +91,7 @@ class ResponseHandler implements ResponseHandlerInterface
 
         if ($template === null) {
             throw new ResourceNotFoundException(
-                'ResponseHandler: View for '.$templateName.' does not exist!'
+                'ResponseHandler: View for ' . $templateName . ' does not exist!'
             );
         }
 

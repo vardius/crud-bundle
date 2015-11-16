@@ -10,6 +10,8 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
@@ -23,6 +25,11 @@ use Vardius\Bundle\CrudBundle\Event\ResponseEvent;
  */
 abstract class SaveAction extends Action
 {
+    /**
+     * Rest response success action code
+     */
+    CONST ACTION_CODE = 200;
+
     /**
      * {@inheritdoc}
      */
@@ -77,16 +84,36 @@ abstract class SaveAction extends Action
                     ]));
                 }
 
-                return $controller->redirect($controller->generateUrl($routeName, [
-                    'id' => $data->getId()
-                ]));
+                if ($this->options['response_type'] === 'html') {
+
+                    return $controller->redirect($controller->generateUrl($routeName, [
+                        'id' => $data->getId()
+                    ]));
+                } else {
+
+                    return $responseHandler->getResponse($this->options['response_type'], '', '', [
+                        'data' => $data,
+                    ], self::ACTION_CODE);
+                }
             }
+        } else {
+            $formErrorHandler = $controller->get('vardius_crud.form.error_handler');
+
+            return new JsonResponse([
+                'message' => 'Invalid form data',
+                'errors' => $formErrorHandler->getErrorMessages($form),
+            ], 400);
         }
 
         $params = [
-            'form' => $form->createView(),
             'data' => $data,
         ];
+
+        if ($this->options['response_type'] === 'html') {
+            $params = array_merge($params, [
+                'form' => $form->createView(),
+            ]);
+        }
 
         $paramsEvent = new ResponseEvent($params);
         $crudEvent = new CrudEvent($repository, $event->getController(), $paramsEvent);

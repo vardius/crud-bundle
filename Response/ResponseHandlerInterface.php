@@ -27,9 +27,11 @@ interface ResponseHandlerInterface
      * @param string $view controller event view
      * @param string $templateName action template name
      * @param array $params
+     * @param int   $status  The response status code
+     * @param array $headers An array of response headers
      * @return JsonResponse|Response
      */
-    public function getResponse($responseType, $view, $templateName, $params);
+    public function getResponse($responseType, $view, $templateName, $params, $status = 200, $headers = array());
 
     /**
      * @param string $view controller event view

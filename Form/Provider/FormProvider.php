@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\CrudBundle\Form\Provider;
 
-
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormFactory;
@@ -22,7 +21,6 @@ use Symfony\Component\Form\FormFactory;
  */
 class FormProvider
 {
-
     /** @var  EntityManager */
     protected $entityManager;
     /** @var FormFactory */
@@ -42,7 +40,7 @@ class FormProvider
      * @param AbstractType $formType
      * @param null $data
      * @param array $options
-     * @return \Symfony\Component\Form\Form|\Symfony\Component\Form\FormInterface
+     * @return \Symfony\Component\Form\Form |\Symfony\Component\Form\FormInterface
      */
     public function createForm(AbstractType $formType = null, $data = null, array $options = array())
     {

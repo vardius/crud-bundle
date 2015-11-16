@@ -61,7 +61,17 @@ class DeleteAction extends Action
 
         $dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
 
-        return $controller->redirect($this->getResponseHandler($controller)->getRefererUrl($controller, $request));
+        $responseHandler = $this->getResponseHandler($controller);
+        if ($this->options['response_type'] === 'html') {
+
+            return $controller->redirect($responseHandler->getRefererUrl($controller, $request));
+        } else {
+
+            return $responseHandler->getResponse($this->options['response_type'], '', '', [
+                'data' => $data,
+            ]);
+        }
+
     }
 
     /**

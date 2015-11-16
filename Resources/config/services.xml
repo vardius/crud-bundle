@@ -22,6 +22,7 @@
         <parameter key="vardius_crud.data.provider.doctrine.class">Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider</parameter>
         <!--FORM-->
         <parameter key="vardius_crud.form.provider.class">Vardius\Bundle\CrudBundle\Form\Provider\FormProvider</parameter>
+        <parameter key="vardius_crud.form.error_handler.class">Vardius\Bundle\CrudBundle\Form\FormErrorHandler</parameter>
         <!--RESPONSE-->
         <parameter key="vardius_crud.response.handler.class">Vardius\Bundle\CrudBundle\Response\ResponseHandler</parameter>
         <!--ROUTING-->
@@ -73,9 +74,13 @@
             <argument type="service" id="doctrine.orm.entity_manager"/>
             <argument type="service" id="form.factory"/>
         </service>
+        <service id="vardius_crud.form.error_handler" class="%vardius_crud.form.error_handler.class%">
+            <argument type="service" id="translator"/>
+        </service>
         <!--RESPONSE-->
         <service id="vardius_crud.response.handler" class="%vardius_crud.response.handler.class%">
             <argument type="service" id="templating"/>
+            <argument type="service" id="serializer"/>
         </service>
         <!--ROUTING-->
         <service id="vardius_crud.routing.pool" class="%vardius_crud.routing.pool.class%"/>

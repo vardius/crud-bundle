@@ -21,6 +21,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class AddAction extends SaveAction
 {
     /**
+     * Rest response success action code
+     */
+    CONST ACTION_CODE = 201;
+
+    /**
      * @inheritDoc
      */
     public function configureOptions(OptionsResolver $resolver)

@@ -49,17 +49,22 @@ class ListAction extends Action
         } else {
             $columns = $listView->getColumns();
             $results = $listView->getData($listDataEvent, true);
-            foreach ($results['results'] as $key => $result) {
-                $results['results'][$key] = [];
-                foreach ($columns as $column) {
+            $results = $results->toArray();
+
+            foreach ($results as $key => $result) {
+                $rowData = [];
+                foreach ($columns as $columnKey => $column) {
                     $columnData = $column->getData($result, $this->options['response_type']);
                     if ($columnData) {
-                        $results['results'][$key][] = $columnData;
+                        $rowData[$column->getLabel()] = $columnData;
                     }
                 }
+                $results[$key] = $rowData;
             }
 
-            $params = $results;
+            $params = [
+                'results' => $results,
+            ];
         }
 
         $paramsEvent = new ResponseEvent($params);
@@ -90,7 +95,7 @@ class ListAction extends Action
 
         $resolver->setDefault('pattern', function (Options $options) {
             if ($options['rest_route']) {
-                return '/{page}/{limit}/{column}/{sort}';
+                return '/';
             }
 
             return '/list/{page}/{limit}/{column}/{sort}';

@@ -11,6 +11,7 @@
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\Intl\Exception\MethodNotImplementedException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
@@ -42,9 +43,23 @@ class ShowAction extends Action
             throw new EntityNotFoundException('Not found error');
         }
 
-        $params = [
-            'data' => $data,
-        ];
+        if ($this->options['response_type'] === 'html') {
+            $params = [
+                'data' => $data,
+            ];
+        } else {
+            if ($this->options['toArray']) {
+                if (method_exists($data, 'toArray')) {
+                    $data = $data->toArray();
+                } else {
+                    throw new MethodNotImplementedException('toArray');
+                }
+            }
+
+            $params = [
+                'data' => $data,
+            ];
+        }
 
         $paramsEvent = new ResponseEvent($params);
         $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $paramsEvent);
@@ -77,6 +92,13 @@ class ShowAction extends Action
 
             return $previousValue;
         });
+
+        $resolver->setDefault('toArray', false);
+        $resolver->addAllowedTypes(
+            [
+                'toArray' => 'bool',
+            ]
+        );
     }
 
     /**
