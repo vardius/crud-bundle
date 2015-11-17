@@ -20,8 +20,6 @@ use Vardius\Bundle\CrudBundle\Controller\CrudController;
  */
 abstract class Action implements ActionInterface
 {
-    /** @var array  */
-    private static $resolversByClass = array();
     /** @var array */
     protected $options;
 
@@ -38,13 +36,9 @@ abstract class Action implements ActionInterface
      */
     public function setOptions(array $options = [])
     {
-        $class = get_class($this);
-        if (!isset(self::$resolversByClass[$class])) {
-            self::$resolversByClass[$class] = new OptionsResolver();
-            $this->configureOptions(self::$resolversByClass[$class]);
-        }
-
-        $this->options = self::$resolversByClass[$class]->resolve($options);
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+        $this->options = $resolver->resolve($options);
     }
 
     /**
@@ -93,14 +87,6 @@ abstract class Action implements ActionInterface
             )
         );
         $resolver->setAllowedValues('response_type', array('html', 'xml', 'json'));
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function clearOptionsConfig()
-    {
-        self::$resolversByClass = array();
     }
 
     /**

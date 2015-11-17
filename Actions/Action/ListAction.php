@@ -53,7 +53,7 @@ class ListAction extends Action
 
             foreach ($results as $key => $result) {
                 $rowData = [];
-                foreach ($columns as $columnKey => $column) {
+                foreach ($columns as $column) {
                     $columnData = $column->getData($result, $this->options['response_type']);
                     if ($columnData) {
                         $rowData[$column->getLabel()] = $columnData;
