@@ -39,11 +39,11 @@ class ActionPool
     }
 
     /**
-     * @param Action $actions
+     * @param Action $action
      */
-    public function addAction(Action $actions)
+    public function addAction(Action $action)
     {
-        $this->actions->set($actions->getName(), $actions);
+        $this->actions->set($action->getName(), $action);
     }
 
     /**

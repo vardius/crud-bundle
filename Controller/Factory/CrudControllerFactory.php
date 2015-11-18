@@ -20,6 +20,7 @@ use Vardius\Bundle\CrudBundle\Controller\CrudController;
 use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider;
 use Vardius\Bundle\ListBundle\ListView\Provider\ListViewProviderInterface;
+use Vardius\Bundle\SecurityBundle\Security\Authorization\Voter\SupportedClassPool;
 
 /**
  * CrudControllerFactory
@@ -34,6 +35,8 @@ class CrudControllerFactory
     protected $entityManager;
     /** @var  ContainerInterface */
     protected $container;
+    /** @var  SupportedClassPool */
+    protected $securityClassPool;
 
     /**
      * @param array $actions
@@ -44,6 +47,7 @@ class CrudControllerFactory
         $this->actions = new ArrayCollection($actions);
         $this->container = $container;
         $this->entityManager = $this->container->get('doctrine.orm.entity_manager');
+        $this->securityClassPool = $this->container->get('vardius_security.voter.supported_class_pool');
     }
 
     /**
@@ -65,6 +69,8 @@ class CrudControllerFactory
         if ($repo === null) {
             throw new EntityNotFoundException('CrudFactory: Invalid entity alias "' . $entityName . '"');
         }
+
+        $this->securityClassPool->addClass($repo->getClassName());
 
         $dataProvider = new DataProvider($repo, $this->entityManager, $crudManager);
         $controller = new CrudController($dataProvider, $routePrefix, $listViewProvider, $formType, $view);

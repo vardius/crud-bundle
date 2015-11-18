@@ -32,6 +32,9 @@ class ListAction extends Action
     public function call(ActionEvent $event)
     {
         $controller = $event->getController();
+
+        $this->checkRole($controller);
+
         $repository = $event->getDataProvider()->getSource();
 
         $listView = $event->getListView();

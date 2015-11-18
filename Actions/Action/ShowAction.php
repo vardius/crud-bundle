@@ -32,15 +32,22 @@ class ShowAction extends Action
      */
     public function call(ActionEvent $event)
     {
+        $controller = $event->getController();
+
+        $this->checkRole($controller);
+
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
-        $controller = $event->getController();
         $dispatcher = $controller->get('event_dispatcher');
         $id = $request->get('id');
 
         $data = $dataProvider->get($id);
         if ($data === null) {
             throw new EntityNotFoundException('Not found error');
+        }
+
+        if ($this->options['isOwner']) {
+            $event->getController()->checkAccess('isOwner', $data, 'User is not an owner of this object!');
         }
 
         if ($this->options['response_type'] === 'html') {

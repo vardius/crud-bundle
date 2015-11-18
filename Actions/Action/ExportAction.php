@@ -34,9 +34,12 @@ class ExportAction extends Action
      */
     public function call(ActionEvent $event)
     {
+        $controller = $event->getController();
+
+        $this->checkRole($controller);
+
         $repository = $event->getDataProvider()->getSource();
         $request = $event->getRequest();
-        $controller = $event->getController();
         $dispatcher = $controller->get('event_dispatcher');
         $snappy = $controller->get('knp_snappy.pdf');
         $responseHandler = $this->getResponseHandler($controller);

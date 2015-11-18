@@ -10,12 +10,12 @@
 
 namespace Vardius\Bundle\CrudBundle\Controller;
 
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Vardius\Bundle\CrudBundle\Actions\ActionInterface;
 use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
@@ -183,6 +183,21 @@ class CrudController extends Controller
     public function redirectToPath($routeName, array $params)
     {
         return $this->redirect($this->generateUrl($routeName, $params));
+    }
+
+    /**
+     * Throws an exception unless the attributes are granted against the current authentication token and optionally
+     * supplied object.
+     *
+     * @param mixed $attributes The attributes
+     * @param mixed $object The object
+     * @param string $message The message passed to the exception
+     *
+     * @throws AccessDeniedException
+     */
+    public function checkAccess($attributes, $object = null, $message = 'Access Denied.')
+    {
+        $this->denyAccessUnlessGranted($attributes, $object, $message);
     }
 
 }

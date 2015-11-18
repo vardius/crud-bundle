@@ -10,8 +10,10 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
+use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 
 /**
  * Action
@@ -68,6 +70,8 @@ abstract class Action implements ActionInterface
                 'condition' => '',
                 'rest_route' => false,
                 'response_type' => 'html',
+                'isOwner' => false,
+                'hasRole' => '',
             )
         );
         $resolver->setAllowedTypes(
@@ -84,6 +88,8 @@ abstract class Action implements ActionInterface
                 'condition' => 'string',
                 'rest_route' => 'bool',
                 'response_type' => 'string',
+                'isOwner' => 'bool',
+                'hasRole' => 'string',
             )
         );
         $resolver->setAllowedValues('response_type', array('html', 'xml', 'json'));
@@ -108,6 +114,17 @@ abstract class Action implements ActionInterface
     protected function getResponseHandler(CrudController $controller)
     {
         return $controller->get('vardius_crud.response.handler');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function checkRole(CrudController $controller)
+    {
+        $role = $this->options['hasRole'];
+        if (!empty($role)) {
+            $controller->checkAccess($role);
+        }
     }
 
 }
