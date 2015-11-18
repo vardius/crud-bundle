@@ -151,6 +151,8 @@ Here is a simple example explaining how to add actions and provide custom config
                     'schemes' => [],
                     'methods' => [],
                     'condition' => '',
+                    'isOwner' => false,
+                    'hasRole' => 'ROLE_USER',
                     'toArray' => false, //Default false, available only for show action, determine if use to Array method for data serialization (rest api)
                 ])
                 ->addAction('edit', [])
