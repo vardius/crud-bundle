@@ -29,7 +29,8 @@ Enable the bundle in the kernel:
         $bundles = array(
             // ...
             new Vardius\Bundle\ListBundle\VardiusListBundle(),
-            new Vardius\Bundle\ListBundle\VardiusCrudBundle(),
+            new Vardius\Bundle\CrudBundle\VardiusCrudBundle(),
+            new Vardius\Bundle\SecurityBundle\VardiusSecurityBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
