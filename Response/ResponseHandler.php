@@ -12,7 +12,6 @@ namespace Vardius\Bundle\CrudBundle\Response;
 
 use JMS\Serializer\Serializer;
 use Symfony\Bridge\Twig\TwigEngine;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

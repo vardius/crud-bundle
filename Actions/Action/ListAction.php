@@ -41,7 +41,7 @@ class ListAction extends Action
         $listDataEvent = new ListDataEvent($repository, $event->getRequest());
 
         $dispatcher = $controller->get('event_dispatcher');
-        $crudEvent = new CrudEvent($listView, $event->getController(), $listDataEvent);
+        $crudEvent = new CrudEvent($listView, $controller, $listDataEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
 
         if ($this->options['response_type'] === 'html') {
@@ -71,7 +71,7 @@ class ListAction extends Action
         }
 
         $paramsEvent = new ResponseEvent($params);
-        $crudEvent = new CrudEvent($repository, $event->getController(), $paramsEvent);
+        $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_LIST_PRE_RESPONSE, $crudEvent);
 
         return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());

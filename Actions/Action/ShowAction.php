@@ -47,7 +47,7 @@ class ShowAction extends Action
         }
 
         if ($this->options['isOwner']) {
-            $event->getController()->checkAccess('isOwner', $data, 'User is not an owner of this object!');
+            $controller->checkAccess('isOwner', $data, 'User is not an owner of this object!');
         }
 
         if ($this->options['response_type'] === 'html') {
@@ -69,7 +69,7 @@ class ShowAction extends Action
         }
 
         $paramsEvent = new ResponseEvent($params);
-        $crudEvent = new CrudEvent($dataProvider->getSource(), $event->getController(), $paramsEvent);
+        $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
 
         return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());

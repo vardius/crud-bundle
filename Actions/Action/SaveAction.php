@@ -48,7 +48,7 @@ abstract class SaveAction extends Action
             $data = $dataProvider->get($id);
 
             if ($this->options['isOwner']) {
-                $event->getController()->checkAccess('isOwner', $data, 'User is not an owner of this object!');
+                $controller->checkAccess('isOwner', $data, 'User is not an owner of this object!');
             }
         } else {
             $data = $dataProvider->create();
@@ -123,7 +123,7 @@ abstract class SaveAction extends Action
         }
 
         $paramsEvent = new ResponseEvent($params);
-        $crudEvent = new CrudEvent($repository, $event->getController(), $paramsEvent);
+        $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SAVE_PRE_RESPONSE, $crudEvent);
 
         return $responseHandler->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());

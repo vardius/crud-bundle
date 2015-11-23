@@ -32,7 +32,6 @@ Enable the bundle in the kernel:
             new Vardius\Bundle\CrudBundle\VardiusCrudBundle(),
             new Vardius\Bundle\SecurityBundle\VardiusSecurityBundle(),
             new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
-            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
         );
     }

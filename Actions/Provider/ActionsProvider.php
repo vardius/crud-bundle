@@ -36,14 +36,6 @@ abstract class ActionsProvider implements ActionsProviderInterface
     }
 
     /**
-     * @return ArrayCollection
-     */
-    public function getActions()
-    {
-        return $this->actions;
-    }
-
-    /**
      * @param string $type
      * @param array $options
      * @return $this

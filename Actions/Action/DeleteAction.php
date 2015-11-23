@@ -46,7 +46,7 @@ class DeleteAction extends Action
         }
 
         if ($this->options['isOwner']) {
-            $event->getController()->checkAccess('isOwner', $data, 'User is not an owner of this object!');
+            $controller->checkAccess('isOwner', $data, 'User is not an owner of this object!');
         }
 
         $crudEvent = new CrudEvent($dataProvider->getSource(), $controller);
