@@ -90,7 +90,7 @@ class ResponseHandler implements ResponseHandlerInterface
 
         if ($template === null) {
             throw new ResourceNotFoundException(
-                'ResponseHandler: View for ' . $templateName . ' does not exist!'
+                'View for ' . $templateName . ' does not exist!'
             );
         }
 
