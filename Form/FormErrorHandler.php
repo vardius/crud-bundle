@@ -11,7 +11,7 @@
 namespace Vardius\Bundle\CrudBundle\Form;
 
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Translation\IdentityTranslator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class FormErrorHandler
@@ -19,14 +19,14 @@ use Symfony\Component\Translation\IdentityTranslator;
  */
 class FormErrorHandler
 {
-    /** @var  IdentityTranslator */
+    /** @var  TranslatorInterface */
     protected $translator;
 
     /**
      * FormErrorHandler constructor.
-     * @param IdentityTranslator $translator
+     * @param TranslatorInterface $translator
      */
-    public function __construct(IdentityTranslator $translator)
+    public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
