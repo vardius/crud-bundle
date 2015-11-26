@@ -58,7 +58,7 @@ class CrudControllerFactory
      * @param string $view
      * @param array|ActionsProvider $actions
      *
-     * @throws EntityNotFoundException
+     * @throws \Exception
      * @return CrudController
      */
     public function get($entityName, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [])
