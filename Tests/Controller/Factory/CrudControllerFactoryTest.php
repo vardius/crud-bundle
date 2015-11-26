@@ -27,10 +27,11 @@ class CrudControllerFactoryTest extends \PHPUnit_Framework_TestCase
 
         $entityManager = $this
             ->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->setMethods(array('getRepository'))
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->setExpectedException('Doctrine\ORM\EntityNotFoundException');
+        $this->setExpectedException('Exception');
 
         $factory = new CrudControllerFactory([], $container);
         $reflection = new \ReflectionClass($factory);
