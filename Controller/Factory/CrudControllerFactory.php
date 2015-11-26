@@ -12,7 +12,6 @@ namespace Vardius\Bundle\CrudBundle\Controller\Factory;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
 use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider;
@@ -67,7 +66,7 @@ class CrudControllerFactory
         $repo = $this->entityManager->getRepository($entityName);
 
         if ($repo === null) {
-            throw new EntityNotFoundException('CrudFactory: Invalid entity alias "' . $entityName . '"');
+            throw new \Exception('CrudFactory: Invalid entity alias "' . $entityName . '"');
         }
 
         $this->securityClassPool->addClass($repo->getClassName());
