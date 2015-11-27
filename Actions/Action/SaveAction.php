@@ -102,14 +102,14 @@ abstract class SaveAction extends Action
                         'data' => $data,
                     ], self::ACTION_CODE);
                 }
-            }
-        } else {
-            $formErrorHandler = $controller->get('vardius_crud.form.error_handler');
+            } else {
+                $formErrorHandler = $controller->get('vardius_crud.form.error_handler');
 
-            return new JsonResponse([
-                'message' => 'Invalid form data',
-                'errors' => $formErrorHandler->getErrorMessages($form),
-            ], 400);
+                return new JsonResponse([
+                    'message' => 'Invalid form data',
+                    'errors' => $formErrorHandler->getErrorMessages($form),
+                ], 400);
+            }
         }
 
         $params = [
