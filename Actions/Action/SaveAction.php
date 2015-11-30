@@ -102,7 +102,7 @@ abstract class SaveAction extends Action
                         'data' => $data,
                     ], self::ACTION_CODE);
                 }
-            } else {
+            } elseif ($this->options['response_type'] === 'json') {
                 $formErrorHandler = $controller->get('vardius_crud.form.error_handler');
 
                 return new JsonResponse([
