@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\CrudBundle\Response;
 
+use JMS\Serializer\SerializationContext;
 use JMS\Serializer\Serializer;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,12 +46,12 @@ class ResponseHandler implements ResponseHandlerInterface
     /**
      * @inheritDoc
      */
-    public function getResponse($responseType, $view, $templateName, $params, $status = 200, $headers = array())
+    public function getResponse($responseType, $view, $templateName, $params, $status = 200, $headers = [], $groups = ['Default'])
     {
         if ($responseType === 'html') {
             $response = $this->getHtml($view, $templateName, $params);
         } else {
-            $response = $this->serializer->serialize($params, $responseType);
+            $response = $this->serializer->serialize($params, $responseType, SerializationContext::create()->setGroups($groups));
         }
 
         return new Response($response, $status, $headers);
