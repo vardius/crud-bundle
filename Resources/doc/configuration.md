@@ -3,12 +3,12 @@ Vardius - Crud Bundle
 
 Configuration
 ----------------
-1. [Create your entity class](#1. Create your entity class)
-2. Create your form type
-3. Create controller
-4. Include scripts
+1. [Create your entity class](#create-your-entity-class)
+2. [Create your form type(#create-your-form-type)
+3. [Create controller(#create-controller)
+4. [Include scripts(#include-scripts)
 
-### 1. Create your entity class
+### Create your entity class
 
 ``` php
     /**
@@ -40,7 +40,7 @@ Configuration
     }
 ```
 
-### 2. Create your form type
+### Create your form type
 
 ``` xml
     <service id="app.form.type.product" class="App\MainBundle\Form\Type\ProductType">
@@ -48,7 +48,7 @@ Configuration
     </service>
 ```
 
-### 3. Create controller
+### Create controller
 
 Finally create your crud controller
 Remember to inject `list view` service for `list` action.
@@ -65,7 +65,8 @@ You can read more about how to create `list view provider` [HERE](https://github
     </service>
 ```
 
-### 4. Include scripts
+### Include scripts
+
 Include styles in your view
 
 ``` html
