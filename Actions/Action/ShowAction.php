@@ -34,8 +34,6 @@ class ShowAction extends Action
     {
         $controller = $event->getController();
 
-        $this->checkRole($controller);
-
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
         $dispatcher = $controller->get('event_dispatcher');
@@ -46,9 +44,7 @@ class ShowAction extends Action
             throw new EntityNotFoundException('Not found error');
         }
 
-        if ($this->options['isOwner']) {
-            $controller->checkAccess('isOwner', $data, 'User is not an owner of this object!');
-        }
+        $this->checkRole($controller, $data);
 
         if ($this->options['response_type'] === 'html') {
             $params = [

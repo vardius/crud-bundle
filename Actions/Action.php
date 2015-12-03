@@ -70,8 +70,7 @@ abstract class Action implements ActionInterface
                 'condition' => '',
                 'rest_route' => false,
                 'response_type' => 'html',
-                'isOwner' => false,
-                'hasRole' => '',
+                'checkAccess' => [],
             )
         );
         $resolver->setAllowedTypes(
@@ -88,8 +87,7 @@ abstract class Action implements ActionInterface
                 'condition' => 'string',
                 'rest_route' => 'bool',
                 'response_type' => 'string',
-                'isOwner' => 'bool',
-                'hasRole' => 'string',
+                'checkAccess' => 'array',
             )
         );
         $resolver->setAllowedValues('response_type', array('html', 'xml', 'json'));
@@ -119,11 +117,24 @@ abstract class Action implements ActionInterface
     /**
      * @inheritDoc
      */
-    public function checkRole(CrudController $controller)
+    public function checkRole(CrudController $controller, $data = null)
     {
-        $role = $this->options['hasRole'];
+        $role = $this->options['checkAccess'];
         if (!empty($role)) {
-            $controller->checkAccess($role);
+
+            $attributes = [];
+            if (array_key_exists('attributes', $role)) {
+                $attributes = $role['attributes'];
+            }
+
+            $message = null;
+            if (array_key_exists('message', $role)) {
+                $message = (string)$role['message'];
+            }
+
+            if (!empty($attributes)) {
+                $controller->checkAccess($attributes, $data, $message);
+            }
         }
     }
 

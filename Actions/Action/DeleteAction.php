@@ -32,8 +32,6 @@ class DeleteAction extends Action
     {
         $controller = $event->getController();
 
-        $this->checkRole($controller);
-
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
         $dispatcher = $controller->get('event_dispatcher');
@@ -45,9 +43,7 @@ class DeleteAction extends Action
             throw new EntityNotFoundException('Not found error');
         }
 
-        if ($this->options['isOwner']) {
-            $controller->checkAccess('isOwner', $data, 'User is not an owner of this object!');
-        }
+        $this->checkRole($controller, $data);
 
         $crudEvent = new CrudEvent($dataProvider->getSource(), $controller);
         $dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);

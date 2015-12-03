@@ -37,8 +37,6 @@ abstract class SaveAction extends Action
     {
         $controller = $event->getController();
 
-        $this->checkRole($controller);
-
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
         $dispatcher = $controller->get('event_dispatcher');
@@ -47,11 +45,12 @@ abstract class SaveAction extends Action
         if ($id = $request->get('id')) {
             $data = $dataProvider->get($id);
 
-            if ($this->options['isOwner']) {
-                $controller->checkAccess('isOwner', $data, 'User is not an owner of this object!');
-            }
+
+            $this->checkRole($controller, $data);
         } else {
             $data = $dataProvider->create();
+
+            $this->checkRole($controller);
         }
 
         $repository = $dataProvider->getSource();

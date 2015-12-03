@@ -151,8 +151,10 @@ Here is a simple example explaining how to add actions and provide custom config
                     'schemes' => [],
                     'methods' => [],
                     'condition' => '',
-                    'isOwner' => false,
-                    'hasRole' => 'ROLE_USER',
+                    'checkAccess' => [ //default empty array - no access is checked then
+                        'attributes' => ['ROLE_USER', 'isOwner'], //attributes array
+                        'message' => 'Access Denied.', //optional message, default: Access Denied.
+                    ],
                     'toArray' => false, //Default false, available only for show action, determine if use to Array method for data serialization (rest api)
                 ])
                 ->addAction('edit', [])
@@ -168,6 +170,9 @@ You can enable rest routs by providing `rest_route` parameter as `true`. If you 
 `response_type` tell the action what type of response to return `xml`, `html`, or `json`.
 By `template` parameter you can provide custom location for action view.
 Other options are just routing symfony options.
+
+`checkAccess` option allow you to check user role, or use your custom voters as well, this bundle goes with `vardius-security` bundle which allows you to use `isOwner` voter.
+For more information how to configure `isOwner` read [Configuration](https://github.com/Vardius/security-bundle/blob/master/Resources/doc/configuration.md)
 
 **COUTION: When using ActionProvider only actions provided by provider class are enabled in controller!**
 
