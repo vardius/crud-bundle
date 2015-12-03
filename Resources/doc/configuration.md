@@ -5,11 +5,8 @@ Configuration
 ----------------
 1. Create your entity class
 2. Create your form type
-3. Set up your crud actions
-4. Provide custom config for actions
-5. Add custom logic
-6. CSV export data
-7. Include scripts
+3. Create controller
+4. Include scripts
 
 ### 1. Create your entity class
 
@@ -51,8 +48,11 @@ Configuration
     </service>
 ```
 
-### 3. Set up your crud actions
-Default:
+### 3. Create controller
+
+Finally create your crud controller
+Remember to inject `list view` service for `list` action.
+You can read more about how to create `list view provider` [HERE](https://github.com/Vardius/list-bundle/blob/master/Resources/doc/configuration.md)
 
 ``` xml
     <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
@@ -65,262 +65,7 @@ Default:
     </service>
 ```
 
-or set only provided actions
-
-``` xml
-    <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
-        <argument>AppBundle:Category</argument>
-        <argument>/category</argument>
-        <argument>NULL</argument>
-        <argument>NULL</argument>
-        <argument>NULL</argument>
-        <argument type="collection">
-            <argument type="service" key="add" id="vardius_crud.action_show"/>
-        </argument>
-
-        <tag name="vardius_crud.controller" />
-    </service>
-```
-
-add action to enabled by default
-
-``` xml
-    <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
-        <argument>AppMainBundle:Product</argument>
-        <argument>/products</argument>
-        <argument type="service" id="app_main.product.list_view"/>
-        <argument type="service" id="app_main.form.type.product"/>
-
-        <call method="addAction">
-            <argument>export</argument>
-            <argument type="service" id="vardius_crud.action_export"/>
-        </call>
-        
-        <tag name="vardius_crud.controller" />
-    </service>
-```
-
-Action `vardius_crud.action_export` is not enabled by default. If you want to use it add it same way as in example before.
-
-Default enabled actions:
-
-``` xml
-    <argument type="service" key="list" id="vardius_crud.action_list"/>
-    <argument type="service" key="show" id="vardius_crud.action_show"/>
-    <argument type="service" key="add" id="vardius_crud.action_add"/>
-    <argument type="service" key="edit" id="vardius_crud.action_edit"/>
-    <argument type="service" key="delete" id="vardius_crud.action_delete"/>
-```
-
-Default disabled actions:
-
-``` xml
-    <argument type="service" key="export" id="vardius_crud.action_export"/>
-```
-
-### 4. Provide custom config for actions
-In case you want to use rest routes or provide some config for actions you can create ActionsProvider class
-
-Here is a simple example explaining how to add actions and provide custom config for it.
-
-``` php
- <?php
-    namespace App\DemoBundle\Actions;
-
-    use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider as BaseProvider;
-
-    class ProductActionsProvider extends BaseProvider
-    {
-        /**
-         * Provides actions for controller
-         */
-        public function getActions()
-        {
-            //actions: list,show,edit,add,delete,export
-            $this
-                ->addAction('list', [
-                    'route_suffix' => 'somesuffix' //default action name
-                    'rest_route' => false,
-                    'response_type' => 'html', 
-                    'template' => '',
-                    'pattern' => '',
-                    'defaults' => [],
-                    'requirements' => [],
-                    'options' => [],
-                    'host' => '',
-                    'schemes' => [],
-                    'methods' => [],
-                    'condition' => '',
-                    'checkAccess' => [ //default empty array - no access is checked then
-                        'attributes' => ['ROLE_USER', 'isOwner'], //attributes array
-                        'message' => 'Access Denied.', //optional message, default: Access Denied.
-                    ],
-                    'toArray' => false, //Default false, available only for show action, determine if use to Array method for data serialization (rest api)
-                ])
-                ->addAction('edit', [])
-            ;
-            
-            return $this->actions;
-        }
-
-    }
-```
-
-You can enable rest routs by providing `rest_route` parameter as `true`. If you don't know what RESTful is you can read more about it [HERE](http://routes.readthedocs.org/en/latest/restful.html)
-`response_type` tell the action what type of response to return `xml`, `html`, or `json`.
-By `template` parameter you can provide custom location for action view.
-Other options are just routing symfony options.
-
-`checkAccess` option allow you to check user role, or use your custom voters as well, this bundle goes with `vardius-security` bundle which allows you to use `isOwner` voter.
-For more information how to configure `isOwner` read [Configuration](https://github.com/Vardius/security-bundle/blob/master/Resources/doc/configuration.md)
-
-**COUTION: When using ActionProvider only actions provided by provider class are enabled in controller!**
-
-Remember to register you `ActionProvider` as a `service`
-
-``` xml
-    <service id="app.product.action_provider" class="App\DemoBundle\Actions\ProductActionsProvider" parent="vardius_crud.action.provider"/>
-```
-
-Anf use it in your controller definition:
-
-``` xml
-    <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
-        <argument>AppBundle:Product</argument>
-        <argument>/product</argument>
-        <argument>NULL</argument>
-        <argument>NULL</argument>
-        <argument>NULL</argument>
-        <argument type="service" id="app.product.action_provider"/>
-
-        <tag name="vardius_crud.controller" />
-    </service>
-```
-
-Providing route_suffix as in example above will result with route name as: `app.crud_controller.somesuffix` according to this example
-Route names are builded as `$controllerKey . '.' . $actionKey` where `$controllerKey` is controller service id and `$actionKey` is `route_suffix` option or action name if route_suffix is not provided
-
-### 5. Add custom logic
-You can add custom logic when add, remove or edit entity. In case to do that just create CrudManager class that implements `Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface`
-
-``` php
-    namespace App\DemoBundle\Manager;
-
-    use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
-
-    class CrudManager implements CrudManagerInterface
-    {
-        /** @var EntityManager */
-        protected $entityManager;
-        
-        /**
-         * @param EntityManager $entityManager
-         */
-        function __construct(EntityManager $entityManager)
-        {
-            $this->entityManager = $entityManager;
-        }
-            
-        /**
-         * Remove entity custom logic
-         *
-         * @param $entity
-         */
-        public function remove($entity)
-        {
-            //add your custom logic
-            $this->entityManager->remove($entity);
-        }
-    
-        /**
-         * Add entity custom logic
-         * @param $entity
-         */
-        public function add($entity)
-        {
-            //add your custom logic
-            $this->entityManager->persist($data);
-        }
-    
-        /**
-         * Updates entity custom logic
-         *
-         * @param $entity
-         */
-        public function update($entity)
-        {
-            //add your custom logic
-            $this->entityManager->persist($data);
-        }
-    }
-```
-
-Declare is at a service and pass it to your controller. Example:
-
-``` xml
-    <service id="app.crud_manager" class="App\DemoBundle\Manager\CrudManager">
-        <argument type="service" id="doctrine.orm.entity_manager"/>
-    </service>
-    
-    <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
-        <argument>AppMainBundle:Product</argument>
-        <argument>/products</argument>
-        <argument type="service" id="app_main.product.list_view"/>
-        <argument type="service" id="app_main.form.type.product"/>
-        <argument type="service" id="app.crud_manager"/>
-
-        <tag name="vardius_crud.controller" />
-    </service>
-```
-
-### 6. CSV export data
-In case of export data to CSV file implement toArray() method in your entity class or override controller methods
-
-``` xml    
-    <service id="app.product_controller" class="App\DemoBundle\Controller\ProductController" factory-service="vardius_crud.controller.factory" factory-method="get">
-        <argument>AppMainBundle:Product</argument>
-        <argument>/products</argument>
-        <argument type="service" id="app_main.product.list_view"/>
-        <argument type="service" id="app_main.form.type.product"/>
-
-        <tag name="vardius_crud.controller" />
-    </service>
-```
-
-``` php
-    class ProductController extends CrudController
-    {
-        /**
-         * Returns array from entity object
-         * Used in export action
-         *
-         * @param $entity
-         * @return array
-         */
-        public function getRow($entity)
-        {
-            return [
-                $entity->getId(),
-                $entity->getName(),
-            ];
-        }
-    
-        /**
-         * Returns headers for export action (CSV file case)
-         *
-         * @return array
-         */
-        public function getHeaders()
-        {
-            return [
-                'ID',
-                'Name',
-            ];
-        }
-    }
-```
-
-### 7. Include scripts
+### 4. Include scripts
 Include styles in your view
 
 ``` html
@@ -339,3 +84,10 @@ or get latest from
 
         [Bootstrap](http://getbootstrap.com/getting-started/#download)
         [Font Awesome](http://fortawesome.github.io/Font-Awesome/get-started/)
+
+
+Advanced config
+----------------
+1. [Manage your controller's actions](Resources/doc/actions.md)
+2. [Add custom logic to your controller](Resources/doc/custom_logic.md)
+3. [Export action](Resources/doc/export.md)
