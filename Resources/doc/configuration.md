@@ -88,6 +88,6 @@ or get latest from
 
 Advanced config
 ----------------
-1. [Manage your controller's actions](Resources/doc/actions.md)
-2. [Add custom logic to your controller](Resources/doc/custom_logic.md)
-3. [Export action](Resources/doc/export.md)
+1. [Manage your controller's actions](actions.md)
+2. [Add custom logic to your controller](custom_logic.md)
+3. [Export action](export.md)
