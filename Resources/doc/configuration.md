@@ -4,9 +4,9 @@ Vardius - Crud Bundle
 Configuration
 ----------------
 1. [Create your entity class](#create-your-entity-class)
-2. [Create your form type(#create-your-form-type)
-3. [Create controller(#create-controller)
-4. [Include scripts(#include-scripts)
+2. [Create your form type](#create-your-form-type)
+3. [Create controller](#create-controller)
+4. [Include scripts](#include-scripts)
 
 ### Create your entity class
 
