@@ -3,9 +3,9 @@ Vardius - Crud Bundle
 
 Add custom logic to your controller
 ----------------
-1. Add custom logic
+1. [Add custom logic](#add-custom-logic)
 
-### 1. Add custom logic
+### Add custom logic
 
 You can add custom logic when add, remove or edit entity.
 In case to do that just create CrudManager class that implements `Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface`

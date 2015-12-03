@@ -3,12 +3,12 @@ Vardius - Crud Bundle
 
 Manage your controller's actions
 ----------------
-1. Default actions
-2. Enable only few
-3. Add additional action
-4. Configure actions
+1. [Default actions](#default-actions)
+2. [Enable only few](#enable-only-few)
+3. [Add additional action](#add-additional-action)
+4. [Configure actions](#configure-actions)
 
-### 1. Default actions
+### Default actions
 
 By default there is 5 basic crud actions enabled:
 
@@ -39,7 +39,7 @@ If it is enough for you you don't have to tell your controller nothing
     </service>
 ```
 
-### 2. Enable only few
+### Enable only few
 
 You can tell controller which actions should be enabled. 
 In that case pass the collection of actions you want to be available
@@ -59,7 +59,7 @@ In that case pass the collection of actions you want to be available
     </service>
 ```
 
-### 3. Add additional action
+### Add additional action
 
 You can add more actions to this enabled by default or this provided by you.
 Simply tell controller to call method `addAction`
@@ -80,7 +80,7 @@ Simply tell controller to call method `addAction`
     </service>
 ```
 
-### 4. Configure actions
+### Configure actions
 
 In case you want to use rest routes or provide some config for actions you can create ActionsProvider class
 Here is a simple example explaining how to add actions and provide custom config for it.

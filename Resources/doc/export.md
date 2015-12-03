@@ -3,9 +3,9 @@ Vardius - Crud Bundle
 
 Export action
 ----------------
-1. CSV export data
+1. [CSV export data](#csv-export-data)
 
-### 1. CSV export data
+### CSV export data
 
 In case of export data to CSV file implement toArray() method in your entity class or override controller methods
 You can also configure actions to return `json`, or `xml` then instead of `toArray` method `JMSSerialzier` will serialize your data.
