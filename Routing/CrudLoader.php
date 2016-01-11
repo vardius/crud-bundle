@@ -53,7 +53,7 @@ class CrudLoader implements LoaderInterface
                 /** @var ActionInterface $action */
                 $options = $action->getOptions();
 
-                $pattern = $controller->getRoutePrefix() . $options['pattern'];
+                $pattern = rtrim($controller->getRoutePrefix() . $options['pattern'], '/');
 
                 $defaults = $options['defaults'];
                 $defaults['_controller'] = $controllerKey . ':' . 'callAction';
