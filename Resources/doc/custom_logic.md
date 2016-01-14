@@ -46,7 +46,7 @@ In case to do that just create CrudManager class that implements `Vardius\Bundle
         public function add($entity)
         {
             //add your custom logic
-            $this->entityManager->persist($data);
+            $this->entityManager->persist($entity);
         }
     
         /**
@@ -57,7 +57,7 @@ In case to do that just create CrudManager class that implements `Vardius\Bundle
         public function update($entity)
         {
             //add your custom logic
-            $this->entityManager->persist($data);
+            $this->entityManager->persist($entity);
         }
     }
 ```
