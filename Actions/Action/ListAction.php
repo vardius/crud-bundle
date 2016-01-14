@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
@@ -17,6 +18,7 @@ use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvents;
 use Vardius\Bundle\CrudBundle\Event\ResponseEvent;
+use Vardius\Bundle\ListBundle\Column\ColumnInterface;
 use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 
 /**
@@ -66,13 +68,21 @@ class ListAction extends Action
         return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
     }
 
-    protected function parseResults($results, $columns)
+    /**
+     * @param array $results
+     * @param ArrayCollection|ColumnInterface[] $columns
+     * @return array
+     */
+    protected function parseResults(array $results, $columns)
     {
         foreach ($results as $key => $result) {
             if (is_array($result)) {
+                
                 return $this->parseResults($results, $columns);
             } elseif (method_exists($result, 'getId')) {
                 $rowData = [];
+
+                /** @var ColumnInterface $column */
                 foreach ($columns as $column) {
                     $columnData = $column->getData($result, $this->options['response_type']);
                     if ($columnData) {
