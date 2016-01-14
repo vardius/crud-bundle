@@ -52,18 +52,7 @@ class ListAction extends Action
         } else {
             $columns = $listView->getColumns();
             $results = $listView->getData($listDataEvent, true);
-            $results = $results->toArray();
-
-            foreach ($results as $key => $result) {
-                $rowData = [];
-                foreach ($columns as $column) {
-                    $columnData = $column->getData($result, $this->options['response_type']);
-                    if ($columnData) {
-                        $rowData[$column->getLabel()] = $columnData;
-                    }
-                }
-                $results[$key] = $rowData;
-            }
+            $results = $this->parseResults($results->toArray(), $columns);
 
             $params = [
                 'results' => $results,
@@ -75,6 +64,26 @@ class ListAction extends Action
         $dispatcher->dispatch(CrudEvents::CRUD_LIST_PRE_RESPONSE, $crudEvent);
 
         return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
+    }
+
+    protected function parseResults($results, $columns)
+    {
+        foreach ($results as $key => $result) {
+            if (is_array($result)) {
+                return $this->parseResults($results, $columns);
+            } elseif (is_object($result)) {
+                $rowData = [];
+                foreach ($columns as $column) {
+                    $columnData = $column->getData($result, $this->options['response_type']);
+                    if ($columnData) {
+                        $rowData[$column->getLabel()] = $columnData;
+                    }
+                }
+                $results[$key] = $rowData;
+            }
+        }
+
+        return $results;
     }
 
     /**
