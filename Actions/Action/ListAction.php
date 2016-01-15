@@ -78,7 +78,7 @@ class ListAction extends Action
         foreach ($results as $key => $result) {
             if (is_array($result)) {
 
-                return $this->parseResults($result, $columns);
+                $results[$key] = $this->parseResults($result, $columns);
             } elseif (method_exists($result, 'getId')) {
                 $rowData = [];
 
