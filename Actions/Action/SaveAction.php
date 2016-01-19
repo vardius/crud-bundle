@@ -125,7 +125,7 @@ abstract class SaveAction extends Action
         $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SAVE_PRE_RESPONSE, $crudEvent);
 
-        return $responseHandler->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
+        return $responseHandler->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['Default', 'show']);
     }
 
 }
