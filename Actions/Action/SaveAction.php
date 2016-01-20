@@ -45,7 +45,6 @@ abstract class SaveAction extends Action
         if ($id = $request->get('id')) {
             $data = $dataProvider->get($id);
 
-
             $this->checkRole($controller, $data);
         } else {
             $data = $dataProvider->create();
