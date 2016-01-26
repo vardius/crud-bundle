@@ -120,7 +120,7 @@ class DataProvider implements DataProviderInterface
             $this->entityManager->persist($data);
         }
 
-        $this->entityManager->flush($data);
+        $this->entityManager->flush();
     }
 
     /**
@@ -134,7 +134,7 @@ class DataProvider implements DataProviderInterface
             $this->entityManager->persist($data);
         }
 
-        $this->entityManager->flush($data);
+        $this->entityManager->flush();
     }
 
     /**
