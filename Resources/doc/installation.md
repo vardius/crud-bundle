@@ -37,8 +37,13 @@ Enable the bundle in the kernel:
     }
 ```
 
-``` yml
+Add to config.yml:
+
+``` yaml
     # app/config/config.yml
+    vardius_crud:
+        api_version: //default null (api is not versioned) read more: http://jmsyst.com/libs/serializer/master/cookbook/exclusion_strategies#versioning-objects
+        
     knp_snappy:
         pdf:
             enabled:    true

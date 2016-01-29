@@ -32,15 +32,19 @@ class ResponseHandler implements ResponseHandlerInterface
     protected $serializer;
     /** @var string */
     protected $templateEngine = '.html.twig';
+    /** @var int|null */
+    protected $version;
 
     /**
      * @param TwigEngine $templating
      * @param TwigEngine $templating
+     * @param int|null $version
      */
-    function __construct(TwigEngine $templating, Serializer $serializer)
+    function __construct(TwigEngine $templating, Serializer $serializer, $version = null)
     {
         $this->templating = $templating;
         $this->serializer = $serializer;
+        $this->version = $version;
     }
 
     /**
@@ -51,7 +55,15 @@ class ResponseHandler implements ResponseHandlerInterface
         if ($responseType === 'html') {
             $response = $this->getHtml($view, $templateName, $params);
         } else {
-            $response = $this->serializer->serialize($params, $responseType, SerializationContext::create()->setGroups($groups));
+            $context = SerializationContext::create();
+            $context->setGroups($groups);
+            $context->enableMaxDepthChecks();
+
+            if ($this->version !== null) {
+                $context->setVersion($this->version);
+            }
+
+            $response = $this->serializer->serialize($params, $responseType, $context);
         }
 
         return new Response($response, $status, $headers);
@@ -112,6 +124,23 @@ class ResponseHandler implements ResponseHandlerInterface
         $route = $parameters['_route'];
 
         return $controller->generateUrl($route, $params);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+        return $this;
     }
 
 }

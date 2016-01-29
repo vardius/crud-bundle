@@ -81,6 +81,7 @@
         <service id="vardius_crud.response.handler" class="%vardius_crud.response.handler.class%">
             <argument type="service" id="templating"/>
             <argument type="service" id="serializer"/>
+            <argument>%vardius_crud.api_version%</argument>
         </service>
         <!--ROUTING-->
         <service id="vardius_crud.routing.pool" class="%vardius_crud.routing.pool.class%"/>

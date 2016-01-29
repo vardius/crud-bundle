@@ -50,4 +50,15 @@ interface ResponseHandlerInterface
      */
     public function getRefererUrl(CrudController $controller, Request $request, $params = []);
 
+    /**
+     * @return int|null
+     */
+    public function getVersion();
+
+    /**
+     * @param int|null $version
+     * @return ResponseHandler
+     */
+    public function setVersion($version);
+
 }
