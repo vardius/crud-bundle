@@ -105,7 +105,7 @@ class ListAction extends Action
 
         $resolver->setDefault('defaults', [
             'page' => 1,
-            'limit' => 1,
+            'limit' => null,
             'column' => null,
             'sort' => null
         ]);
