@@ -42,6 +42,15 @@ Configuration
 
 ### Create your form type
 
+##### YML
+``` yml
+services:
+    app.form.type.product:
+        class: App\MainBundle\Form\Type\ProductType
+        tags:
+            - { name: form.type, alias: product }
+```
+##### XML
 ``` xml
     <service id="app.form.type.product" class="App\MainBundle\Form\Type\ProductType">
         <tag name="form.type" alias="product"/>
@@ -53,7 +62,18 @@ Configuration
 Finally create your crud controller
 Remember to inject `list view` service for `list` action.
 You can read more about how to create `list view provider` [HERE](https://github.com/Vardius/list-bundle/blob/master/Resources/doc/configuration.md)
-
+##### YML
+``` yml
+services:
+    app.crud_controller:
+        class: %vardius_crud.controller.class%
+        tags:
+            - { name: vardius_crud.controller }
+        factory_method: get
+        factory_service: vardius_crud.controller.factory
+        arguments: ['AppMainBundle:Product', /products, '@app_main.product.list_view', '@app_main.form.type.product']
+```
+##### XML
 ``` xml
     <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
         <argument>AppMainBundle:Product</argument>
