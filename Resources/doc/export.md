@@ -10,6 +10,18 @@ Export action
 In case of export data to CSV file implement toArray() method in your entity class or override controller methods
 You can also configure actions to return `json`, or `xml` then instead of `toArray` method `JMSSerialzier` will serialize your data.
 
+##### YML
+``` xml    
+services:
+    app.product_controller:
+        class: App\DemoBundle\Controller\ProductController
+        tags:
+            - { name: vardius_crud.controller }
+        factory_method: get
+        factory_service: vardius_crud.controller.factory
+        arguments: ['AppMainBundle:Product', /products, '@app_main.product.list_view', '@app_main.form.type.product']
+```
+##### XML
 ``` xml    
     <service id="app.product_controller" class="App\DemoBundle\Controller\ProductController" factory-service="vardius_crud.controller.factory" factory-method="get">
         <argument>AppMainBundle:Product</argument>
