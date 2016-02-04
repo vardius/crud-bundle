@@ -1,0 +1,71 @@
+parameters:
+    vardius_crud.controller.class: Vardius\Bundle\CrudBundle\Controller\CrudController
+    vardius_crud.controller.factory.class: Vardius\Bundle\CrudBundle\Controller\Factory\CrudControllerFactory
+    vardius_crud.action.factory.class: Vardius\Bundle\CrudBundle\Actions\Factory\ActionFactory
+    vardius_crud.action.provider.class: Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider
+    vardius_crud.action_pool.class: Vardius\Bundle\CrudBundle\Actions\ActionPool
+    vardius_crud.action_list.class: Vardius\Bundle\CrudBundle\Actions\Action\ListAction
+    vardius_crud.action_show.class: Vardius\Bundle\CrudBundle\Actions\Action\ShowAction
+    vardius_crud.action_add.class: Vardius\Bundle\CrudBundle\Actions\Action\AddAction
+    vardius_crud.action_edit.class: Vardius\Bundle\CrudBundle\Actions\Action\EditAction
+    vardius_crud.action_delete.class: Vardius\Bundle\CrudBundle\Actions\Action\DeleteAction
+    vardius_crud.action_export.class: Vardius\Bundle\CrudBundle\Actions\Action\ExportAction
+    vardius_crud.data.provider.doctrine.class: Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider
+    vardius_crud.form.provider.class: Vardius\Bundle\CrudBundle\Form\Provider\FormProvider
+    vardius_crud.form.error_handler.class: Vardius\Bundle\CrudBundle\Form\FormErrorHandler
+    vardius_crud.response.handler.class: Vardius\Bundle\CrudBundle\Response\ResponseHandler
+    vardius_crud.routing.loader.class: Vardius\Bundle\CrudBundle\Routing\CrudLoader
+    vardius_crud.routing.pool.class: Vardius\Bundle\CrudBundle\Routing\CrudPool
+
+services:
+    vardius_crud.controller.factory:
+        class: %vardius_crud.controller.factory.class%
+        arguments: [{ list: '@vardius_crud.action_list', show: '@vardius_crud.action_show', add: '@vardius_crud.action_add', edit: '@vardius_crud.action_edit', delete: '@vardius_crud.action_delete' }, '@service_container']
+    vardius_crud.action_pool:
+        class: %vardius_crud.action_pool.class%
+    vardius_crud.action.factory:
+        class: %vardius_crud.action.factory.class%
+        arguments: ['@vardius_crud.action_pool']
+    vardius_crud.action.provider:
+        class: %vardius_crud.action.provider.class%
+        arguments: ['@vardius_crud.action.factory']
+    vardius_crud.action_list:
+        class: %vardius_crud.action_list.class%
+        tags:
+            - { name: vardius_crud.action }
+    vardius_crud.action_show:
+        class: %vardius_crud.action_show.class%
+        tags:
+            - { name: vardius_crud.action }
+    vardius_crud.action_add:
+        class: %vardius_crud.action_add.class%
+        tags:
+            - { name: vardius_crud.action }
+    vardius_crud.action_edit:
+        class: %vardius_crud.action_edit.class%
+        tags:
+            - { name: vardius_crud.action }
+    vardius_crud.action_delete:
+        class: %vardius_crud.action_delete.class%
+        tags:
+            - { name: vardius_crud.action }
+    vardius_crud.action_export:
+        class: %vardius_crud.action_export.class%
+        tags:
+            - { name: vardius_crud.action }
+    vardius_crud.form.provider:
+        class: %vardius_crud.form.provider.class%
+        arguments: ['@doctrine.orm.entity_manager', '@form.factory']
+    vardius_crud.form.error_handler:
+        class: %vardius_crud.form.error_handler.class%
+        arguments: ['@translator']
+    vardius_crud.response.handler:
+        class: %vardius_crud.response.handler.class%
+        arguments: ['@templating', '@serializer', '%vardius_crud.api_version%']
+    vardius_crud.routing.pool:
+        class: %vardius_crud.routing.pool.class%
+    vardius_crud.routing.loader:
+        class: %vardius_crud.routing.loader.class%
+        tags:
+            - { name: routing.loader }
+        arguments: ['@vardius_crud.routing.pool']
