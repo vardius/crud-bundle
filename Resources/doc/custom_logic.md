@@ -63,7 +63,21 @@ In case to do that just create CrudManager class that implements `Vardius\Bundle
 ```
 
 Declare is as a service and pass it to your controller.
-
+##### YML
+``` yml
+services:
+    app.crud_manager:
+        class: App\DemoBundle\Manager\CrudManager
+        arguments: ['@doctrine.orm.entity_manager']
+    app.crud_controller:
+        class: %vardius_crud.controller.class%
+        tags:
+            - { name: vardius_crud.controller }
+        factory_method: get
+        factory_service: vardius_crud.controller.factory
+        arguments: ['AppMainBundle:Product', /products, '@app_main.product.list_view', '@app_main.form.type.product', '@app.crud_manager']
+```
+##### XML
 ``` xml
     <service id="app.crud_manager" class="App\DemoBundle\Manager\CrudManager">
         <argument type="service" id="doctrine.orm.entity_manager"/>
