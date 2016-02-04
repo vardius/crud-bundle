@@ -11,7 +11,11 @@ Manage your controller's actions
 ### Default actions
 
 By default there is 5 basic crud actions enabled:
-
+##### YML
+``` yml
+    arguments: { list: '@vardius_crud.action_list', show: '@vardius_crud.action_show', add: '@vardius_crud.action_add', edit: '@vardius_crud.action_edit', delete: '@vardius_crud.action_delete' }
+```
+##### XML
 ``` xml
     <argument type="service" key="list" id="vardius_crud.action_list"/>
     <argument type="service" key="show" id="vardius_crud.action_show"/>
@@ -21,13 +25,31 @@ By default there is 5 basic crud actions enabled:
 ```
 
 Default disabled actions:
-
+##### YML
+``` yml
+    export: '@vardius_crud.action_export'
+```
+##### XML
 ``` xml
     <argument type="service" key="export" id="vardius_crud.action_export"/>
 ```
 
 If it is enough for you you don't have to tell your controller nothing
 
+##### YML
+``` yml
+services:
+    app.crud_controller:
+        class: %vardius_crud.controller.class%
+        tags:
+            - { name: vardius_crud.controller }
+        factory_method: get
+        factory_service: vardius_crud.controller.factory
+        arguments: ['AppMainBundle:Product', /products, '@app_main.product.list_view', '@app_main.form.type.product']
+
+```
+
+##### XML
 ``` xml
     <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
         <argument>AppMainBundle:Product</argument>
@@ -43,7 +65,20 @@ If it is enough for you you don't have to tell your controller nothing
 
 You can tell controller which actions should be enabled. 
 In that case pass the collection of actions you want to be available
+##### YML
+``` yml
+    
+services:
+    app.crud_controller:
+        class: %vardius_crud.controller.class%
+        tags:
+            - { name: vardius_crud.controller }
+        factory_method: get
+        factory_service: vardius_crud.controller.factory
+        arguments: ['AppBundle:Category', /category, null, null, null, { add: '@vardius_crud.action_show' }]
+```
 
+##### XML
 ``` xml
     <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
         <argument>AppBundle:Category</argument>
@@ -63,7 +98,20 @@ In that case pass the collection of actions you want to be available
 
 You can add more actions to this enabled by default or this provided by you.
 Simply tell controller to call method `addAction`
-
+##### YML
+``` yml
+services:
+    app.crud_controller:
+        class: %vardius_crud.controller.class%
+        tags:
+            - { name: vardius_crud.controller }
+        factory_method: get
+        factory_service: vardius_crud.controller.factory
+        arguments: ['AppMainBundle:Product', /products, '@app_main.product.list_view', '@app_main.form.type.product']
+        calls:
+            - [addAction, [export, '@vardius_crud.action_export']]
+```
+##### XML
 ``` xml
     <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
         <argument>AppMainBundle:Product</argument>
@@ -139,13 +187,31 @@ For more information how to configure `isOwner` read [Configuration](https://git
 **COUTION: When using ActionProvider only actions provided by provider class are enabled in controller!**
 
 Remember to register your `ActionProvider` as a `service`
-
+##### YML
+``` yml
+services:
+    app.product.action_provider:
+        class: App\DemoBundle\Actions\ProductActionsProvider
+```
+##### XML
 ``` xml
     <service id="app.product.action_provider" class="App\DemoBundle\Actions\ProductActionsProvider" parent="vardius_crud.action.provider"/>
 ```
 
 And use it in your controller definition:
 
+##### YML
+``` yml
+services:
+    app.crud_controller:
+        class: %vardius_crud.controller.class%
+        tags:
+            - { name: vardius_crud.controller }
+        factory_method: get
+        factory_service: vardius_crud.controller.factory
+        arguments: ['AppBundle:Product', /product, null, null, null, '@app.product.action_provider']
+```
+##### XML
 ``` xml
     <service id="app.crud_controller" class="%vardius_crud.controller.class%" factory-service="vardius_crud.controller.factory" factory-method="get">
         <argument>AppBundle:Product</argument>
