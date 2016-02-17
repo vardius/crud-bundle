@@ -21,3 +21,8 @@ RELEASE NOTES
 
 - Actions more generic
 - Actions provider
+
+**0.5.0**
+
+- Fixed save action for rest methods
+- Major upgrades
