@@ -50,6 +50,10 @@ class DeleteAction extends Action
 
         try {
             $dataProvider->remove($data->getId());
+
+            $response = [
+                'success' => true,
+            ];
         } catch (\Exception $e) {
             $message = null;
             if (is_object($data) && method_exists($data, '__toString')) {
@@ -57,6 +61,11 @@ class DeleteAction extends Action
             } else {
                 $message = 'Error while deleting element with id "' . $id . '"';
             }
+
+            $response = [
+                'success' => false,
+                'error' => $message,
+            ];
 
             $flashBag = $request->getSession()->getFlashBag();
             $flashBag->add('error', $message);
@@ -70,11 +79,8 @@ class DeleteAction extends Action
             return $controller->redirect($responseHandler->getRefererUrl($controller, $request));
         } else {
 
-            return $responseHandler->getResponse($this->options['response_type'], '', '', [
-                'data' => $data,
-            ]);
+            return $responseHandler->getResponse($this->options['response_type'], '', '', $response);
         }
-
     }
 
     /**
