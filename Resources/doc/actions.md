@@ -7,7 +7,7 @@ Manage your controller's actions
 2. [Enable only few](#enable-only-few)
 3. [Add additional action](#add-additional-action)
 4. [Configure actions](#configure-actions)
-5. [Response/Request formats](#response/request-formats)
+5. [Response/Request formats](#responserequest-formats)
 
 ### Default actions
 
