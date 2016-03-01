@@ -33,9 +33,10 @@ class ShowAction extends Action
     public function call(ActionEvent $event)
     {
         $controller = $event->getController();
-
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
+
+        $format = $request->getRequestFormat();
         $dispatcher = $controller->get('event_dispatcher');
         $id = $request->get('id');
 
@@ -46,7 +47,7 @@ class ShowAction extends Action
 
         $this->checkRole($controller, $data);
 
-        if ($this->options['response_type'] === 'html') {
+        if ($format === 'html') {
             $params = [
                 'data' => $data,
             ];
@@ -68,7 +69,7 @@ class ShowAction extends Action
         $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
 
-        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['Default', 'show']);
+        return $this->getResponseHandler($controller)->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['Default', 'show']);
     }
 
     /**
@@ -82,10 +83,10 @@ class ShowAction extends Action
 
         $resolver->setDefault('pattern', function (Options $options) {
             if ($options['rest_route']) {
-                return '/{id}';
+                return '/{id}.{_format}';
             }
 
-            return '/show/{id}';
+            return '/show/{id}.{_format}';
         });
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {

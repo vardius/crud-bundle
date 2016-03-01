@@ -36,9 +36,10 @@ abstract class SaveAction extends Action
     public function call(ActionEvent $event)
     {
         $controller = $event->getController();
-
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
+
+        $format = $request->getRequestFormat();
         $dispatcher = $controller->get('event_dispatcher');
         $formProvider = $controller->get('vardius_crud.form.provider');
 
@@ -91,18 +92,18 @@ abstract class SaveAction extends Action
                     ]));
                 }
 
-                if ($this->options['response_type'] === 'html') {
+                if ($format === 'html') {
 
                     return $controller->redirect($controller->generateUrl($routeName, [
                         'id' => $data->getId()
                     ]));
                 } else {
 
-                    return $responseHandler->getResponse($this->options['response_type'], '', '', [
+                    return $responseHandler->getResponse($format, '', '', [
                         'data' => $data,
                     ], self::ACTION_CODE, [], ['Default', 'update']);
                 }
-            } elseif ($this->options['response_type'] === 'json') {
+            } elseif ($format === 'json') {
                 $formErrorHandler = $controller->get('vardius_crud.form.error_handler');
 
                 return new JsonResponse([
@@ -116,7 +117,7 @@ abstract class SaveAction extends Action
             'data' => $data,
         ];
 
-        if ($this->options['response_type'] === 'html') {
+        if ($format === 'html') {
             $params = array_merge($params, [
                 'form' => $form->createView(),
             ]);
@@ -126,7 +127,7 @@ abstract class SaveAction extends Action
         $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SAVE_PRE_RESPONSE, $crudEvent);
 
-        return $responseHandler->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
+        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
     }
 
 }

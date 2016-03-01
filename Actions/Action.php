@@ -69,10 +69,10 @@ abstract class Action implements ActionInterface
                 'methods' => [],
                 'condition' => '',
                 'rest_route' => false,
-                'response_type' => 'html',
                 'checkAccess' => [],
             )
         );
+
         $resolver->setAllowedTypes(
             array(
                 'route_suffix' => 'string',
@@ -86,11 +86,17 @@ abstract class Action implements ActionInterface
                 'methods' => 'array',
                 'condition' => 'string',
                 'rest_route' => 'bool',
-                'response_type' => 'string',
                 'checkAccess' => 'array',
             )
         );
-        $resolver->setAllowedValues('response_type', array('html', 'xml', 'json'));
+
+        $resolver->setDefault('defaults', [
+            '_format' => 'html'
+        ]);
+
+        $resolver->setDefault('requirements', [
+            '_format' => 'html|json|xml',
+        ]);
     }
 
     /**

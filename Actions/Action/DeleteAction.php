@@ -31,9 +31,10 @@ class DeleteAction extends Action
     public function call(ActionEvent $event)
     {
         $controller = $event->getController();
-
         $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
+
+        $format = $request->getRequestFormat();
         $dispatcher = $controller->get('event_dispatcher');
         $id = $request->get('id');
 
@@ -74,12 +75,12 @@ class DeleteAction extends Action
         $dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
 
         $responseHandler = $this->getResponseHandler($controller);
-        if ($this->options['response_type'] === 'html') {
+        if ($format === 'html') {
 
             return $controller->redirect($responseHandler->getRefererUrl($controller, $request));
         } else {
 
-            return $responseHandler->getResponse($this->options['response_type'], '', '', $response);
+            return $responseHandler->getResponse($format, '', '', $response);
         }
     }
 
@@ -96,10 +97,10 @@ class DeleteAction extends Action
 
         $resolver->setDefault('pattern', function (Options $options) {
             if ($options['rest_route']) {
-                return '/{id}';
+                return '/{id}.{_format}';
             }
 
-            return '/delete/{id}';
+            return '/delete/{id}.{_format}';
         });
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {

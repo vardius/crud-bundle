@@ -34,19 +34,21 @@ class ListAction extends Action
     public function call(ActionEvent $event)
     {
         $controller = $event->getController();
+        $request = $event->getRequest();
+        $format = $request->getRequestFormat();
 
         $this->checkRole($controller);
 
         $repository = $event->getDataProvider()->getSource();
 
         $listView = $event->getListView();
-        $listDataEvent = new ListDataEvent($repository, $event->getRequest());
+        $listDataEvent = new ListDataEvent($repository, $request);
 
         $dispatcher = $controller->get('event_dispatcher');
         $crudEvent = new CrudEvent($listView, $controller, $listDataEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
 
-        if ($this->options['response_type'] === 'html') {
+        if ($format === 'html') {
             $params = [
                 'list' => $listView->render($listDataEvent),
                 'title' => $listView->getTitle(),
@@ -54,7 +56,7 @@ class ListAction extends Action
         } else {
             $columns = $listView->getColumns();
             $results = $listView->getData($listDataEvent, true);
-            $results = $this->parseResults($results->toArray(), $columns);
+            $results = $this->parseResults($results->toArray(), $columns, $format);
 
             $params = $results;
         }
@@ -63,26 +65,27 @@ class ListAction extends Action
         $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_LIST_PRE_RESPONSE, $crudEvent);
 
-        return $this->getResponseHandler($controller)->getResponse($this->options['response_type'], $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['Default', 'list']);
+        return $this->getResponseHandler($controller)->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['Default', 'list']);
     }
 
     /**
      * @param array $results
      * @param ArrayCollection|ColumnInterface[] $columns
+     * @param string $format
      * @return array
      */
-    protected function parseResults(array $results, $columns)
+    protected function parseResults(array $results, $columns, $format)
     {
         foreach ($results as $key => $result) {
             if (is_array($result)) {
 
-                $results[$key] = $this->parseResults($result, $columns);
+                $results[$key] = $this->parseResults($result, $columns, $format);
             } elseif (method_exists($result, 'getId')) {
                 $rowData = [];
 
                 /** @var ColumnInterface $column */
                 foreach ($columns as $column) {
-                    $columnData = $column->getData($result, $this->options['response_type']);
+                    $columnData = $column->getData($result, $format);
                     if ($columnData) {
                         $rowData[$column->getLabel()] = $columnData;
                     }
@@ -105,20 +108,20 @@ class ListAction extends Action
             'page' => 1,
             'limit' => null,
             'column' => null,
-            'sort' => null
+            'sort' => null,
         ]);
 
         $resolver->setDefault('requirements', [
             'page' => '\d+',
-            'limit' => '\d+'
+            'limit' => '\d+',
         ]);
 
         $resolver->setDefault('pattern', function (Options $options) {
             if ($options['rest_route']) {
-                return '/';
+                return '.{_format}';
             }
 
-            return '/list/{page}/{limit}/{column}/{sort}';
+            return '/list/{page}/{limit}/{column}/{sort}.{_format}';
         });
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {

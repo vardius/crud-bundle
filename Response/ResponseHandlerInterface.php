@@ -23,7 +23,7 @@ use Vardius\Bundle\CrudBundle\Controller\CrudController;
 interface ResponseHandlerInterface
 {
     /**
-     * @param string $responseType
+     * @param string $format
      * @param string $view controller event view
      * @param string $templateName action template name
      * @param array $params
@@ -32,7 +32,7 @@ interface ResponseHandlerInterface
      * @param array $groups An array of groups for serialization
      * @return JsonResponse|Response
      */
-    public function getResponse($responseType, $view, $templateName, $params, $status = 200, $headers = [], $groups = ['Default']);
+    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $groups = ['Default']);
 
     /**
      * @param string $view controller event view

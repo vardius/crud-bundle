@@ -31,10 +31,10 @@ class EditAction extends SaveAction
 
         $resolver->setDefault('pattern', function (Options $options) {
             if ($options['rest_route']) {
-                return '/{id}';
+                return '/{id}.{_format}';
             }
 
-            return '/edit/{id}';
+            return '/edit/{id}.{_format}';
         });
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {

@@ -7,6 +7,7 @@ Manage your controller's actions
 2. [Enable only few](#enable-only-few)
 3. [Add additional action](#add-additional-action)
 4. [Configure actions](#configure-actions)
+5. [Response/Request formats](#response/request-formats)
 
 ### Default actions
 
@@ -151,7 +152,12 @@ Here is a simple example explaining how to add actions and provide custom config
                 ->addAction('list', [
                     'route_suffix' => 'somesuffix' //default action name
                     'rest_route' => false,
-                    'response_type' => 'html', 
+                    'defaults' => [
+                        '_format' => 'json'
+                    ],
+                    'requirements' => [
+                        '_format' => 'json'
+                    ],
                     'template' => '',
                     'pattern' => '',
                     'defaults' => [],
@@ -176,13 +182,56 @@ Here is a simple example explaining how to add actions and provide custom config
     }
 ```
 
-You can enable rest routs by providing `rest_route` parameter as `true`. If you don't know what RESTful is you can read more about it [HERE](http://routes.readthedocs.org/en/latest/restful.html)
-`response_type` tell the action what type of response to return `xml`, `html`, or `json`.
 By `template` parameter you can provide custom location for action view.
 Other options are just routing symfony options.
 
 `checkAccess` option allow you to check user role, or use your custom voters as well, this bundle goes with `vardius-security` bundle which allows you to use `isOwner` voter.
 For more information how to configure `isOwner` read [Configuration](https://github.com/Vardius/security-bundle/blob/master/Resources/doc/configuration.md)
+
+### Response/Request formats
+
+You can enable rest routs by providing `rest_route` parameter as `true`. If you don't know what RESTful is you can read more about it [HERE](http://routes.readthedocs.org/en/latest/restful.html)
+Default `_format` is `html` and you can request other response by providing allowed formats in the route. For example `/list.json`. allowed types by default are `html|json|xml`.
+When entering rout without `{_format}` parameter the default one will trigger. For example `/list` will trigger default `html` format.
+
+You can override this options as follows:
+
+``` php
+ <?php
+    namespace App\DemoBundle\Actions;
+
+    use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider as BaseProvider;
+
+    class ProductActionsProvider extends BaseProvider
+    {
+        /**
+         * Provides actions for controller
+         */
+        public function getActions()
+        {
+            //actions: list,show,edit,add,delete,export
+            $this
+                ->addAction('list', [
+                    'defaults' => [
+                        '_format' => 'json' //default format
+                    ],
+                    'requirements' => [
+                        '_format' => 'json|xml' //allowed formats
+                    ],
+                ])
+            ;
+            
+            return $this->actions;
+        }
+    }
+```
+
+This example will works as follow:
+
+`/list` will trigger `json` format
+`/list.json` will trigger `json` format
+`/list.xml` will trigger `xml` format
+`/list.*` any other formats will not match any route
 
 **COUTION: When using ActionProvider only actions provided by provider class are enabled in controller!**
 

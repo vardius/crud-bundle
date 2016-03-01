@@ -42,10 +42,10 @@ class AddAction extends SaveAction
 
         $resolver->setDefault('pattern', function (Options $options) {
             if ($options['rest_route']) {
-                return '/';
+                return '.{_format}';
             }
 
-            return '/add';
+            return '/add.{_format}';
         });
     }
 

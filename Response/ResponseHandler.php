@@ -50,9 +50,9 @@ class ResponseHandler implements ResponseHandlerInterface
     /**
      * @inheritDoc
      */
-    public function getResponse($responseType, $view, $templateName, $params, $status = 200, $headers = [], $groups = ['Default'])
+    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $groups = ['Default'])
     {
-        if ($responseType === 'html') {
+        if ($format === 'html') {
             $response = $this->getHtml($view, $templateName, $params);
         } else {
             $context = SerializationContext::create();
@@ -63,7 +63,7 @@ class ResponseHandler implements ResponseHandlerInterface
                 $context->setVersion($this->version);
             }
 
-            $response = $this->serializer->serialize($params, $responseType, $context);
+            $response = $this->serializer->serialize($params, $format, $context);
         }
 
         return new Response($response, $status, $headers);
