@@ -60,7 +60,9 @@ class ShowAction extends Action
                 }
             }
 
-            $params = $data;
+            $params = [
+                'data' => $data,
+            ];
         }
 
         $paramsEvent = new ResponseEvent($params);

@@ -22,15 +22,15 @@ class ResponseEvent
 
     /**
      * ResponseEvent constructor.
-     * @param array|object $params
+     * @param array $params
      */
-    public function __construct($params = [])
+    public function __construct(array $params = [])
     {
         $this->params = $params;
     }
 
     /**
-     * @return array|object
+     * @return array
      */
     public function getParams()
     {
@@ -38,7 +38,7 @@ class ResponseEvent
     }
 
     /**
-     * @param array|object $params
+     * @param array $params
      * @return ResponseEvent
      */
     public function setParams($params)
