@@ -58,9 +58,7 @@ class ListAction extends Action
             $results = $listView->getData($listDataEvent, true);
             $results = $this->parseResults($results->toArray(), $columns, $format);
 
-            $params = [
-                'data' => $results,
-            ];
+            $params = $results;
         }
 
         $paramsEvent = new ResponseEvent($params);
