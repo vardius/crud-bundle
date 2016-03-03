@@ -113,9 +113,7 @@ abstract class SaveAction extends Action
             }
         }
 
-        $params = [
-            'data' => $data,
-        ];
+        $params = $data;
 
         if ($format === 'html') {
             $params = array_merge($params, [
