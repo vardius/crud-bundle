@@ -15,9 +15,9 @@
     ],
     "require": {
         "php": ">=5.4",
-        "symfony/symfony": ">=2.6",
+        "symfony/symfony": ">=3.0",
         "vardius/list-bundle": ">=0.6",
-        "vardius/security-bundle": ">=0.1",
+        "vardius/security-bundle": ">=0.2",
         "knplabs/knp-snappy-bundle": "1.2.*@dev",
         "symfony/options-resolver": ">=2.7",
         "jms/serializer-bundle": "^1.0"
@@ -28,7 +28,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.5.x-dev"
+            "dev-master": "0.6.x-dev"
         }
     }
 }
