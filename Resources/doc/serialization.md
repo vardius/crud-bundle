@@ -27,7 +27,9 @@ Here is a simple example explaining how to add actions and provide custom config
             //actions: list,show,edit,add,delete,export
             $this
                 ->addAction('show', [
-                    'response_type' => 'json', 
+                    'defaults' => [
+                        '_format' => 'json'
+                    ],
                     'toArray' => false, //Default false, determine if use to Array method for data serialization (rest api)
                 ])
             ;

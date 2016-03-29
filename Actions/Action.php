@@ -56,47 +56,37 @@ abstract class Action implements ActionInterface
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'route_suffix' => '',
-                'pattern' => '',
-                'template' => '',
-                'defaults' => [],
-                'requirements' => [],
-                'options' => [],
-                'host' => '',
-                'schemes' => [],
-                'methods' => [],
-                'condition' => '',
-                'rest_route' => false,
-                'checkAccess' => [],
-            )
-        );
-
-        $resolver->setAllowedTypes(
-            array(
-                'route_suffix' => 'string',
-                'pattern' => 'string',
-                'template' => 'string',
-                'defaults' => 'array',
-                'requirements' => 'array',
-                'options' => 'array',
-                'host' => 'string',
-                'schemes' => 'array',
-                'methods' => 'array',
-                'condition' => 'string',
-                'rest_route' => 'bool',
-                'checkAccess' => 'array',
-            )
-        );
-
-        $resolver->setDefault('defaults', [
-            '_format' => 'html'
+        $resolver->setDefaults([
+            'route_suffix' => '',
+            'pattern' => '',
+            'template' => '',
+            'defaults' => [
+                '_format' => 'html'
+            ],
+            'requirements' => [
+                '_format' => 'html|json|xml',
+            ],
+            'options' => [],
+            'host' => '',
+            'schemes' => [],
+            'methods' => [],
+            'condition' => '',
+            'rest_route' => false,
+            'checkAccess' => [],
         ]);
 
-        $resolver->setDefault('requirements', [
-            '_format' => 'html|json|xml',
-        ]);
+        $resolver->setAllowedTypes('route_suffix', 'string');
+        $resolver->setAllowedTypes('pattern', 'string');
+        $resolver->setAllowedTypes('template', 'string');
+        $resolver->setAllowedTypes('defaults', 'array');
+        $resolver->setAllowedTypes('requirements', 'array');
+        $resolver->setAllowedTypes('options', 'array');
+        $resolver->setAllowedTypes('host', 'string');
+        $resolver->setAllowedTypes('schemes', 'array');
+        $resolver->setAllowedTypes('methods', 'array');
+        $resolver->setAllowedTypes('condition', 'string');
+        $resolver->setAllowedTypes('rest_route', 'bool');
+        $resolver->setAllowedTypes('checkAccess', 'array');
     }
 
     /**

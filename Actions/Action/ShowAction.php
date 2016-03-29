@@ -98,11 +98,7 @@ class ShowAction extends Action
         });
 
         $resolver->setDefault('toArray', false);
-        $resolver->addAllowedTypes(
-            [
-                'toArray' => 'bool',
-            ]
-        );
+        $resolver->addAllowedTypes('toArray', 'bool');
     }
 
     /**
