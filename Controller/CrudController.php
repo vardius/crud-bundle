@@ -15,6 +15,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Vardius\Bundle\CrudBundle\Actions\ActionInterface;
 use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
@@ -57,6 +58,34 @@ class CrudController extends Controller
         $this->formType = $formType;
         $this->view = $view;
         $this->actions = new ArrayCollection();
+    }
+
+    /**
+     * Gets a container service by its id.
+     *
+     * @param string $id The service id
+     *
+     * @return object The service
+     */
+    public function get($id)
+    {
+        return $this->container->get($id);
+    }
+
+    /**
+     * Generates a URL from the given parameters.
+     *
+     * @param string $route The name of the route
+     * @param mixed $parameters An array of parameters
+     * @param int $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     *
+     * @see UrlGeneratorInterface
+     */
+    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
     /**
