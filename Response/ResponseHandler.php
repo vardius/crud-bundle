@@ -10,12 +10,11 @@
 
 namespace Vardius\Bundle\CrudBundle\Response;
 
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\Serializer;
 use Symfony\Bridge\Twig\TwigEngine;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Serializer\Serializer;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 
 /**
@@ -32,38 +31,30 @@ class ResponseHandler implements ResponseHandlerInterface
     protected $serializer;
     /** @var string */
     protected $templateEngine = '.html.twig';
-    /** @var int|null */
-    protected $version;
 
     /**
      * @param TwigEngine $templating
-     * @param TwigEngine $templating
-     * @param int|null $version
+     * @param Serializer $serializer
      */
-    function __construct(TwigEngine $templating, Serializer $serializer, $version = null)
+    function __construct(TwigEngine $templating, Serializer $serializer = null)
     {
         $this->templating = $templating;
         $this->serializer = $serializer;
-        $this->version = $version;
     }
 
     /**
      * @inheritDoc
      */
-    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $groups = ['Default'])
+    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $groups = [])
     {
         if ($format === 'html') {
             $response = $this->getHtml($view, $templateName, $params);
+        } elseif ($this->serializer instanceof Serializer) {
+            $response = $this->serializer->serialize($params, $format, $groups);
         } else {
-            $context = SerializationContext::create();
-            $context->setGroups($groups);
-            $context->enableMaxDepthChecks();
-
-            if ($this->version !== null) {
-                $context->setVersion($this->version);
-            }
-
-            $response = $this->serializer->serialize($params, $format, $context);
+            throw new \Exception(
+                'The serializer service is not available by default. To turn it on, activate it in your project configuration.'
+            );
         }
 
         return new Response($response, $status, $headers);
@@ -124,23 +115,6 @@ class ResponseHandler implements ResponseHandlerInterface
         $route = $parameters['_route'];
 
         return $controller->generateUrl($route, $params);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getVersion()
-    {
-        return $this->version;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-        return $this;
     }
 
 }
