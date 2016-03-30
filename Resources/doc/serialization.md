@@ -6,6 +6,8 @@ Serialization
 1. [Configure](#configure)
 1. [Set groups](#set-groups)
 
+You can read more how to use the Symfony's [ Serializer](https://symfony.com/doc/current/cookbook/serializer.html)
+
 ### Configure
 
 In case you want to use rest routes or provide some config for actions you can create ActionsProvider class
@@ -55,7 +57,7 @@ Analogically:
     namespace AppBundle\Entity;
     
     use Doctrine\ORM\Mapping as ORM;
-    use JMS\Serializer\Annotation as Serializer;
+    use Symfony\Component\Serializer\Annotation as Serializer;
     
     /**
      * @package AppBundle\Entity
@@ -82,10 +84,9 @@ Analogically:
         /**
          * @var ArrayCollection|Video[]
          * @ORM\ManyToOne(targetEntity="Video", inversedBy="overlays")
-         * @Serializer\MaxDepth(2)
          * @Serializer\Groups({"show", "update"})
          */
         protected $category;
 ```
 
-FOr more information read how to configure this read: [JMS Serializer](http://jmsyst.com/libs/serializer/master/reference/annotations)
+For more information read [The Serializer Component](https://symfony.com/doc/master/components/serializer.html)

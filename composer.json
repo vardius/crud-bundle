@@ -19,8 +19,7 @@
         "vardius/list-bundle": "^0.6",
         "vardius/security-bundle": "^0.2",
         "knplabs/knp-snappy-bundle": "1.2.*@dev",
-        "symfony/options-resolver": "^3.0",
-        "jms/serializer-bundle": "^1.0"
+        "symfony/options-resolver": "^3.0"
     },
     "target-dir": "Vardius/Bundle/CrudBundle",
     "autoload": {
@@ -28,7 +27,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.6.x-dev"
+            "dev-master": "0.7.x-dev"
         }
     }
 }
