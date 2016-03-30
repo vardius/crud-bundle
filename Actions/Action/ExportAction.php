@@ -42,7 +42,7 @@ class ExportAction extends Action
         $request = $event->getRequest();
         $dispatcher = $controller->get('event_dispatcher');
         $snappy = $controller->get('knp_snappy.pdf');
-        $responseHandler = $this->getResponseHandler($controller);
+        $responseHandler = $controller->get('vardius_crud.response.handler');
 
         $crudEvent = new CrudEvent($repository, $controller);
         $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);

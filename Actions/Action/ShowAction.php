@@ -68,8 +68,9 @@ class ShowAction extends Action
         $paramsEvent = new ResponseEvent($params);
         $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
+        $responseHandler = $controller->get('vardius_crud.response.handler');
 
-        return $this->getResponseHandler($controller)->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['show']);
+        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['show']);
     }
 
     /**
