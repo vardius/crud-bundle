@@ -74,7 +74,7 @@ class DeleteAction extends Action
 
         $dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
 
-        $responseHandler = $this->getResponseHandler($controller);
+        $responseHandler = $controller->get('vardius_crud.response.handler');
         if ($format === 'html') {
 
             return $controller->redirect($responseHandler->getRefererUrl($controller, $request));

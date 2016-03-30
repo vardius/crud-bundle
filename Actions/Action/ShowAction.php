@@ -69,7 +69,7 @@ class ShowAction extends Action
         $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
 
-        return $this->getResponseHandler($controller)->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['Default', 'show']);
+        return $this->getResponseHandler($controller)->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['show']);
     }
 
     /**

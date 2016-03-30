@@ -13,6 +13,7 @@ namespace Vardius\Bundle\CrudBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -58,34 +59,6 @@ class CrudController extends Controller
         $this->formType = $formType;
         $this->view = $view;
         $this->actions = new ArrayCollection();
-    }
-
-    /**
-     * Gets a container service by its id.
-     *
-     * @param string $id The service id
-     *
-     * @return object The service
-     */
-    public function get($id)
-    {
-        return $this->container->get($id);
-    }
-
-    /**
-     * Generates a URL from the given parameters.
-     *
-     * @param string $route The name of the route
-     * @param mixed $parameters An array of parameters
-     * @param int $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
-     *
-     * @return string The generated URL
-     *
-     * @see UrlGeneratorInterface
-     */
-    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
-    {
-        return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
 
     /**
@@ -227,6 +200,47 @@ class CrudController extends Controller
     public function checkAccess($attributes, $object = null, $message = 'Access Denied.')
     {
         $this->denyAccessUnlessGranted($attributes, $object, $message);
+    }
+
+    /**
+     * Gets a container service by its id.
+     *
+     * @param string $id The service id
+     *
+     * @return object The service
+     */
+    public function get($id)
+    {
+        return $this->container->get($id);
+    }
+
+    /**
+     * Generates a URL from the given parameters.
+     *
+     * @param string $route The name of the route
+     * @param mixed $parameters An array of parameters
+     * @param int $referenceType The type of reference (one of the constants in UrlGeneratorInterface)
+     *
+     * @return string The generated URL
+     *
+     * @see UrlGeneratorInterface
+     */
+    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    {
+        return $this->container->get('router')->generate($route, $parameters, $referenceType);
+    }
+
+    /**
+     * Returns a RedirectResponse to the given URL.
+     *
+     * @param string $url The URL to redirect to
+     * @param int $status The status code to use for the Response
+     *
+     * @return RedirectResponse
+     */
+    public function redirect($url, $status = 302)
+    {
+        return new RedirectResponse($url, $status);
     }
 
 }

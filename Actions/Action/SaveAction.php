@@ -11,7 +11,6 @@
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
@@ -127,7 +126,7 @@ abstract class SaveAction extends Action
         $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SAVE_PRE_RESPONSE, $crudEvent);
 
-        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams());
+        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['update']);
     }
 
 }

@@ -100,17 +100,6 @@ abstract class Action implements ActionInterface
     }
 
     /**
-     * Returns response handler class
-     *
-     * @param CrudController $controller
-     * @return \Vardius\Bundle\CrudBundle\Response\ResponseHandler
-     */
-    protected function getResponseHandler(CrudController $controller)
-    {
-        return $controller->get('vardius_crud.response.handler');
-    }
-
-    /**
      * @inheritDoc
      */
     public function checkRole(CrudController $controller, $data = null)
