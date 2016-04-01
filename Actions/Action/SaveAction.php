@@ -11,6 +11,8 @@
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
@@ -35,12 +37,8 @@ abstract class SaveAction extends Action
     public function call(ActionEvent $event)
     {
         $controller = $event->getController();
-        $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
-
-        $format = $request->getRequestFormat();
-        $dispatcher = $controller->get('event_dispatcher');
-        $formProvider = $controller->get('vardius_crud.form.provider');
+        $request = $event->getRequest();
 
         if ($id = $request->get('id')) {
             $data = $dataProvider->get($id);
@@ -52,16 +50,22 @@ abstract class SaveAction extends Action
             $this->checkRole($controller);
         }
 
-        $repository = $dataProvider->getSource();
+        $formProvider = $controller->get('vardius_crud.form.provider');
         $form = $formProvider->createForm($event->getFormType(), $data, [
             'method' => $request->getMethod()
         ]);
 
+        $repository = $dataProvider->getSource();
         $crudEvent = new CrudEvent($repository, $controller, $form);
+
+        $dispatcher = $controller->get('event_dispatcher');
         $dispatcher->dispatch(CrudEvents::CRUD_PRE_SAVE, $crudEvent);
 
+        $format = $request->getRequestFormat();
         $responseHandler = $controller->get('vardius_crud.response.handler');
+
         if (in_array($request->getMethod(), ['POST', 'PUT'])) {
+
             $form->handleRequest($request);
 
             if ($form->isValid()) {
@@ -83,7 +87,10 @@ abstract class SaveAction extends Action
                 }
 
                 if (!$controller->get('router')->getRouteCollection()->get($routeName)) {
-                    $flashBag = $request->getSession()->getFlashBag();
+                    /** @var Session $session */
+                    $session = $request->getSession();
+                    /** @var FlashBagInterface $flashBag */
+                    $flashBag = $session->getFlashBag();
                     $flashBag->add('success', 'save.success');
 
                     return $controller->redirect($responseHandler->getRefererUrl($controller, $request, [
@@ -124,7 +131,7 @@ abstract class SaveAction extends Action
 
         $paramsEvent = new ResponseEvent($params);
         $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
-        $dispatcher->dispatch(CrudEvents::CRUD_SAVE_PRE_RESPONSE, $crudEvent);
+        $dispatcher->dispatch(CrudEvents::CRUD_SAVE, $crudEvent);
 
         return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['update']);
     }

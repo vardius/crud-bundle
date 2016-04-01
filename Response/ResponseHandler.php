@@ -61,9 +61,12 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @inheritDoc
+     * @param string $view controller event view
+     * @param string $templateName action template name
+     * @param array $params
+     * @return string
      */
-    public function getHtml($view, $templateName, $params)
+    protected function getHtml($view, $templateName, $params)
     {
         $template = null;
         if ($this->templating->exists($templateName)) {

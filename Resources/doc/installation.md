@@ -17,6 +17,7 @@ Install the package through composer:
 REQUIRED: `vardius/list-bundle`
 
 ### 2. Enable the VardiusCrudBundle
+
 Enable the bundle in the kernel:
 
 ``` php
@@ -27,23 +28,8 @@ Enable the bundle in the kernel:
     {
         $bundles = array(
             // ...
-            new Vardius\Bundle\ListBundle\VardiusListBundle(),
             new Vardius\Bundle\CrudBundle\VardiusCrudBundle(),
-            new Vardius\Bundle\SecurityBundle\VardiusSecurityBundle(),
-            new Knp\Bundle\SnappyBundle\KnpSnappyBundle(),
+            new Vardius\Bundle\ListBundle\VardiusListBundle(),
         );
     }
 ```
-
-If you need export actions add to config.yml:
-
-``` yaml
-    # app/config/config.yml
-    knp_snappy:
-        pdf:
-            enabled:    true
-            binary:     /usr/local/bin/wkhtmltopdf
-            options:    []
-```
-
-You can omit this config if you don't want to enable this actions. Also don't register `KnpSnappyBundle` then.
