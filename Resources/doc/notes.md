@@ -26,3 +26,17 @@ RELEASE NOTES
 
 - Fixed save action for rest methods
 - Major upgrades
+
+
+**0.6.0**
+
+- Major refactor
+
+**0.7.0**
+
+- Upgrade to work with symfony 3.0
+
+**0.8.0**
+
+- Works independent from external bundles
+- VardiusListBundle support
