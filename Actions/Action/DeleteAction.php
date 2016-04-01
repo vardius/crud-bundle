@@ -30,7 +30,7 @@ class DeleteAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event)
+    public function call(ActionEvent $event, $format)
     {
         $controller = $event->getController();
         $dataProvider = $event->getDataProvider();
@@ -75,8 +75,6 @@ class DeleteAction extends Action
         }
 
         $dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
-
-        $format = $request->getRequestFormat();
         $responseHandler = $controller->get('vardius_crud.response.handler');
 
         if ($format === 'html') {

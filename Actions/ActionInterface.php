@@ -10,7 +10,6 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 
@@ -25,9 +24,10 @@ interface ActionInterface
      * Action body, method is invoked when the action is called from controller
      *
      * @param ActionEvent $event
-     * @return Response
+     * @param string $format
+     * @return mixed
      */
-    public function call(ActionEvent $event);
+    public function call(ActionEvent $event, $format);
 
     /**
      * Adjust the configuration of the options
