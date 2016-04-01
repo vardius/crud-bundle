@@ -28,20 +28,23 @@ class ListAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event)
+    public function call(ActionEvent $event, $format)
     {
         $controller = $event->getController();
 
         $this->checkRole($controller);
-
-        $request = $event->getRequest();
-        $format = $request->getRequestFormat();
-
+        
         $repository = $event->getDataProvider()->getSource();
 
         $params = [
             'data' => $repository->findAll(),
         ];
+
+        $request = $event->getRequest();
+        $routeName = $request->get('_route');
+        if (strpos($routeName, 'export') !== false) {
+            $params['ui'] = false;
+        }
 
         $paramsEvent = new ResponseEvent($params);
         $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);

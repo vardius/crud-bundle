@@ -68,7 +68,7 @@ class CrudController extends Controller
             throw new NotFoundHttpException('Action "' . $_action . '" does not exist');
         }
 
-        return $action->call($event);
+        return $action->call($event, $request->getRequestFormat());
     }
 
     /**

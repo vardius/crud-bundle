@@ -107,21 +107,20 @@ class ListAction extends Action\ListAction
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event)
+    public function call(ActionEvent $event, string $format)
     {
         $controller = $event->getController();
 
         $this->checkRole($controller);
-
+        
         $request = $event->getRequest();
         $repository = $event->getDataProvider()->getSource();
+        $listDataEvent = new ListDataEvent($repository, $request);
 
         /** @var ListViewProviderInterface $listViewProvider */
         $listViewProvider = $controller->get(trim($controller->getRoutePrefix(), '/') . '.list_view');
         $listView = $listViewProvider->buildListView();
-        $listDataEvent = new ListDataEvent($repository, $request);
 
-        $format = $request->getRequestFormat();
         if ($format === 'html') {
             $params = [
                 'list' => $listView->render($listDataEvent),
@@ -135,6 +134,11 @@ class ListAction extends Action\ListAction
             $params = [
                 'data' => $results,
             ];
+        }
+        
+        $routeName = $request->get('_route');
+        if (strpos($routeName, 'export') !== false) {
+            $params['ui'] = false;
         }
 
         $paramsEvent = new ResponseEvent($params);

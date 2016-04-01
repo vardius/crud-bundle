@@ -30,7 +30,7 @@ class ShowAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event)
+    public function call(ActionEvent $event, $format)
     {
         $controller = $event->getController();
         $dataProvider = $event->getDataProvider();
@@ -44,7 +44,6 @@ class ShowAction extends Action
 
         $this->checkRole($controller, $data);
 
-        $format = $request->getRequestFormat();
         if ($format === 'html') {
             $params = [
                 'data' => $data,
@@ -61,6 +60,11 @@ class ShowAction extends Action
             $params = [
                 'data' => $data,
             ];
+        }
+
+        $routeName = $request->get('_route');
+        if (strpos($routeName, 'export') !== false) {
+            $params['ui'] = false;
         }
 
         $paramsEvent = new ResponseEvent($params);

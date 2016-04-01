@@ -34,7 +34,7 @@ abstract class SaveAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event)
+    public function call(ActionEvent $event, $format)
     {
         $controller = $event->getController();
         $dataProvider = $event->getDataProvider();
@@ -60,8 +60,6 @@ abstract class SaveAction extends Action
 
         $dispatcher = $controller->get('event_dispatcher');
         $dispatcher->dispatch(CrudEvents::CRUD_PRE_SAVE, $crudEvent);
-
-        $format = $request->getRequestFormat();
         $responseHandler = $controller->get('vardius_crud.response.handler');
 
         if (in_array($request->getMethod(), ['POST', 'PUT'])) {

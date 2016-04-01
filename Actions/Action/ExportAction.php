@@ -28,7 +28,7 @@ class ExportAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event)
+    public function call(ActionEvent $event, $format)
     {
         $controller = $event->getController();
 
@@ -44,7 +44,7 @@ class ExportAction extends Action
 
         if (is_numeric($id)) {
             $showAction = $controller->get('vardius_crud.action_show');
-            $html = $showAction->call($event)->getContent();
+            $html = $showAction->call($event, 'html')->getContent();
 
             $response = new Response(
                 $snappy->getOutputFromHtml($html, [
@@ -63,7 +63,7 @@ class ExportAction extends Action
             $type = $request->get('type');
             if ($type === 'pdf') {
                 $listAction = $controller->get('vardius_crud.action_list');
-                $html = $listAction->call($event)->getContent();
+                $html = $listAction->call($event, 'html')->getContent();
 
                 $response = new Response(
                     $snappy->getOutputFromHtml($html, [
