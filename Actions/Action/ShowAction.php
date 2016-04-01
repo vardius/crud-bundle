@@ -33,13 +33,10 @@ class ShowAction extends Action
     public function call(ActionEvent $event)
     {
         $controller = $event->getController();
-        $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
+        $request = $event->getRequest();
 
-        $format = $request->getRequestFormat();
-        $dispatcher = $controller->get('event_dispatcher');
         $id = $request->get('id');
-
         $data = $dataProvider->get($id);
         if ($data === null) {
             throw new EntityNotFoundException('Not found error');
@@ -47,6 +44,7 @@ class ShowAction extends Action
 
         $this->checkRole($controller, $data);
 
+        $format = $request->getRequestFormat();
         if ($format === 'html') {
             $params = [
                 'data' => $data,
@@ -67,7 +65,10 @@ class ShowAction extends Action
 
         $paramsEvent = new ResponseEvent($params);
         $crudEvent = new CrudEvent($dataProvider->getSource(), $controller, $paramsEvent);
+
+        $dispatcher = $controller->get('event_dispatcher');
         $dispatcher->dispatch(CrudEvents::CRUD_SHOW, $crudEvent);
+
         $responseHandler = $controller->get('vardius_crud.response.handler');
 
         return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['show']);

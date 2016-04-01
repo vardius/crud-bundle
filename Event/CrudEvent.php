@@ -15,7 +15,6 @@ use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Form\FormInterface;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
-use Vardius\Bundle\ListBundle\ListView\ListView;
 
 /**
  * CrudEvent
@@ -24,7 +23,7 @@ use Vardius\Bundle\ListBundle\ListView\ListView;
  */
 class CrudEvent extends Event
 {
-    /** @var EntityRepository|QueryBuilder|ListView */
+    /** @var EntityRepository|QueryBuilder */
     protected $source;
     /** @var FormInterface|ResponseEvent|mixed */
     protected $data;
@@ -32,7 +31,7 @@ class CrudEvent extends Event
     protected $controller;
 
     /**
-     * @param EntityRepository|QueryBuilder|ListView $source
+     * @param EntityRepository|QueryBuilder $source
      * @param CrudController $controller
      * @param FormInterface|ResponseEvent|mixed $data
      */
@@ -44,11 +43,31 @@ class CrudEvent extends Event
     }
 
     /**
-     * @return EntityRepository|QueryBuilder|ListView
+     * @return EntityRepository|QueryBuilder
      */
     public function getSource()
     {
         return $this->source;
+    }
+
+    /**
+     * @param EntityRepository|QueryBuilder $source
+     * @return CrudEvent
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
+        return $this;
+    }
+
+    /**
+     * @param mixed|FormInterface|ResponseEvent $data
+     * @return CrudEvent
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+        return $this;
     }
 
     /**

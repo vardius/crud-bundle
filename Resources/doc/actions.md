@@ -158,7 +158,7 @@ Here is a simple example explaining how to add actions and provide custom config
                     'requirements' => [
                         '_format' => 'json'
                     ],
-                    'template' => '',
+                    'template' => '', //template path available for all actions expect export (export uses show and list action templates)
                     'pattern' => '',
                     'defaults' => [],
                     'requirements' => [],

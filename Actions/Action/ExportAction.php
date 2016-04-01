@@ -17,7 +17,6 @@ use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvents;
-use Vardius\Bundle\ListBundle\Event\ListDataEvent;
 
 /**
  * ExportAction
@@ -26,9 +25,6 @@ use Vardius\Bundle\ListBundle\Event\ListDataEvent;
  */
 class ExportAction extends Action
 {
-    /** @var int */
-    protected $id = null;
-
     /**
      * {@inheritdoc}
      */
@@ -38,24 +34,18 @@ class ExportAction extends Action
 
         $this->checkRole($controller);
 
-        $repository = $event->getDataProvider()->getSource();
+        if (!$controller->has('knp_snappy.pdf')) {
+            throw new \Exception('Have you registered KnpSnappyBundle?');
+        }
+
         $request = $event->getRequest();
-        $dispatcher = $controller->get('event_dispatcher');
         $snappy = $controller->get('knp_snappy.pdf');
-        $responseHandler = $controller->get('vardius_crud.response.handler');
+        $id = $request->get('id');
 
-        $crudEvent = new CrudEvent($repository, $controller);
-        $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);
+        if (is_numeric($id)) {
+            $showAction = $controller->get('vardius_crud.action_show');
+            $html = $showAction->call($event)->getContent();
 
-        $this->id = $request->get('id');
-        $options['template'] = !empty($this->options['template'] ?: (is_numeric($this->id) ? 'show' : 'list'));
-
-        if (is_numeric($this->id)) {
-            $dataProvider = $event->getDataProvider();
-            $html = $responseHandler->getHtml($event->getView(), $this->getTemplate(), [
-                'data' => $dataProvider->get($this->id),
-                'ui' => false
-            ]);
             $response = new Response(
                 $snappy->getOutputFromHtml($html, [
                     'margin-bottom' => 3,
@@ -70,16 +60,11 @@ class ExportAction extends Action
                 )
             );
         } else {
-            $listView = $event->getListView();
-            $listDataEvent = new ListDataEvent($repository, $request);
-
             $type = $request->get('type');
             if ($type === 'pdf') {
-                $html = $responseHandler->getHtml($event->getView(), $this->getTemplate(), [
-                    'list' => $listView->render($listDataEvent),
-                    'title' => $listView->getTitle(),
-                    'ui' => false
-                ]);
+                $listAction = $controller->get('vardius_crud.action_list');
+                $html = $listAction->call($event)->getContent();
+
                 $response = new Response(
                     $snappy->getOutputFromHtml($html, [
                         'margin-bottom' => 3,
@@ -94,10 +79,14 @@ class ExportAction extends Action
                     )
                 );
             } else {
-                $response = new StreamedResponse();
-                $listView->setPagination(false);
-                $queryBuilder = $listView->getData($listDataEvent, true, true);
+                $repository = $event->getDataProvider()->getSource();
+                $queryBuilder = $repository->createQueryBuilder('vardius_csv_export');
+                $crudEvent = new CrudEvent($repository, $controller, $queryBuilder);
 
+                $dispatcher = $controller->get('event_dispatcher');
+                $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);
+
+                $response = new StreamedResponse();
                 $response->setCallback(
                     function () use ($queryBuilder, $controller) {
                         $handle = fopen('php://output', 'w+');
@@ -136,6 +125,8 @@ class ExportAction extends Action
     public function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
+
+        $resolver->remove('template');
 
         $resolver->setDefault('pattern', '/export/{type}/{id}');
 
