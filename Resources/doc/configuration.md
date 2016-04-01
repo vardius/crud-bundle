@@ -110,6 +110,7 @@ or get latest from
 Advanced config
 ----------------
 1. [Manage your controller's actions](actions.md)
-2. [Add custom logic to your controller](custom_logic.md)
-3. [Export action](export.md)
-4. [Serialization](serialization.md)
+2. [Use VardiusListBundle for list action](vardiuslist.md)
+3. [Add custom logic to your controller](custom_logic.md)
+4. [Export action](export.md)
+5. [Serialization](serialization.md)

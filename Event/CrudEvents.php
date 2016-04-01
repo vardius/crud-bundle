@@ -118,7 +118,7 @@ final class CrudEvents
     const CRUD_SHOW = 'vardius_crud.show';
 
     /**
-     * The vardius_crud.export event is thrown each time an export action is called
+     * The vardius_crud.export event is thrown each time an export (to csv only) action is called
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
@@ -128,22 +128,12 @@ final class CrudEvents
     const CRUD_EXPORT = 'vardius_crud.export';
 
     /**
-     * The vardius_crud.list.pre_response event is thrown each time before list action response return
+     * The vardius_crud.save event is thrown each time before add/edit action response return
      *
      * The event listener receives an
      * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
      *
      * @var string
      */
-    const CRUD_LIST_PRE_RESPONSE = 'vardius_crud.list.pre_response';
-
-    /**
-     * The vardius_crud.save.pre_response event is thrown each time before add/edit action response return
-     *
-     * The event listener receives an
-     * Vardius\Bundle\CrudBundle\Event\CrudEvent instance.
-     *
-     * @var string
-     */
-    const CRUD_SAVE_PRE_RESPONSE = 'vardius_crud.save.pre_response';
+    const CRUD_SAVE = 'vardius_crud.save';
 }

@@ -11,6 +11,8 @@
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
@@ -31,15 +33,11 @@ class DeleteAction extends Action
     public function call(ActionEvent $event)
     {
         $controller = $event->getController();
-        $request = $event->getRequest();
         $dataProvider = $event->getDataProvider();
+        $request = $event->getRequest();
 
-        $format = $request->getRequestFormat();
-        $dispatcher = $controller->get('event_dispatcher');
         $id = $request->get('id');
-
         $data = $dataProvider->get($id);
-
         if ($data === null) {
             throw new EntityNotFoundException('Not found error');
         }
@@ -47,6 +45,7 @@ class DeleteAction extends Action
         $this->checkRole($controller, $data);
 
         $crudEvent = new CrudEvent($dataProvider->getSource(), $controller);
+        $dispatcher = $controller->get('event_dispatcher');
         $dispatcher->dispatch(CrudEvents::CRUD_PRE_DELETE, $crudEvent);
 
         try {
@@ -68,13 +67,18 @@ class DeleteAction extends Action
                 'error' => $message,
             ];
 
-            $flashBag = $request->getSession()->getFlashBag();
+            /** @var Session $session */
+            $session = $request->getSession();
+            /** @var FlashBagInterface $flashBag */
+            $flashBag = $session->getFlashBag();
             $flashBag->add('error', $message);
         }
 
         $dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
 
+        $format = $request->getRequestFormat();
         $responseHandler = $controller->get('vardius_crud.response.handler');
+
         if ($format === 'html') {
 
             return $controller->redirect($responseHandler->getRefererUrl($controller, $request));

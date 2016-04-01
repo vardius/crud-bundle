@@ -21,8 +21,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Vardius\Bundle\CrudBundle\Actions\ActionInterface;
 use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
-use Vardius\Bundle\ListBundle\ListView\ListView;
-use Vardius\Bundle\ListBundle\ListView\Provider\ListViewProviderInterface;
 
 /**
  * CrudController
@@ -41,21 +39,17 @@ class CrudController extends Controller
     protected $formType;
     /** @var ArrayCollection */
     protected $actions;
-    /** @var ListView */
-    protected $listView;
 
     /**
      * @param DataProviderInterface $dataProvider
      * @param string $routePrefix
-     * @param ListViewProviderInterface $listViewProvider
      * @param AbstractType $formType
      * @param string $view
      */
-    function __construct(DataProviderInterface $dataProvider, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, $view = null)
+    function __construct(DataProviderInterface $dataProvider, $routePrefix = '', AbstractType $formType = null, $view = null)
     {
         $this->dataProvider = $dataProvider;
         $this->routePrefix = $routePrefix;
-        $this->listView = $listViewProvider ? $listViewProvider->buildListView() : $listViewProvider;
         $this->formType = $formType;
         $this->view = $view;
         $this->actions = new ArrayCollection();
@@ -153,14 +147,6 @@ class CrudController extends Controller
     }
 
     /**
-     * @return ListView
-     */
-    public function getListView()
-    {
-        return $this->listView;
-    }
-
-    /**
      * Returns array from entity object
      * Used in export action
      *
@@ -212,6 +198,18 @@ class CrudController extends Controller
     public function get($id)
     {
         return $this->container->get($id);
+    }
+
+    /**
+     * Returns true if the service id is defined.
+     *
+     * @param string $id The service id
+     *
+     * @return bool true if the service id is defined, false otherwise
+     */
+    public function has($id)
+    {
+        return $this->container->has($id);
     }
 
     /**

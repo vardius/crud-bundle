@@ -18,7 +18,6 @@ use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider;
-use Vardius\Bundle\ListBundle\ListView\Provider\ListViewProviderInterface;
 use Vardius\Bundle\SecurityBundle\Security\Authorization\Voter\SupportedClassPool;
 
 /**
@@ -52,7 +51,6 @@ class CrudControllerFactory
     /**
      * @param $routePrefix
      * @param $entityName
-     * @param ListViewProviderInterface $listViewProvider
      * @param AbstractType $formType
      * @param CrudManagerInterface $crudManager
      * @param string $view
@@ -61,7 +59,7 @@ class CrudControllerFactory
      * @throws \Exception
      * @return CrudController
      */
-    public function get($entityName, $routePrefix = '', ListViewProviderInterface $listViewProvider = null, AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [])
+    public function get($entityName, $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [])
     {
         $repo = $this->entityManager->getRepository($entityName);
 
@@ -72,7 +70,7 @@ class CrudControllerFactory
         $this->securityClassPool->addClass($repo->getClassName());
 
         $dataProvider = new DataProvider($repo, $this->entityManager, $crudManager);
-        $controller = new CrudController($dataProvider, $routePrefix, $listViewProvider, $formType, $view);
+        $controller = new CrudController($dataProvider, $routePrefix, $formType, $view);
         $controller->setContainer($this->container);
 
         if ($actions instanceof ActionsProvider) {

@@ -14,7 +14,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\Request;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
-use Vardius\Bundle\ListBundle\ListView\ListView;
 
 /**
  * ActionEvent
@@ -76,13 +75,5 @@ class ActionEvent
     public function getDataProvider()
     {
         return $this->controller->getDataProvider();
-    }
-
-    /**
-     * @return ListView
-     */
-    public function getListView()
-    {
-        return $this->controller->getListView();
     }
 }

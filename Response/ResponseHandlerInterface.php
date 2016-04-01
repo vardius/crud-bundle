@@ -27,20 +27,12 @@ interface ResponseHandlerInterface
      * @param string $view controller event view
      * @param string $templateName action template name
      * @param array $params
-     * @param int   $status  The response status code
+     * @param int $status The response status code
      * @param array $headers An array of response headers
      * @param array $groups An array of groups for serialization
      * @return JsonResponse|Response
      */
-    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $groups = ['Default']);
-
-    /**
-     * @param string $view controller event view
-     * @param string $templateName action template name
-     * @param array $params
-     * @return string
-     */
-    public function getHtml($view, $templateName, $params);
+    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $groups = []);
 
     /**
      * @param CrudController $controller
