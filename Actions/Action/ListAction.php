@@ -33,11 +33,10 @@ class ListAction extends Action
         $controller = $event->getController();
 
         $this->checkRole($controller);
-        
-        $repository = $event->getDataProvider()->getSource();
 
+        $dataProvider = $event->getDataProvider();
         $params = [
-            'data' => $repository->findAll(),
+            'data' => $dataProvider->findAll(),
         ];
 
         $request = $event->getRequest();
@@ -46,8 +45,9 @@ class ListAction extends Action
             $params['ui'] = false;
         }
 
+        $source = $dataProvider->getSource();
         $paramsEvent = new ResponseEvent($params);
-        $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
+        $crudEvent = new CrudEvent($source, $controller, $paramsEvent);
 
         $dispatcher = $controller->get('event_dispatcher');
         $dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);

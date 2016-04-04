@@ -14,8 +14,6 @@ Install the package through composer:
     php composer.phar require vardius/crud-bundle:*
 ```
 
-REQUIRED: `vardius/list-bundle`
-
 ### 2. Enable the VardiusCrudBundle
 
 Enable the bundle in the kernel:
@@ -29,7 +27,13 @@ Enable the bundle in the kernel:
         $bundles = array(
             // ...
             new Vardius\Bundle\CrudBundle\VardiusCrudBundle(),
-            new Vardius\Bundle\ListBundle\VardiusListBundle(),
         );
     }
+```
+
+Add to config.yml:
+
+``` yml
+    vardius_crud:
+        db_driver: orm //available orm and propel
 ```

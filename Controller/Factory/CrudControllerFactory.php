@@ -17,7 +17,7 @@ use Symfony\Component\Form\AbstractType;
 use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
-use Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider;
+use Vardius\Bundle\CrudBundle\Data\Provider;
 use Vardius\Bundle\SecurityBundle\Security\Authorization\Voter\SupportedClassPool;
 
 /**
@@ -44,8 +44,14 @@ class CrudControllerFactory
     {
         $this->actions = new ArrayCollection($actions);
         $this->container = $container;
-        $this->entityManager = $this->container->get('doctrine.orm.entity_manager');
-        $this->securityClassPool = $this->container->get('vardius_security.voter.supported_class_pool');
+
+        if ($this->container->has('doctrine.orm.entity_manager')) {
+            $this->entityManager = $this->container->get('doctrine.orm.entity_manager');
+        }
+
+        if ($this->container->has('vardius_security.voter.supported_class_pool')) {
+            $this->securityClassPool = $this->container->get('vardius_security.voter.supported_class_pool');
+        }
     }
 
     /**
@@ -61,15 +67,31 @@ class CrudControllerFactory
      */
     public function get($entityName, $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [])
     {
-        $repo = $this->entityManager->getRepository($entityName);
+        switch ($this->container->get('db_driver')) {
+            case 'propel':
+                if (!class_exists($entityName)) {
+                    throw new \Exception('CrudFactory: Invalid entity alias "' . $entityName . '"');
+                }
 
-        if ($repo === null) {
-            throw new \Exception('CrudFactory: Invalid entity alias "' . $entityName . '"');
+                $this->registerSupportedClass($entityName);
+
+                $query = \PropelQuery::from($entityName);
+
+                $dataProvider = new Provider\Propel\DataProvider($query, $crudManager);
+                break;
+            default:
+                $repo = $this->entityManager->getRepository($entityName);
+
+                if ($repo === null) {
+                    throw new \Exception('CrudFactory: Invalid entity alias "' . $entityName . '"');
+                }
+
+                $this->registerSupportedClass($repo->getClassName());
+
+                $dataProvider = new Provider\Doctrine\DataProvider($repo, $this->entityManager, $crudManager);
+                break;
         }
 
-        $this->securityClassPool->addClass($repo->getClassName());
-
-        $dataProvider = new DataProvider($repo, $this->entityManager, $crudManager);
         $controller = new CrudController($dataProvider, $routePrefix, $formType, $view);
         $controller->setContainer($this->container);
 
@@ -82,5 +104,12 @@ class CrudControllerFactory
         }
 
         return $controller;
+    }
+
+    protected function registerSupportedClass($class)
+    {
+        if ($this->securityClassPool) {
+            $this->securityClassPool->addClass($class);
+        }
     }
 }

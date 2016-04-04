@@ -20,19 +20,19 @@ use Doctrine\ORM\EntityRepository;
 interface DataProviderInterface
 {
     /**
+     * Returns source of data
+     *
+     * @return EntityRepository
+     */
+    public function getSource();
+
+    /**
      * Returns data item by id
      *
      * @param null $id
      * @return mixed
      */
     public function get($id = null);
-
-    /**
-     * Returns source of data
-     *
-     * @return EntityRepository
-     */
-    public function getSource();
 
     /**
      * Creates new element in data source
@@ -61,4 +61,21 @@ interface DataProviderInterface
      * @param $data
      */
     public function update($data);
+
+    /**
+     * @param array $criteria
+     * @return mixed
+     */
+    public function findBy(array $criteria);
+
+    /**
+     * @return mixed
+     */
+    public function findAll();
+
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function reload($data);
 }

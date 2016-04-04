@@ -112,10 +112,10 @@ class ListAction extends Action\ListAction
         $controller = $event->getController();
 
         $this->checkRole($controller);
-        
+
         $request = $event->getRequest();
-        $repository = $event->getDataProvider()->getSource();
-        $listDataEvent = new ListDataEvent($repository, $request);
+        $source = $event->getDataProvider()->getSource();
+        $listDataEvent = new ListDataEvent($source, $request);
 
         /** @var ListViewProviderInterface $listViewProvider */
         $listViewProvider = $controller->get(trim($controller->getRoutePrefix(), '/') . '.list_view');
@@ -135,14 +135,14 @@ class ListAction extends Action\ListAction
                 'data' => $results,
             ];
         }
-        
+
         $routeName = $request->get('_route');
         if (strpos($routeName, 'export') !== false) {
             $params['ui'] = false;
         }
 
         $paramsEvent = new ResponseEvent($params);
-        $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
+        $crudEvent = new CrudEvent($source, $controller, $paramsEvent);
 
         $dispatcher = $controller->get('event_dispatcher');
         $dispatcher->dispatch(CrudEvents::CRUD_LIST, $crudEvent);
