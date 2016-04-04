@@ -32,6 +32,14 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('vardius_crud');
 
+        $rootNode
+            ->children()
+                ->enumNode('db_driver')
+                    ->defaultValue('orm')
+                    ->values(['orm', 'propel'])
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 }

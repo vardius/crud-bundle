@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -79,9 +80,13 @@ class ExportAction extends Action
                     )
                 );
             } else {
-                $repository = $event->getDataProvider()->getSource();
-                $queryBuilder = $repository->createQueryBuilder('vardius_csv_export');
-                $crudEvent = new CrudEvent($repository, $controller, $queryBuilder);
+                $source = $event->getDataProvider()->getSource();
+                if (!$source instanceof EntityRepository) {
+                    throw new \Exception('CSV export supports only ORM db driver');
+                }
+
+                $queryBuilder = $source->createQueryBuilder('vardius_csv_export');
+                $crudEvent = new CrudEvent($source, $controller, $queryBuilder);
 
                 $dispatcher = $controller->get('event_dispatcher');
                 $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);

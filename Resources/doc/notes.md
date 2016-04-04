@@ -40,3 +40,7 @@ RELEASE NOTES
 
 - Works independent from external bundles
 - VardiusListBundle support
+
+**0.8.1**
+
+- Support Propel

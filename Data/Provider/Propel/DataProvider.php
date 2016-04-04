@@ -8,10 +8,8 @@
  * file that was distributed with this source code.
  */
 
-namespace Vardius\Bundle\CrudBundle\Data\Provider\Doctrine;
+namespace Vardius\Bundle\CrudBundle\Data\Provider\Propel;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
 
@@ -22,22 +20,21 @@ use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
  */
 class DataProvider implements DataProviderInterface
 {
-    /** @var EntityRepository */
+    /** @var string */
+    protected $class;
+    /** @var \ModelCriteria */
     protected $source;
-    /** @var EntityManager */
-    protected $entityManager;
     /** @var CrudManagerInterface */
     protected $crudManager;
 
     /**
-     * @param EntityRepository $source
-     * @param EntityManager $entityManager
+     * @param string $class
      * @param CrudManagerInterface $crudManager
      */
-    function __construct(EntityRepository $source, EntityManager $entityManager, CrudManagerInterface $crudManager = null)
+    function __construct($class, CrudManagerInterface $crudManager = null)
     {
-        $this->source = $source;
-        $this->entityManager = $entityManager;
+        $this->class = $class;
+        $this->source = \PropelQuery::from($class);
         $this->crudManager = $crudManager;
     }
 
@@ -61,13 +58,9 @@ class DataProvider implements DataProviderInterface
 
                 return $this->crudManager->get($id);
             } else {
-                $query = $this->source->createQueryBuilder('entity');
+                $this->source->clear();
 
-                return $query
-                    ->andWhere('entity.id = :id')
-                    ->setParameter('id', $id)
-                    ->getQuery()
-                    ->getOneOrNullResult();
+                return $this->source->findPk(1);
             }
         }
 
@@ -79,33 +72,32 @@ class DataProvider implements DataProviderInterface
      */
     public function create()
     {
-        $className = $this->source->getClassName();
-
-        return new $className();
+        return new $this->class();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function remove($data, $flush = true)
+    public function remove($data)
     {
         $entity = null;
         if (is_object($data)) {
             $entity = $data;
         } elseif (is_numeric($data)) {
-            $entity = $this->source->findOneById($data);
+            $this->source->clear();
+            $entity = $this->source->findPk($data);
         } else {
             throw new \InvalidArgumentException('Argument passed is not an object or it\'s not id');
+        }
+
+        if (!$entity instanceof \Persistent) {
+            throw new \InvalidArgumentException('The $entity instance is not supported by the Propel implementation');
         }
 
         if ($this->crudManager instanceof CrudManagerInterface) {
             $this->crudManager->remove($entity);
         } else {
-            $this->entityManager->remove($entity);
-        }
-
-        if ($flush) {
-            $this->entityManager->flush();
+            $entity->delete();
         }
     }
 
@@ -114,13 +106,15 @@ class DataProvider implements DataProviderInterface
      */
     public function add($data)
     {
+        if (!$data instanceof \Persistent) {
+            throw new \InvalidArgumentException('The $data instance is not supported by the Propel implementation');
+        }
+
         if ($this->crudManager instanceof CrudManagerInterface) {
             $this->crudManager->add($data);
         } else {
-            $this->entityManager->persist($data);
+            $data->save();
         }
-
-        $this->entityManager->flush();
     }
 
     /**
@@ -128,13 +122,15 @@ class DataProvider implements DataProviderInterface
      */
     public function update($data)
     {
-        if ($this->crudManager instanceof CrudManagerInterface) {
-            $this->crudManager->update($data);
-        } else {
-            $this->entityManager->persist($data);
+        if (!$data instanceof \Persistent) {
+            throw new \InvalidArgumentException('The $data instance is not supported by the Propel implementation');
         }
 
-        $this->entityManager->flush();
+        if ($this->crudManager instanceof CrudManagerInterface) {
+            $this->crudManager->add($data);
+        } else {
+            $data->save();
+        }
     }
 
     /**
@@ -142,7 +138,14 @@ class DataProvider implements DataProviderInterface
      */
     public function findBy(array $criteria)
     {
-        return $this->source->findOneBy($criteria);
+        $this->source->clear();
+
+        foreach ($criteria as $field => $value) {
+            $method = 'filterBy' . ucfirst($field);
+            $this->source->$method($value);
+        }
+
+        return $this->source->findOne();
     }
 
     /**
@@ -150,7 +153,8 @@ class DataProvider implements DataProviderInterface
      */
     public function findAll()
     {
-        return $this->source->findAll();
+        $this->source->clear();
+        return $this->source->find();
     }
 
     /**
@@ -158,6 +162,10 @@ class DataProvider implements DataProviderInterface
      */
     public function reload($data)
     {
-        $this->entityManager->refresh($data);
+        if (!$data instanceof \Persistent) {
+            throw new \InvalidArgumentException('The $data instance is not supported by the Propel implementation');
+        }
+
+        $data->reload();
     }
 }

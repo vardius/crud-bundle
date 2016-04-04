@@ -61,7 +61,7 @@ services:
 
 Finally create your crud controller
 Remember to inject `list view` service for `list` action.
-You can read more about how to create `list view provider` [HERE](https://github.com/Vardius/list-bundle/blob/master/Resources/doc/configuration.md)
+You can read more about how to create `list view provider` [HERE](https://github.com/Vardius/list-bundle/blob/master/Resources/doc/configuration.md)        
 ##### YML
 ``` yml
 services:
@@ -84,6 +84,8 @@ services:
         <tag name="vardius_crud.controller" />
     </service>
 ```
+
+You can provide bundle path like `AppMainBundle:Product` when using **ORM** and namespace `AppMainBundle\Product` form **Propel** or **ORM**
 
 ### Include scripts
 

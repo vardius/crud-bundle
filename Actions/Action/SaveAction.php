@@ -55,8 +55,8 @@ abstract class SaveAction extends Action
             'method' => $request->getMethod()
         ]);
 
-        $repository = $dataProvider->getSource();
-        $crudEvent = new CrudEvent($repository, $controller, $form);
+        $source = $dataProvider->getSource();
+        $crudEvent = new CrudEvent($source, $controller, $form);
 
         $dispatcher = $controller->get('event_dispatcher');
         $dispatcher->dispatch(CrudEvents::CRUD_PRE_SAVE, $crudEvent);
@@ -128,7 +128,7 @@ abstract class SaveAction extends Action
         }
 
         $paramsEvent = new ResponseEvent($params);
-        $crudEvent = new CrudEvent($repository, $controller, $paramsEvent);
+        $crudEvent = new CrudEvent($source, $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SAVE, $crudEvent);
 
         return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['update']);
