@@ -40,7 +40,7 @@ abstract class ActionsProvider implements ActionsProviderInterface
      * @param array $options
      * @return $this
      */
-    protected function addAction($type, array $options=[])
+    protected function addAction($type, array $options = [])
     {
         $action = $this->actionFactory->get($type, $options);
         $suffix = $action->getOptions()['route_suffix'];
