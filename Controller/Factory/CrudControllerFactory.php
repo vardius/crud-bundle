@@ -75,9 +75,7 @@ class CrudControllerFactory
 
                 $this->registerSupportedClass($entityName);
 
-                $query = \PropelQuery::from($entityName);
-
-                $dataProvider = new Provider\Propel\DataProvider($query, $crudManager);
+                $dataProvider = new Provider\Propel\DataProvider($entityName, $crudManager);
                 break;
             default:
                 $repo = $this->entityManager->getRepository($entityName);
