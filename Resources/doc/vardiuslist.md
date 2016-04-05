@@ -129,7 +129,7 @@ class ListAction extends Action\ListAction
         } else {
             $columns = $listView->getColumns();
             $results = $listView->getData($listDataEvent, true);
-            $results = $this->parseResults($results->toArray(), $columns, $format);
+            $results = $this->parseResults($results, $columns, $format);
 
             $params = [
                 'data' => $results,
