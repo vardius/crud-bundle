@@ -67,7 +67,7 @@ class CrudControllerFactory
      */
     public function get($entityName, $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [])
     {
-        switch ($this->container->get('db_driver')) {
+        switch ($this->container->getParameter('db_driver')) {
             case 'propel':
                 if (!class_exists($entityName)) {
                     throw new \Exception('CrudFactory: Invalid entity alias "' . $entityName . '"');
