@@ -116,4 +116,4 @@ Advanced config
 3. [Add custom logic to your controller](custom_logic.md)
 4. [Export action](export.md)
 5. [Serialization](serialization.md)
-5. [Commands Tool](commands.md)
+6. [Commands Tool](commands.md)
