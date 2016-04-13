@@ -1,0 +1,30 @@
+{
+    "name": "vardius/crud-bundle",
+    "description": "Provides crud actions",
+    "keywords": [
+        "crud", "crud bundle", "symfony2", "bundle", "symfony"
+    ],
+    "license": "MIT",
+    "homepage": "https://github.com/Vardius/crud-bundle",
+    "authors": [
+        {
+          "name": "Rafał Lorenz",
+          "email": "vardius@gmail.com",
+          "homepage": "http://rafallorenz.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "symfony/symfony": "^2.8|^3.0",
+        "symfony/options-resolver": "^2.8|^3.0"
+    },
+    "target-dir": "Vardius/Bundle/CrudBundle",
+    "autoload": {
+        "psr-0": { "Vardius\\Bundle\\CrudBundle": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.8.x-dev"
+        }
+    }
+}

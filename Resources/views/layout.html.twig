@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="{{ _charset }}"/>
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/vardiuscrud/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/vardiuscrud/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+    {% block head %}{% endblock %}
+</head>
+<body>
+<div id="content">
+    <div class="row">
+        <div class="col-md-12">
+            {% for flashMessage in app.session.flashbag.get('notice') %}
+                <div class="flash-message">
+                    <em>Notice</em>: {{ flashMessage }}
+                </div>
+            {% endfor %}
+
+            <div class="row">
+                <div class="col-md-12">
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+
+            {% block javascripts %}
+                <script src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/vardiuscrud/js/jquery.js') }}"></script>
+                <script src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/vardiuscrud/js/bootstrap.min.js') }}"></script>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

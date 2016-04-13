@@ -1,0 +1,93 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <!--CONTROLLER-->
+        <parameter key="vardius_crud.controller.class">Vardius\Bundle\CrudBundle\Controller\CrudController</parameter>
+        <parameter key="vardius_crud.controller.factory.class">Vardius\Bundle\CrudBundle\Controller\Factory\CrudControllerFactory</parameter>
+        <!--ACTIONS-->
+        <parameter key="vardius_crud.action.factory.class">Vardius\Bundle\CrudBundle\Actions\Factory\ActionFactory</parameter>
+        <parameter key="vardius_crud.action.provider.class">Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider</parameter>
+        <parameter key="vardius_crud.action_pool.class">Vardius\Bundle\CrudBundle\Actions\ActionPool</parameter>
+        <parameter key="vardius_crud.action_list.class">Vardius\Bundle\CrudBundle\Actions\Action\ListAction</parameter>
+        <parameter key="vardius_crud.action_show.class">Vardius\Bundle\CrudBundle\Actions\Action\ShowAction</parameter>
+        <parameter key="vardius_crud.action_add.class">Vardius\Bundle\CrudBundle\Actions\Action\AddAction</parameter>
+        <parameter key="vardius_crud.action_edit.class">Vardius\Bundle\CrudBundle\Actions\Action\EditAction</parameter>
+        <parameter key="vardius_crud.action_delete.class">Vardius\Bundle\CrudBundle\Actions\Action\DeleteAction</parameter>
+        <parameter key="vardius_crud.action_export.class">Vardius\Bundle\CrudBundle\Actions\Action\ExportAction</parameter>
+        <!--DATA-->
+        <parameter key="vardius_crud.data.provider.doctrine.class">Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider</parameter>
+        <!--FORM-->
+        <parameter key="vardius_crud.form.provider.class">Vardius\Bundle\CrudBundle\Form\Provider\FormProvider</parameter>
+        <parameter key="vardius_crud.form.error_handler.class">Vardius\Bundle\CrudBundle\Form\FormErrorHandler</parameter>
+        <!--RESPONSE-->
+        <parameter key="vardius_crud.response.handler.class">Vardius\Bundle\CrudBundle\Response\ResponseHandler</parameter>
+        <!--ROUTING-->
+        <parameter key="vardius_crud.routing.loader.class">Vardius\Bundle\CrudBundle\Routing\CrudLoader</parameter>
+        <parameter key="vardius_crud.routing.pool.class">Vardius\Bundle\CrudBundle\Routing\CrudPool</parameter>
+    </parameters>
+    <services>
+        <service id="vardius_crud.controller.factory" class="%vardius_crud.controller.factory.class%">
+            <argument type="collection">
+                <argument type="service" key="list" id="vardius_crud.action_list"/>
+                <argument type="service" key="show" id="vardius_crud.action_show"/>
+                <argument type="service" key="add" id="vardius_crud.action_add"/>
+                <argument type="service" key="edit" id="vardius_crud.action_edit"/>
+                <argument type="service" key="delete" id="vardius_crud.action_delete"/>
+            </argument>
+            <argument type="service" id="service_container"/>
+        </service>
+        <!--ACTION POOL-->
+        <service id="vardius_crud.action_pool" class="%vardius_crud.action_pool.class%" />
+        <!--ACTION FACTORY-->
+        <service id="vardius_crud.action.factory" class="%vardius_crud.action.factory.class%">
+            <argument type="service" id="vardius_crud.action_pool"/>
+        </service>
+        <!--ACTION PROVIDER-->
+        <service id="vardius_crud.action.provider" class="%vardius_crud.action.provider.class%" abstract="true">
+            <argument type="service" id="vardius_crud.action.factory"/>
+        </service>
+        <!--ACTIONS-->
+        <service id="vardius_crud.action_list" class="%vardius_crud.action_list.class%">
+            <tag name="vardius_crud.action" />
+        </service>
+        <service id="vardius_crud.action_show" class="%vardius_crud.action_show.class%">
+            <tag name="vardius_crud.action" />
+        </service>
+        <service id="vardius_crud.action_add" class="%vardius_crud.action_add.class%">
+            <tag name="vardius_crud.action" />
+        </service>
+        <service id="vardius_crud.action_edit" class="%vardius_crud.action_edit.class%">
+            <tag name="vardius_crud.action" />
+        </service>
+        <service id="vardius_crud.action_delete" class="%vardius_crud.action_delete.class%">
+            <tag name="vardius_crud.action" />
+        </service>
+        <service id="vardius_crud.action_export" class="%vardius_crud.action_export.class%">
+            <tag name="vardius_crud.action" />
+        </service>
+        <!--FORM-->
+        <service id="vardius_crud.form.provider" class="%vardius_crud.form.provider.class%">
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+            <argument type="service" id="form.factory"/>
+        </service>
+        <service id="vardius_crud.form.error_handler" class="%vardius_crud.form.error_handler.class%">
+            <argument type="service" id="translator"/>
+        </service>
+        <!--RESPONSE-->
+        <service id="vardius_crud.response.handler" class="%vardius_crud.response.handler.class%">
+            <argument type="service" id="templating"/>
+            <argument type="service" id="serializer"/>
+        </service>
+        <!--ROUTING-->
+        <service id="vardius_crud.routing.pool" class="%vardius_crud.routing.pool.class%"/>
+        <service id="vardius_crud.routing.loader" class="%vardius_crud.routing.loader.class%">
+            <argument type="service" id="vardius_crud.routing.pool"/>
+
+            <tag name="routing.loader"/>
+        </service>
+    </services>
+</container>

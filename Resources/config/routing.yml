@@ -1,0 +1,3 @@
+_Crud_Controllers:
+    resource: .
+    type: vardius_crud

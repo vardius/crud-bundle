@@ -1,0 +1,46 @@
+Vardius - Crud Bundle
+======================================
+
+RELEASE NOTES
+----------------
+
+**0.1.0**
+
+- First public release of crud-bundle
+
+**0.2.0**
+
+- Major bug fix and updates
+
+**0.3.0**
+
+- Added crud manager
+- added export action (pdf, csv)
+
+**0.4.0**
+
+- Actions more generic
+- Actions provider
+
+**0.5.0**
+
+- Fixed save action for rest methods
+- Major upgrades
+
+
+**0.6.0**
+
+- Major refactor
+
+**0.7.0**
+
+- Upgrade to work with symfony 3.0
+
+**0.8.0**
+
+- Works independent from external bundles
+- VardiusListBundle support
+
+**0.8.1**
+
+- Support Propel
