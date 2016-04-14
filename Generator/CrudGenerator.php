@@ -194,7 +194,7 @@ class CrudGenerator
     {
         $buildCode = '';
         foreach ($properties as $property) {
-            $buildCode .= sprintf("\n->addColumn('%s', 'property')", lcfirst($property));
+            $buildCode .= sprintf("\n            ->addColumn('%s', 'property')", lcfirst($property));
         }
 
         return str_replace('##BUILD_CODE##', $buildCode, $content);
@@ -205,7 +205,7 @@ class CrudGenerator
         $buildCode = '';
         foreach ($properties as $property) {
             if ($this->isPropel) {
-                $body = "\n->addFilter('%s', function (FilterEvent \$event) {
+                $body = "\n            ->addFilter('%s', function (FilterEvent \$event) {
                 /** @var \\ModelCriteria \$query */
                 \$query = \$event->getQuery();
 
@@ -214,13 +214,19 @@ class CrudGenerator
                 return \$query;
                 })";
             } else {
-                $body = "\n->addFilter('%s', function (FilterEvent \$event) {
-                \$field = \$event->getField();
+                $body = "\n            ->addFilter('%s', function (FilterEvent \$event) {
+                \$query = \$event->getQuery();
+                \$value = \$event->getValue();
 
-                return \$event->getQuery()
-                    ->andWhere(\$event->getAlias() . '.' . \$field . ' = :' . \$field)
-                    ->setParameter(\$field, \$event->getValue());
-                })";
+                if (\$value) {
+                    \$field = \$event->getField();
+
+                    \$query = \$event->getQuery()
+                        ->andWhere(\$event->getAlias() . '.' . \$field . ' = :' . \$field)
+                        ->setParameter(\$field, \$value);
+                }
+
+                return \$query;";
             }
 
             $buildCode .= sprintf($body, lcfirst($property));
@@ -233,7 +239,7 @@ class CrudGenerator
     {
         $buildCode = '';
         foreach ($properties as $property) {
-            $buildCode .= sprintf("\n->add('%s')", lcfirst($property));
+            $buildCode .= sprintf("\n            ->add('%s')", lcfirst($property));
         }
 
         return str_replace('##BUILD_CODE##', $buildCode, $content);
