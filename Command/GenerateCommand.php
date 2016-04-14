@@ -115,8 +115,8 @@ EOT
                 }
             }
 
-            $generator->generate($name, $properties);
-            $generator->register($name);
+            $generator->generate($name, $entityMetadata->getNamespace(), $properties);
+            $generator->register($name, $entityMetadata->getNamespace());
         }
         $generator->closeFile();
     }
@@ -139,8 +139,8 @@ EOT
                 }
             }
 
-            $generator->generate($name, $properties);
-            $generator->register($name);
+            $generator->generate($name, $table->getNamespace(), $properties);
+            $generator->register($name, $table->getNamespace());
         }
         $generator->closeFile();
     }

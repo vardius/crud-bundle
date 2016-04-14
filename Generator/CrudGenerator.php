@@ -64,23 +64,23 @@ class CrudGenerator
         fclose($this->file);
     }
 
-    public function register($name)
+    public function register($name, $namespace)
     {
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/services.yml');
 
         $content = str_replace('##CLASS##', ucfirst($name), $content);
-        $content = str_replace('##FQCN##', sprintf('%s\%s', $this->bundle->getNamespace(), $name), $content);
+        $content = str_replace('##FQCN##', sprintf('%s\%s', $namespace, $name), $content);
         $content = str_replace('##TYPE_NAME##', $this->fromCamelCase($name), $content);
         $content = str_replace('##ROUTE##', str_replace('_', '-', $this->fromCamelCase($name)), $content);
         fwrite($this->file, $content . "\n");
     }
 
-    public function generate($name, $properties)
+    public function generate($name, $namespace, $properties)
     {
         $dir = $this->createDirectory(self::DEFAULT_LIST_DIRECTORY);
         $file = new \SplFileInfo(sprintf('%s/%sListViewProvider.php', $dir, $name));
         if (!file_exists($file)) {
-            $this->addList($file, $properties, $this->bundle->getNamespace(), $name);
+            $this->addList($file, $properties, $namespace, $name);
         } else {
             $this->output->writeln(sprintf('File <comment>%-60s</comment> exists, skipped.', $this->getRelativeFileName($file)));
         }
@@ -88,7 +88,7 @@ class CrudGenerator
         $dir = $this->createDirectory(self::DEFAULT_FILTER_DIRECTORY);
         $file = new \SplFileInfo(sprintf('%s/%sFilterProvider.php', $dir, $name));
         if (!file_exists($file)) {
-            $this->addFilter($file, $properties, $this->bundle->getNamespace(), $name);
+            $this->addFilter($file, $properties, $namespace, $name);
         } else {
             $this->output->writeln(sprintf('File <comment>%-60s</comment> exists, skipped.', $this->getRelativeFileName($file)));
         }
@@ -96,7 +96,7 @@ class CrudGenerator
         $dir = $this->createDirectory(self::DEFAULT_FORM_DIRECTORY);
         $file = new \SplFileInfo(sprintf('%s/%sFilterType.php', $dir, $name));
         if (!file_exists($file)) {
-            $this->addFilterType($file, $properties, $this->bundle->getNamespace(), $name);
+            $this->addFilterType($file, $properties, $namespace, $name);
         } else {
             $this->output->writeln(sprintf('File <comment>%-60s</comment> exists, skipped.', $this->getRelativeFileName($file)));
         }
@@ -104,7 +104,7 @@ class CrudGenerator
         $dir = $this->createDirectory(self::DEFAULT_FORM_TYPE_DIRECTORY);
         $file = new \SplFileInfo(sprintf('%s/%sType.php', $dir, $name));
         if (!file_exists($file)) {
-            $this->addFormType($file, $properties, $this->bundle->getNamespace(), $name);
+            $this->addFormType($file, $properties, $namespace, $name);
         } else {
             $this->output->writeln(sprintf('File <comment>%-60s</comment> exists, skipped.', $this->getRelativeFileName($file)));
         }
