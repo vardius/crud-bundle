@@ -221,9 +221,10 @@ class CrudGenerator
                 if (\$value) {
                     \$field = \$event->getField();
 
-                    \$query = \$event->getQuery()
-                        ->andWhere(\$event->getAlias() . '.' . \$field . ' = :' . \$field)
-                        ->setParameter(\$field, \$value);
+                    //Example filter
+                    //\$query = \$event->getQuery()
+                    //    ->andWhere(\$event->getAlias() . '.' . \$field . ' = :' . \$field)
+                    //    ->setParameter(\$field, \$value);
                 }
 
                 return \$query;
