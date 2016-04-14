@@ -143,6 +143,7 @@ class CrudGenerator
 
     protected function addList(\SplFileInfo $file, $properties, $namespace, $name)
     {
+        $namespace = str_replace('\Entity', '', $namespace);
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/ListViewProvider.php');
 
         $content = str_replace('##NAMESPACE##', $namespace . str_replace('/', '\\', self::DEFAULT_LIST_DIRECTORY), $content);
@@ -155,6 +156,7 @@ class CrudGenerator
 
     protected function addFilter(\SplFileInfo $file, $properties, $namespace, $name)
     {
+        $namespace = str_replace('\Entity', '', $namespace);
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/FilterProvider.php');
 
         $content = str_replace('##NAMESPACE##', $namespace . str_replace('/', '\\', self::DEFAULT_FILTER_DIRECTORY), $content);
@@ -166,6 +168,7 @@ class CrudGenerator
 
     protected function addFilterType(\SplFileInfo $file, $properties, $namespace, $name)
     {
+        $namespace = str_replace('\Entity', '', $namespace);
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/FilterType.php');
 
         $content = str_replace('##NAMESPACE##', $namespace . str_replace('/', '\\', self::DEFAULT_FORM_DIRECTORY), $content);
@@ -179,6 +182,7 @@ class CrudGenerator
 
     protected function addFormType(\SplFileInfo $file, $properties, $namespace, $name)
     {
+        $namespace = str_replace('\Entity', '', $namespace);
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/FormType.php');
 
         $content = str_replace('##NAMESPACE##', $namespace . str_replace('/', '\\', self::DEFAULT_FORM_TYPE_DIRECTORY), $content);
@@ -206,26 +210,26 @@ class CrudGenerator
         foreach ($properties as $property) {
             if ($this->isPropel) {
                 $body = "\n        ->addFilter('%s', function (FilterEvent \$event) {
-                /** @var \\ModelCriteria \$queryBuilder */
-                \$queryBuilder = \$event->getQueryBuilder();
+                /** @var \\ModelCriteria \$query */
+                \$query = \$event->getQuery();
 
-                \$queryBuilder->filterBy" . ucfirst($property) . "(\$event->getValue());
+                \$query->filterBy" . ucfirst($property) . "(\$event->getValue());
 
-                return \$queryBuilder;
+                return \$query;
                 })";
             } else {
                 $body = "\n        ->addFilter('%s', function (FilterEvent \$event) {
                 \$formData = \$event->getData();
-                    \$queryBuilder = \$event->getQueryBuilder();
+                    \$query = \$event->getQuery();
                     \$alias = \$event->getAlias();
 
                     \$property = \$formData['" . $property . "'];
 
-                    \$queryBuilder
+                    \$query
                         ->andWhere(\$alias.'." . $property . " = :property')
                         ->setParameter('property', \$property);
 
-                    return \$queryBuilder;
+                    return \$query;
                 })";
             }
 
