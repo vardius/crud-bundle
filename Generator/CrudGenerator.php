@@ -212,7 +212,7 @@ class CrudGenerator
                 \$query->filterBy" . ucfirst($property) . "(\$event->getValue());
 
                 return \$query;
-                })";
+            })";
             } else {
                 $body = "\n            ->addFilter('%s', function (FilterEvent \$event) {
                 \$query = \$event->getQuery();
@@ -227,7 +227,7 @@ class CrudGenerator
                 }
 
                 return \$query;
-                }";
+            })";
             }
 
             $buildCode .= sprintf($body, lcfirst($property));
