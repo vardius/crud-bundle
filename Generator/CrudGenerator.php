@@ -226,7 +226,8 @@ class CrudGenerator
                         ->setParameter(\$field, \$value);
                 }
 
-                return \$query;";
+                return \$query;
+                }";
             }
 
             $buildCode .= sprintf($body, lcfirst($property));
