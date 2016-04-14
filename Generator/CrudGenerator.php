@@ -143,10 +143,9 @@ class CrudGenerator
 
     protected function addList(\SplFileInfo $file, $properties, $namespace, $name)
     {
-        $namespace = str_replace('\Entity', '', $namespace);
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/ListViewProvider.php');
 
-        $content = str_replace('##NAMESPACE##', $namespace . str_replace('/', '\\', self::DEFAULT_LIST_DIRECTORY), $content);
+        $content = str_replace('##NAMESPACE##', str_replace('\Entity', '', $namespace) . str_replace('/', '\\', self::DEFAULT_LIST_DIRECTORY), $content);
         $content = str_replace('##CLASS##', $name . 'ListViewProvider', $content);
         $content = str_replace('##TYPE_NAME##', $this->fromCamelCase($name), $content);
         $content = $this->addListFields($properties, $content);
@@ -156,10 +155,9 @@ class CrudGenerator
 
     protected function addFilter(\SplFileInfo $file, $properties, $namespace, $name)
     {
-        $namespace = str_replace('\Entity', '', $namespace);
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/FilterProvider.php');
 
-        $content = str_replace('##NAMESPACE##', $namespace . str_replace('/', '\\', self::DEFAULT_FILTER_DIRECTORY), $content);
+        $content = str_replace('##NAMESPACE##', str_replace('\Entity', '', $namespace) . str_replace('/', '\\', self::DEFAULT_FILTER_DIRECTORY), $content);
         $content = str_replace('##CLASS##', $name . 'FilterProvider', $content);
         $content = $this->addFilterFields($properties, $content);
 
@@ -168,10 +166,9 @@ class CrudGenerator
 
     protected function addFilterType(\SplFileInfo $file, $properties, $namespace, $name)
     {
-        $namespace = str_replace('\Entity', '', $namespace);
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/FilterType.php');
 
-        $content = str_replace('##NAMESPACE##', $namespace . str_replace('/', '\\', self::DEFAULT_FORM_DIRECTORY), $content);
+        $content = str_replace('##NAMESPACE##', str_replace('\Entity', '', $namespace) . str_replace('/', '\\', self::DEFAULT_FORM_DIRECTORY), $content);
         $content = str_replace('##CLASS##', $name . 'FilterType', $content);
         $content = str_replace('##FQCN##', sprintf('%s\%s', $namespace, $name), $content);
         $content = str_replace('##TYPE_NAME##', $this->fromCamelCase($name), $content);
@@ -182,10 +179,9 @@ class CrudGenerator
 
     protected function addFormType(\SplFileInfo $file, $properties, $namespace, $name)
     {
-        $namespace = str_replace('\Entity', '', $namespace);
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/FormType.php');
 
-        $content = str_replace('##NAMESPACE##', $namespace . str_replace('/', '\\', self::DEFAULT_FORM_TYPE_DIRECTORY), $content);
+        $content = str_replace('##NAMESPACE##', str_replace('\Entity', '', $namespace) . str_replace('/', '\\', self::DEFAULT_FORM_TYPE_DIRECTORY), $content);
         $content = str_replace('##CLASS##', $name . 'Type', $content);
         $content = str_replace('##FQCN##', sprintf('%s\%s', $namespace, $name), $content);
         $content = str_replace('##TYPE_NAME##', $this->fromCamelCase($name), $content);
