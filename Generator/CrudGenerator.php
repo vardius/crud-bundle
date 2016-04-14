@@ -148,6 +148,8 @@ class CrudGenerator
         $content = str_replace('##NAMESPACE##', str_replace('\Entity', '', $namespace) . str_replace('/', '\\', self::DEFAULT_LIST_DIRECTORY), $content);
         $content = str_replace('##CLASS##', $name . 'ListViewProvider', $content);
         $content = str_replace('##TYPE_NAME##', $this->fromCamelCase($name), $content);
+        $content = str_replace('##FFQCN##', sprintf('%s\%s', str_replace('\Entity', '', $namespace), $name . 'FilterType'), $content);
+        $content = str_replace('##FCLASS##', $name . 'FilterType', $content);
         $content = $this->addListFields($properties, $content);
 
         file_put_contents($file->getPathName(), $content);
@@ -171,7 +173,6 @@ class CrudGenerator
         $content = str_replace('##NAMESPACE##', str_replace('\Entity', '', $namespace) . str_replace('/', '\\', self::DEFAULT_FORM_DIRECTORY), $content);
         $content = str_replace('##CLASS##', $name . 'FilterType', $content);
         $content = str_replace('##FQCN##', sprintf('%s\%s', $namespace, $name), $content);
-        $content = str_replace('##TYPE_NAME##', $this->fromCamelCase($name), $content);
         $content = $this->addFormFields($properties, $content);
 
         file_put_contents($file->getPathName(), $content);
@@ -184,7 +185,6 @@ class CrudGenerator
         $content = str_replace('##NAMESPACE##', str_replace('\Entity', '', $namespace) . str_replace('/', '\\', self::DEFAULT_FORM_TYPE_DIRECTORY), $content);
         $content = str_replace('##CLASS##', $name . 'Type', $content);
         $content = str_replace('##FQCN##', sprintf('%s\%s', $namespace, $name), $content);
-        $content = str_replace('##TYPE_NAME##', $this->fromCamelCase($name), $content);
         $content = $this->addFormFields($properties, $content);
 
         file_put_contents($file->getPathName(), $content);
@@ -194,7 +194,7 @@ class CrudGenerator
     {
         $buildCode = '';
         foreach ($properties as $property) {
-            $buildCode .= sprintf("\n        ->addColumn('%s', 'property')", lcfirst($property));
+            $buildCode .= sprintf("\n->addColumn('%s', 'property')", lcfirst($property));
         }
 
         return str_replace('##BUILD_CODE##', $buildCode, $content);
@@ -205,7 +205,7 @@ class CrudGenerator
         $buildCode = '';
         foreach ($properties as $property) {
             if ($this->isPropel) {
-                $body = "\n        ->addFilter('%s', function (FilterEvent \$event) {
+                $body = "\n->addFilter('%s', function (FilterEvent \$event) {
                 /** @var \\ModelCriteria \$query */
                 \$query = \$event->getQuery();
 
@@ -239,7 +239,7 @@ class CrudGenerator
     {
         $buildCode = '';
         foreach ($properties as $property) {
-            $buildCode .= sprintf("\n        ->add('%s')", lcfirst($property));
+            $buildCode .= sprintf("\n->add('%s')", lcfirst($property));
         }
 
         return str_replace('##BUILD_CODE##', $buildCode, $content);

@@ -13,7 +13,8 @@ class ##CLASS## extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder##BUILD_CODE##
+        $builder
+            ##BUILD_CODE##
             ->setMethod('GET');
     }
 
@@ -26,13 +27,5 @@ class ##CLASS## extends AbstractType
             'data_class' => '##FQCN##',
             'validation_group' => ['filter'],
         ]);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getName()
-    {
-        return '##TYPE_NAME##_filter';
     }
 }
