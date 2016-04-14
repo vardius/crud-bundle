@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
-use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider;
+use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProviderInterface;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\Provider;
@@ -93,7 +93,7 @@ class CrudControllerFactory
         $controller = new CrudController($dataProvider, $routePrefix, $formType, $view);
         $controller->setContainer($this->container);
 
-        if ($actions instanceof ActionsProvider) {
+        if ($actions instanceof ActionsProviderInterface) {
             $controller->setActions($actions->getActions());
         } elseif (!empty($actions)) {
             $controller->setActions(new ArrayCollection($actions));

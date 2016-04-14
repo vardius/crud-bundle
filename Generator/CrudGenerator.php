@@ -214,18 +214,12 @@ class CrudGenerator
                 return \$query;
                 })";
             } else {
-                $body = "\n        ->addFilter('%s', function (FilterEvent \$event) {
-                \$formData = \$event->getData();
-                    \$query = \$event->getQuery();
-                    \$alias = \$event->getAlias();
+                $body = "\n->addFilter('%s', function (FilterEvent \$event) {
+                \$field = \$event->getField();
 
-                    \$property = \$formData['" . $property . "'];
-
-                    \$query
-                        ->andWhere(\$alias.'." . $property . " = :property')
-                        ->setParameter('property', \$property);
-
-                    return \$query;
+                return \$event->getQuery()
+                    ->andWhere(\$event->getAlias() . '.' . \$field . ' = :' . \$field)
+                    ->setParameter(\$field, \$event->getValue());
                 })";
             }
 
