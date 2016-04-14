@@ -15,7 +15,7 @@ class ##CLASS## extends ListViewProvider
         $listView = $this->listViewFactory->get();
 
         $listView##BUILD_CODE##
-        ->addFilter('##FCLASS##::class', 'provider.##TYPE_NAME##_filter')
+        ->addFilter(##FCLASS##::class, 'provider.##TYPE_NAME##_filter')
         ;
 
         return $listView;

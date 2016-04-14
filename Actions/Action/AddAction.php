@@ -47,6 +47,14 @@ class AddAction extends SaveAction
 
             return '/add.{_format}';
         });
+
+        $resolver->setDefault('defaults', function (Options $options) {
+            $format = $options['rest_route'] ? 'json' : 'html';
+
+            return [
+                '_format' => $format
+            ];
+        });
     }
 
     /**

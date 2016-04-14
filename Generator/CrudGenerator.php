@@ -148,7 +148,7 @@ class CrudGenerator
         $content = str_replace('##NAMESPACE##', str_replace('\Entity', '', $namespace) . str_replace('/', '\\', self::DEFAULT_LIST_DIRECTORY), $content);
         $content = str_replace('##CLASS##', $name . 'ListViewProvider', $content);
         $content = str_replace('##TYPE_NAME##', $this->fromCamelCase($name), $content);
-        $content = str_replace('##FFQCN##', sprintf('%s\%s', str_replace('\Entity', '', $namespace), $name . 'FilterType'), $content);
+        $content = str_replace('##FFCQN##', sprintf('%s\%s', str_replace('\Entity', '', $namespace), $name . 'FilterType'), $content);
         $content = str_replace('##FCLASS##', $name . 'FilterType', $content);
         $content = $this->addListFields($properties, $content);
 

@@ -105,6 +105,14 @@ class DeleteAction extends Action
             return '/delete/{id}.{_format}';
         });
 
+        $resolver->setDefault('defaults', function (Options $options) {
+            $format = $options['rest_route'] ? 'json' : 'html';
+
+            return [
+                '_format' => $format
+            ];
+        });
+
         $resolver->setDefault('methods', function (Options $options, $previousValue) {
             if ($options['rest_route']) {
                 return ['DELETE'];
