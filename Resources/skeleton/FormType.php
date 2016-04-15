@@ -13,8 +13,7 @@ class ##CLASS## extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ##BUILD_CODE##
+        $builder##BUILD_CODE##
         ;
     }
 

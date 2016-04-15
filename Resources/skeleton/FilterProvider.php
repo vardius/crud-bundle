@@ -12,8 +12,7 @@ class ##CLASS## extends FilterProvider
      */
     public function build()
     {
-        $this
-            ##BUILD_CODE##
+        $this##BUILD_CODE##
         ;
     }
 

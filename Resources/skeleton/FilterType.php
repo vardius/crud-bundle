@@ -13,9 +13,9 @@ class ##CLASS## extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ##BUILD_CODE##
-            ->setMethod('GET');
+        $builder##BUILD_CODE##
+            ->setMethod('GET')
+        ;
     }
 
     /**
