@@ -13,6 +13,7 @@ namespace Vardius\Bundle\CrudBundle\Actions\Action;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
@@ -134,6 +135,14 @@ class ExportAction extends Action
         $resolver->remove('template');
 
         $resolver->setDefault('pattern', '/export/{type}/{id}');
+
+        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+            if ($options['rest_route']) {
+                return ['GET'];
+            }
+
+            return $previousValue;
+        });
 
         $resolver->setDefault('requirements', [
             'type' => 'pdf|csv',
