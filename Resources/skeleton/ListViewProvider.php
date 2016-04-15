@@ -14,7 +14,9 @@ class ##CLASS## extends ListViewProvider
     {
         $listView = $this->listViewFactory->get();
 
-        $listView##BUILD_CODE##
+        $listView
+            ->addColumn('id', 'property')
+            ##BUILD_CODE##
             ->addFilter(##FCLASS##::class, 'provider.##TYPE_NAME##_filter')
         ;
 

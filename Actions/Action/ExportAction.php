@@ -136,7 +136,8 @@ class ExportAction extends Action
         $resolver->setDefault('pattern', '/export/{type}/{id}');
 
         $resolver->setDefault('requirements', [
-            'type' => 'pdf|csv'
+            'type' => 'pdf|csv',
+            'id' => '\d+'
         ]);
 
         $resolver->setDefault('defaults', [
