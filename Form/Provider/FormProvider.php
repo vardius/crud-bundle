@@ -44,6 +44,6 @@ class FormProvider
      */
     public function createForm(AbstractType $formType = null, $data = null, array $options = array())
     {
-        return $this->formFactory->create(($formType ? $formType : 'form'), $data, $options);
+        return $this->formFactory->create(($formType ? get_class($formType) : 'Symfony\Component\Form\Extension\Core\Type\FormType'), $data, $options);
     }
 }
