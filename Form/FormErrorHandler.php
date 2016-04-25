@@ -62,7 +62,7 @@ class FormErrorHandler
                 /**
                  * @ignore
                  */
-                $fieldName = $this->translator->trans($fieldNameData['label'], array(), $fieldNameData['website']);
+                $fieldName = $this->translator->trans($fieldNameData['label'], array(), $fieldNameData['domain']);
             }
 
             $errors[$fieldName] = $error->getMessage();
@@ -86,7 +86,7 @@ class FormErrorHandler
 
         $result = array(
             'label' => $label,
-            'website' => $translationDomain,
+            'domain' => $translationDomain,
         );
 
         if (empty($label)) {
