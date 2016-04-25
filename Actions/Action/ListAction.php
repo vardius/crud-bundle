@@ -65,11 +65,7 @@ class ListAction extends Action
         parent::configureOptions($resolver);
 
         $resolver->setDefault('pattern', function (Options $options) {
-            if ($options['rest_route']) {
-                return '.{_format}';
-            }
-
-            return '/list.{_format}';
+            return $options['rest_route'] ? '.{_format}' : '/list.{_format}';
         });
 
         $resolver->setDefault('defaults', function (Options $options) {
@@ -81,11 +77,7 @@ class ListAction extends Action
         });
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {
-            if ($options['rest_route']) {
-                return ['GET'];
-            }
-
-            return $previousValue;
+            return $options['rest_route'] ? ['GET'] : $previousValue;
         });
     }
 

@@ -58,6 +58,8 @@ abstract class SaveAction extends Action
         $source = $dataProvider->getSource();
         $crudEvent = new CrudEvent($source, $controller, $form);
 
+        $form->
+
         $dispatcher = $controller->get('event_dispatcher');
         $dispatcher->dispatch(CrudEvents::CRUD_PRE_SAVE, $crudEvent);
         $responseHandler = $controller->get('vardius_crud.response.handler');

@@ -33,19 +33,11 @@ class AddAction extends SaveAction
         parent::configureOptions($resolver);
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {
-            if ($options['rest_route']) {
-                return ['POST'];
-            }
-
-            return $previousValue;
+            return $options['rest_route'] ? ['POST'] : $previousValue;
         });
 
         $resolver->setDefault('pattern', function (Options $options) {
-            if ($options['rest_route']) {
-                return '.{_format}';
-            }
-
-            return '/add.{_format}';
+            return $options['rest_route'] ? '.{_format}' : '/add.{_format}';
         });
 
         $resolver->setDefault('defaults', function (Options $options) {

@@ -98,11 +98,7 @@ class DeleteAction extends Action
         ]);
 
         $resolver->setDefault('pattern', function (Options $options) {
-            if ($options['rest_route']) {
-                return '/{id}.{_format}';
-            }
-
-            return '/delete/{id}.{_format}';
+            return $options['rest_route'] ? '/{id}.{_format}' : '/delete/{id}.{_format}';
         });
 
         $resolver->setDefault('defaults', function (Options $options) {
@@ -114,11 +110,7 @@ class DeleteAction extends Action
         });
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {
-            if ($options['rest_route']) {
-                return ['DELETE'];
-            }
-
-            return $previousValue;
+            return $options['rest_route'] ? ['DELETE'] : $previousValue;
         });
     }
 
