@@ -36,15 +36,15 @@ class ExportAction extends Action
 
         $this->checkRole($controller);
 
-        if (!$controller->has('knp_snappy.pdf')) {
-            throw new \Exception('Have you registered KnpSnappyBundle?');
-        }
-
         $request = $event->getRequest();
-        $snappy = $controller->get('knp_snappy.pdf');
         $id = $request->get('id');
 
         if (is_numeric($id)) {
+            if (!$controller->has('knp_snappy.pdf')) {
+                throw new \Exception('Have you registered KnpSnappyBundle?');
+            }
+
+            $snappy = $controller->get('knp_snappy.pdf');
             $showAction = $controller->get('vardius_crud.action_show');
             $html = $showAction->call($event, 'html')->getContent();
 
@@ -64,6 +64,11 @@ class ExportAction extends Action
         } else {
             $type = $request->get('type');
             if ($type === 'pdf') {
+                if (!$controller->has('knp_snappy.pdf')) {
+                    throw new \Exception('Have you registered KnpSnappyBundle?');
+                }
+                
+                $snappy = $controller->get('knp_snappy.pdf');
                 $listAction = $controller->get('vardius_crud.action_list');
                 $html = $listAction->call($event, 'html')->getContent();
 
