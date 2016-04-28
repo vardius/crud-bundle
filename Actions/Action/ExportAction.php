@@ -67,7 +67,7 @@ class ExportAction extends Action
                 if (!$controller->has('knp_snappy.pdf')) {
                     throw new \Exception('Have you registered KnpSnappyBundle?');
                 }
-                
+
                 $snappy = $controller->get('knp_snappy.pdf');
                 $listAction = $controller->get('vardius_crud.action_list');
                 $html = $listAction->call($event, 'html')->getContent();
@@ -93,9 +93,8 @@ class ExportAction extends Action
 
                 $queryBuilder = $source->createQueryBuilder('vardius_csv_export');
                 $crudEvent = new CrudEvent($source, $controller, $queryBuilder);
-
                 $dispatcher = $controller->get('event_dispatcher');
-                $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);
+                $queryBuilder = $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent)->getData();
 
                 $response = new StreamedResponse();
                 $response->setCallback(
