@@ -89,16 +89,26 @@ Example:
 In case of export data to CSV file implement toArray() method in your entity class or override controller methods
 You can also configure actions to return `json`, or `xml` then instead of `toArray` method `serialzier` will serialize your data.
 
+Remember to add as a last argument your **Controller Class** when defining controller service
+
 ##### YML
 ``` xml    
 services:
     app.product_controller:
         class: App\DemoBundle\Controller\ProductController
+        arguments: ['AppMainBundle:Product', /products, '@app_main.product.list_view', '@app_main.form.type.product', null, null, 'App\DemoBundle\Controller\ProductController']
         <!-- ... -->
 ```
 ##### XML
 ``` xml    
     <service id="app.product_controller" class="App\DemoBundle\Controller\ProductController" factory-service="vardius_crud.controller.factory" factory-method="get">
+        <argument>AppMainBundle:Product</argument>
+        <argument>/products</argument>
+        <argument type="service" id="app_main.product.list_view"/>
+        <argument type="service" id="app_main.form.type.product"/>
+        <argument>NULL</argument>
+        <argument>NULL</argument>
+        <argument>App\DemoBundle\Controller\ProductController</argument>
     <!-- ... -->
     </service>
 ```

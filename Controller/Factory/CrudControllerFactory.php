@@ -61,11 +61,12 @@ class CrudControllerFactory
      * @param CrudManagerInterface $crudManager
      * @param string $view
      * @param array|ActionsProvider $actions
+     * @param string $controller
      *
      * @throws \Exception
      * @return CrudController
      */
-    public function get($entityName, $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [])
+    public function get($entityName, $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [], $controller = 'Vardius\Bundle\CrudBundle\Controller\CrudController')
     {
         switch ($this->container->getParameter('vardius_crud.db_driver')) {
             case 'propel':
@@ -90,7 +91,11 @@ class CrudControllerFactory
                 break;
         }
 
-        $controller = new CrudController($dataProvider, $routePrefix, $formType, $view);
+        $controller = new $controller($dataProvider, $routePrefix, $formType, $view);
+        if (!$controller instanceof CrudController) {
+            throw new \Exception('CrudFactory: Invalid controller class "' . get_class($controller) . '"');
+        }
+
         $controller->setContainer($this->container);
 
         if ($actions instanceof ActionsProviderInterface) {
