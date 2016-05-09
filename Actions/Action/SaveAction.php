@@ -105,7 +105,7 @@ abstract class SaveAction extends Action
 
                     return $responseHandler->getResponse($format, '', '', [
                         'data' => $data,
-                    ], self::ACTION_CODE, [], ['Default', 'update']);
+                    ], self::ACTION_CODE, [], ['update']);
                 }
             } elseif ($format === 'json') {
                 $formErrorHandler = $controller->get('vardius_crud.form.error_handler');
