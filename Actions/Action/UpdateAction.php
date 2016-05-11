@@ -74,7 +74,7 @@ class UpdateAction extends Action
 
             return $responseHandler->getResponse($format, '', '', [
                 'data' => $data,
-            ], 200, [], ['update']);
+            ], 200, [], ['groups' => ['update']]);
         }
     }
 

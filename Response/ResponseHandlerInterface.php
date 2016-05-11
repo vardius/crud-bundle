@@ -29,10 +29,10 @@ interface ResponseHandlerInterface
      * @param array $params
      * @param int $status The response status code
      * @param array $headers An array of response headers
-     * @param array $groups An array of groups for serialization
+     * @param array $context An context array for serialization
      * @return JsonResponse|Response
      */
-    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $groups = []);
+    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $context = []);
 
     /**
      * @param CrudController $controller

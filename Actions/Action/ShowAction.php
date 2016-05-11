@@ -75,7 +75,7 @@ class ShowAction extends Action
 
         $responseHandler = $controller->get('vardius_crud.response.handler');
 
-        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['show']);
+        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['groups' => ['show']]);
     }
 
     /**
