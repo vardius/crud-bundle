@@ -40,13 +40,13 @@ class UpdateAction extends Action
         $this->checkRole($controller, $data);
 
         $allowed = $this->getOptions()['allow'];
-        $data = $request->get('data', []);
+        $properties = $request->get('data', []);
 
         $accessor = PropertyAccess::createPropertyAccessorBuilder()
             ->enableMagicCall()
             ->getPropertyAccessor();
 
-        foreach ($data as $property => $value) {
+        foreach ($properties as $property => $value) {
             if (in_array($property, $allowed) && $accessor->isWritable($data, $property)) {
                 $accessor->setValue($data, $property, $value);
             }
