@@ -60,7 +60,7 @@ class CrudControllerFactory
      * @param AbstractType $formType
      * @param CrudManagerInterface $crudManager
      * @param string $view
-     * @param array|ActionsProvider $actions
+     * @param array|ActionsProviderInterface $actions
      * @param string $controller
      *
      * @throws \Exception
