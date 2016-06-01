@@ -1,0 +1,24 @@
+    crud_controller.##TYPE_NAME##:
+        class: "%vardius_crud.controller.class%"
+        factory: ["@vardius_crud.controller.factory", get]
+        arguments: ['##FQCN##', /##ROUTE##, '@form.type.##TYPE_NAME##', null, null, '@base.actions_provider']
+        tags:
+            - { name: vardius_crud.controller }
+
+    form.type.##TYPE_NAME##_filter:
+        class: AppBundle\Form\Filter\Type\##CLASS##FilterType
+        tags:
+            - { name: form.type }
+
+    provider.##TYPE_NAME##_filter:
+        class: AppBundle\Filter\##CLASS##FilterProvider
+        parent: vardius_list.filter.provider
+
+    form.type.##TYPE_NAME##:
+        class: AppBundle\Form\Type\##CLASS##Type
+        tags:
+            - { name: form.type }
+
+    ##TYPE_NAME##.list_view:
+        class: AppBundle\ListView\##CLASS##ListViewProvider
+        parent: vardius_list.list_view.provider

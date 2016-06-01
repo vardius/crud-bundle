@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
-use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider;
+use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProviderInterface;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\Provider;
@@ -60,12 +60,13 @@ class CrudControllerFactory
      * @param AbstractType $formType
      * @param CrudManagerInterface $crudManager
      * @param string $view
-     * @param array|ActionsProvider $actions
+     * @param array|ActionsProviderInterface $actions
+     * @param string $controller
      *
      * @throws \Exception
      * @return CrudController
      */
-    public function get($entityName, $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [])
+    public function get($entityName, $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [], $controller = 'Vardius\Bundle\CrudBundle\Controller\CrudController')
     {
         switch ($this->container->getParameter('vardius_crud.db_driver')) {
             case 'propel':
@@ -90,10 +91,14 @@ class CrudControllerFactory
                 break;
         }
 
-        $controller = new CrudController($dataProvider, $routePrefix, $formType, $view);
+        $controller = new $controller($dataProvider, $routePrefix, $formType, $view);
+        if (!$controller instanceof CrudController) {
+            throw new \Exception('CrudFactory: Invalid controller class "' . get_class($controller) . '"');
+        }
+
         $controller->setContainer($this->container);
 
-        if ($actions instanceof ActionsProvider) {
+        if ($actions instanceof ActionsProviderInterface) {
             $controller->setActions($actions->getActions());
         } elseif (!empty($actions)) {
             $controller->setActions(new ArrayCollection($actions));

@@ -13,6 +13,7 @@ namespace Vardius\Bundle\CrudBundle\Actions\Action;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
@@ -35,15 +36,15 @@ class ExportAction extends Action
 
         $this->checkRole($controller);
 
-        if (!$controller->has('knp_snappy.pdf')) {
-            throw new \Exception('Have you registered KnpSnappyBundle?');
-        }
-
         $request = $event->getRequest();
-        $snappy = $controller->get('knp_snappy.pdf');
         $id = $request->get('id');
 
         if (is_numeric($id)) {
+            if (!$controller->has('knp_snappy.pdf')) {
+                throw new \Exception('Have you registered KnpSnappyBundle?');
+            }
+
+            $snappy = $controller->get('knp_snappy.pdf');
             $showAction = $controller->get('vardius_crud.action_show');
             $html = $showAction->call($event, 'html')->getContent();
 
@@ -63,6 +64,11 @@ class ExportAction extends Action
         } else {
             $type = $request->get('type');
             if ($type === 'pdf') {
+                if (!$controller->has('knp_snappy.pdf')) {
+                    throw new \Exception('Have you registered KnpSnappyBundle?');
+                }
+
+                $snappy = $controller->get('knp_snappy.pdf');
                 $listAction = $controller->get('vardius_crud.action_list');
                 $html = $listAction->call($event, 'html')->getContent();
 
@@ -87,9 +93,8 @@ class ExportAction extends Action
 
                 $queryBuilder = $source->createQueryBuilder('vardius_csv_export');
                 $crudEvent = new CrudEvent($source, $controller, $queryBuilder);
-
                 $dispatcher = $controller->get('event_dispatcher');
-                $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent);
+                $queryBuilder = $dispatcher->dispatch(CrudEvents::CRUD_EXPORT, $crudEvent)->getData();
 
                 $response = new StreamedResponse();
                 $response->setCallback(
@@ -135,8 +140,17 @@ class ExportAction extends Action
 
         $resolver->setDefault('pattern', '/export/{type}/{id}');
 
+        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+            if ($options['rest_route']) {
+                return ['GET'];
+            }
+
+            return $previousValue;
+        });
+
         $resolver->setDefault('requirements', [
-            'type' => 'pdf|csv'
+            'type' => 'pdf|csv',
+            'id' => '\d+'
         ]);
 
         $resolver->setDefault('defaults', [

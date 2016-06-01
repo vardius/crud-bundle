@@ -75,7 +75,7 @@ class ShowAction extends Action
 
         $responseHandler = $controller->get('vardius_crud.response.handler');
 
-        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['show']);
+        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['groups' => ['show']]);
     }
 
     /**
@@ -88,19 +88,19 @@ class ShowAction extends Action
         $resolver->setDefault('requirements', ['id' => '\d+']);
 
         $resolver->setDefault('pattern', function (Options $options) {
-            if ($options['rest_route']) {
-                return '/{id}.{_format}';
-            }
+            return $options['rest_route'] ? '/{id}.{_format}' : '/show/{id}.{_format}';
+        });
 
-            return '/show/{id}.{_format}';
+        $resolver->setDefault('defaults', function (Options $options) {
+            $format = $options['rest_route'] ? 'json' : 'html';
+
+            return [
+                '_format' => $format
+            ];
         });
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {
-            if ($options['rest_route']) {
-                return ['GET'];
-            }
-
-            return $previousValue;
+            return $options['rest_route'] ? ['GET'] : $previousValue;
         });
 
         $resolver->setDefault('toArray', false);

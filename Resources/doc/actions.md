@@ -8,6 +8,7 @@ Manage your controller's actions
 3. [Add additional action](#add-additional-action)
 4. [Configure actions](#configure-actions)
 5. [Response/Request formats](#responserequest-formats)
+6. [Update action](#update-action)
 
 ### Default actions
 
@@ -29,10 +30,12 @@ Default disabled actions:
 ##### YML
 ``` yml
     export: '@vardius_crud.action_export'
+    update: '@vardius_crud.action_update'
 ```
 ##### XML
 ``` xml
     <argument type="service" key="export" id="vardius_crud.action_export"/>
+    <argument type="service" key="update" id="vardius_crud.action_update"/>
 ```
 
 If it is enough for you you don't have to tell your controller nothing
@@ -276,3 +279,29 @@ services:
 
 Providing route_suffix as in example above will result with route name as: `app.crud_controller.somesuffix` according to this example
 Route names are builded as `$controllerKey . '.' . $actionKey` where `$controllerKey` is controller service id and `$actionKey` is `route_suffix` option or action name if route_suffix is not provided.
+
+### Update action
+
+There is `PATCH` action available allowing you to update part of your object defined in action config.
+Example of `Update action` usage:
+
+``` php
+ <?php
+    namespace App\DemoBundle\Actions;
+
+    use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider as BaseProvider;
+
+    class ProductActionsProvider extends BaseProvider
+    {
+        public function getActions()
+        {
+            $this
+                ->addAction('update', [
+                    'allow' => ["name"], //define fields allowed to be update by PATCH request
+                ])
+            ;
+            
+            return $this->actions;
+        }
+    }
+```

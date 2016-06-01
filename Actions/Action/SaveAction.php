@@ -105,7 +105,7 @@ abstract class SaveAction extends Action
 
                     return $responseHandler->getResponse($format, '', '', [
                         'data' => $data,
-                    ], self::ACTION_CODE, [], ['Default', 'update']);
+                    ], self::ACTION_CODE, [], ['groups' => ['update']]);
                 }
             } elseif ($format === 'json') {
                 $formErrorHandler = $controller->get('vardius_crud.form.error_handler');
@@ -131,7 +131,7 @@ abstract class SaveAction extends Action
         $crudEvent = new CrudEvent($source, $controller, $paramsEvent);
         $dispatcher->dispatch(CrudEvents::CRUD_SAVE, $crudEvent);
 
-        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['update']);
+        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['groups' => ['update']]);
     }
 
 }

@@ -45,12 +45,12 @@ class ResponseHandler implements ResponseHandlerInterface
     /**
      * @inheritDoc
      */
-    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $groups = [])
+    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $context = [])
     {
         if ($format === 'html') {
             $response = $this->getHtml($view, $templateName, $params);
         } elseif ($this->serializer instanceof Serializer) {
-            $response = $this->serializer->serialize($params, $format, $groups);
+            $response = $this->serializer->serialize($params, $format, $context);
         } else {
             throw new \Exception(
                 'The serializer service is not available by default. To turn it on, activate it in your project configuration.'

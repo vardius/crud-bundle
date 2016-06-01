@@ -30,19 +30,19 @@ class EditAction extends SaveAction
         $resolver->setDefault('requirements', ['id' => '\d+']);
 
         $resolver->setDefault('pattern', function (Options $options) {
-            if ($options['rest_route']) {
-                return '/{id}.{_format}';
-            }
+            return $options['rest_route'] ? '/{id}.{_format}' : '/edit/{id}.{_format}';
+        });
 
-            return '/edit/{id}.{_format}';
+        $resolver->setDefault('defaults', function (Options $options) {
+            $format = $options['rest_route'] ? 'json' : 'html';
+
+            return [
+                '_format' => $format
+            ];
         });
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {
-            if ($options['rest_route']) {
-                return ['PUT'];
-            }
-
-            return $previousValue;
+            return $options['rest_route'] ? ['PUT'] : $previousValue;
         });
     }
 

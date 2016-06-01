@@ -18,6 +18,7 @@
         <parameter key="vardius_crud.action_edit.class">Vardius\Bundle\CrudBundle\Actions\Action\EditAction</parameter>
         <parameter key="vardius_crud.action_delete.class">Vardius\Bundle\CrudBundle\Actions\Action\DeleteAction</parameter>
         <parameter key="vardius_crud.action_export.class">Vardius\Bundle\CrudBundle\Actions\Action\ExportAction</parameter>
+        <parameter key="vardius_crud.action_update.class">Vardius\Bundle\CrudBundle\Actions\Action\UpdateAction</parameter>
         <!--DATA-->
         <parameter key="vardius_crud.data.provider.doctrine.class">Vardius\Bundle\CrudBundle\Data\Provider\Doctrine\DataProvider</parameter>
         <!--FORM-->
@@ -67,6 +68,9 @@
             <tag name="vardius_crud.action" />
         </service>
         <service id="vardius_crud.action_export" class="%vardius_crud.action_export.class%">
+            <tag name="vardius_crud.action" />
+        </service>
+        <service id="vardius_crud.action_update" class="%vardius_crud.action_update.class%">
             <tag name="vardius_crud.action" />
         </service>
         <!--FORM-->

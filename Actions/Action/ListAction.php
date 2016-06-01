@@ -54,7 +54,7 @@ class ListAction extends Action
 
         $responseHandler = $controller->get('vardius_crud.response.handler');
 
-        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['list']);
+        return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['groups' => ['list']]);
     }
 
     /**
@@ -65,19 +65,19 @@ class ListAction extends Action
         parent::configureOptions($resolver);
 
         $resolver->setDefault('pattern', function (Options $options) {
-            if ($options['rest_route']) {
-                return '.{_format}';
-            }
+            return $options['rest_route'] ? '.{_format}' : '/list.{_format}';
+        });
 
-            return '/list.{_format}';
+        $resolver->setDefault('defaults', function (Options $options) {
+            $format = $options['rest_route'] ? 'json' : 'html';
+
+            return [
+                '_format' => $format
+            ];
         });
 
         $resolver->setDefault('methods', function (Options $options, $previousValue) {
-            if ($options['rest_route']) {
-                return ['GET'];
-            }
-
-            return $previousValue;
+            return $options['rest_route'] ? ['GET'] : $previousValue;
         });
     }
 
