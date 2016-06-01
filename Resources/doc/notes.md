@@ -44,3 +44,11 @@ RELEASE NOTES
 **0.8.1**
 
 - Support Propel
+
+**0.8.2**
+
+- Updated business logic
+- Added generator (generate CRUD for entity/entities)
+- Fixed add action view 
+- Added PATCH (Update action)
+- Fixed export action controller
