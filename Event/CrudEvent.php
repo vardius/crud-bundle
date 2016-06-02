@@ -10,10 +10,7 @@
 
 namespace Vardius\Bundle\CrudBundle\Event;
 
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\Form\FormInterface;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 
 /**
@@ -23,17 +20,17 @@ use Vardius\Bundle\CrudBundle\Controller\CrudController;
  */
 class CrudEvent extends Event
 {
-    /** @var EntityRepository|QueryBuilder */
+    /** @var mixed */
     protected $source;
-    /** @var FormInterface|ResponseEvent|mixed */
+    /** @var mixed */
     protected $data;
     /** @var CrudController */
     protected $controller;
 
     /**
-     * @param EntityRepository|QueryBuilder $source
+     * @param mixed $source
      * @param CrudController $controller
-     * @param FormInterface|ResponseEvent|mixed $data
+     * @param mixed $data
      */
     function __construct($source, CrudController $controller, $data = null)
     {
@@ -43,7 +40,7 @@ class CrudEvent extends Event
     }
 
     /**
-     * @return EntityRepository|QueryBuilder
+     * @return mixed
      */
     public function getSource()
     {
@@ -51,7 +48,7 @@ class CrudEvent extends Event
     }
 
     /**
-     * @param EntityRepository|QueryBuilder $source
+     * @param mixed $source
      * @return CrudEvent
      */
     public function setSource($source)
@@ -61,7 +58,7 @@ class CrudEvent extends Event
     }
 
     /**
-     * @param mixed|FormInterface|ResponseEvent $data
+     * @param mixed $data
      * @return CrudEvent
      */
     public function setData($data)
@@ -71,7 +68,7 @@ class CrudEvent extends Event
     }
 
     /**
-     * @return FormInterface|ResponseEvent|mixed
+     * @return mixed
      */
     public function getData()
     {

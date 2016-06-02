@@ -88,5 +88,4 @@ class ListAction extends Action
     {
         return 'list';
     }
-
 }
