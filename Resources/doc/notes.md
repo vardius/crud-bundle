@@ -52,3 +52,7 @@ RELEASE NOTES
 - Fixed add action view 
 - Added PATCH (Update action)
 - Fixed export action controller
+
+**0.9.0**
+
+- End support for PHP<7.0.0
