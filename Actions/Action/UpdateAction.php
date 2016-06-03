@@ -13,11 +13,11 @@ namespace Vardius\Bundle\CrudBundle\Actions\Action;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvent;
 use Vardius\Bundle\CrudBundle\Event\CrudEvents;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * UpdateAction
@@ -29,7 +29,7 @@ class UpdateAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event, $format)
+    public function call(ActionEvent $event, string $format)
     {
         $controller = $event->getController();
         $dataProvider = $event->getDataProvider();
@@ -102,7 +102,7 @@ class UpdateAction extends Action
             ];
         });
 
-        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+        $resolver->setDefault('methods', function (Options $options, array $previousValue) {
             return $options['rest_route'] ? ['PATCH'] : $previousValue;
         });
 
@@ -114,7 +114,7 @@ class UpdateAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'update';
     }

@@ -10,9 +10,9 @@
 
 namespace Vardius\Bundle\CrudBundle\Generator;
 
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 /**
  * Class CrudGenerator
@@ -32,18 +32,18 @@ class CrudGenerator
     protected $bundle;
     /** @var string */
     protected $kernelRootDir;
-    /** @var  boolean */
+    /** @var  bool */
     protected $isPropel;
     protected $file;
 
     /**
      * CrudGenerator constructor.
      * @param string $kernelRootDir
-     * @param boolean $isPropel
+     * @param bool $isPropel
      * @param BundleInterface $bundle
      * @param OutputInterface $output
      */
-    public function __construct($kernelRootDir, $isPropel, BundleInterface $bundle, OutputInterface $output)
+    public function __construct(string $kernelRootDir, bool $isPropel, BundleInterface $bundle, OutputInterface $output)
     {
         $this->isPropel = $isPropel;
         $this->output = $output;
@@ -64,7 +64,7 @@ class CrudGenerator
         fclose($this->file);
     }
 
-    public function register($name, $namespace)
+    public function register(string $name, string $namespace)
     {
         $content = file_get_contents(__DIR__ . '/../Resources/skeleton/services.yml');
 
@@ -75,7 +75,7 @@ class CrudGenerator
         fwrite($this->file, $content . "\n");
     }
 
-    public function generate($name, $namespace, $properties)
+    public function generate(string $name, string $namespace, array $properties)
     {
         $dir = $this->createDirectory(self::DEFAULT_LIST_DIRECTORY);
         $file = new \SplFileInfo(sprintf('%s/%sListViewProvider.php', $dir, $name));
@@ -246,5 +246,4 @@ class CrudGenerator
 
         return str_replace('##BUILD_CODE##', $buildCode, $content);
     }
-
 }

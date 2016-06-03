@@ -33,26 +33,27 @@ class ActionPool
     /**
      * @return ArrayCollection
      */
-    public function getActions()
+    public function getActions():ArrayCollection
     {
         return $this->actions;
     }
 
     /**
-     * @param Action $action
+     * @param ActionInterface $action
+     * @return ActionPool
      */
-    public function addAction(Action $action)
+    public function addAction(ActionInterface $action):self
     {
         $this->actions->set($action->getName(), $action);
+        return $this;
     }
 
     /**
      * @param string $id
-     * @return Action
+     * @return ActionInterface
      */
-    public function getAction($id)
+    public function getAction(string $id):ActionInterface
     {
         return $this->actions->get($id);
     }
-
 }

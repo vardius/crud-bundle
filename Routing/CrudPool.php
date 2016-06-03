@@ -8,9 +8,7 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Vardius\Bundle\CrudBundle\Routing;
-
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
@@ -36,18 +34,17 @@ class CrudPool
     /**
      * @return ArrayCollection
      */
-    public function getControllers()
+    public function getControllers():ArrayCollection
     {
         return $this->controllers;
     }
 
     /**
-     * @param $id
+     * @param string $id
      * @param CrudController $controller
      */
-    public function addController($id, CrudController $controller)
+    public function addController(string $id, CrudController $controller)
     {
         $this->controllers->set($id, $controller);
     }
-
 }

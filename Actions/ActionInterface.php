@@ -27,7 +27,7 @@ interface ActionInterface
      * @param string $format
      * @return mixed
      */
-    public function call(ActionEvent $event, $format);
+    public function call(ActionEvent $event, string $format);
 
     /**
      * Adjust the configuration of the options
@@ -41,7 +41,7 @@ interface ActionInterface
      *
      * @return array
      */
-    public function getOptions();
+    public function getOptions():array;
 
     /**
      * Set the configuration array
@@ -55,6 +55,5 @@ interface ActionInterface
      *
      * @return string
      */
-    public function getName();
-
+    public function getName():string;
 }

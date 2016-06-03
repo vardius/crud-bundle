@@ -40,7 +40,7 @@ class ActionEvent
     /**
      * @return Request
      */
-    public function getRequest()
+    public function getRequest():Request
     {
         return $this->request;
     }
@@ -48,7 +48,7 @@ class ActionEvent
     /**
      * @return CrudController
      */
-    public function getController()
+    public function getController():CrudController
     {
         return $this->controller;
     }
@@ -56,7 +56,7 @@ class ActionEvent
     /**
      * @return AbstractType
      */
-    public function getFormType()
+    public function getFormType():AbstractType
     {
         return $this->controller->getFormType();
     }
@@ -64,7 +64,7 @@ class ActionEvent
     /**
      * @return string
      */
-    public function getView()
+    public function getView():string
     {
         return $this->controller->getView();
     }
@@ -72,7 +72,7 @@ class ActionEvent
     /**
      * @return DataProviderInterface
      */
-    public function getDataProvider()
+    public function getDataProvider():DataProviderInterface
     {
         return $this->controller->getDataProvider();
     }

@@ -20,9 +20,9 @@ interface CrudManagerInterface
     /**
      * Get entity custom logic
      *
-     * @param $id
+     * @param int $id
      */
-    public function get($id);
+    public function get(int $id);
 
     /**
      * Remove entity custom logic

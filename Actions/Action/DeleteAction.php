@@ -30,7 +30,7 @@ class DeleteAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event, $format)
+    public function call(ActionEvent $event, string $format)
     {
         $controller = $event->getController();
         $dataProvider = $event->getDataProvider();
@@ -109,7 +109,7 @@ class DeleteAction extends Action
             ];
         });
 
-        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+        $resolver->setDefault('methods', function (Options $options, array $previousValue) {
             return $options['rest_route'] ? ['DELETE'] : $previousValue;
         });
     }
@@ -117,9 +117,8 @@ class DeleteAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'delete';
     }
-
 }

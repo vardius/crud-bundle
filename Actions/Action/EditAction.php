@@ -41,7 +41,7 @@ class EditAction extends SaveAction
             ];
         });
 
-        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+        $resolver->setDefault('methods', function (Options $options, array $previousValue) {
             return $options['rest_route'] ? ['PUT'] : $previousValue;
         });
     }
@@ -49,9 +49,8 @@ class EditAction extends SaveAction
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'edit';
     }
-
 }

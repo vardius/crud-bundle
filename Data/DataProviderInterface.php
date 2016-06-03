@@ -10,8 +10,6 @@
 
 namespace Vardius\Bundle\CrudBundle\Data;
 
-use Doctrine\ORM\EntityRepository;
-
 /**
  * DataProviderInterface
  *
@@ -22,17 +20,17 @@ interface DataProviderInterface
     /**
      * Returns source of data
      *
-     * @return EntityRepository
+     * @return mixed
      */
     public function getSource();
 
     /**
      * Returns data item by id
      *
-     * @param null $id
+     * @param int|null $id
      * @return mixed
      */
-    public function get($id = null);
+    public function get(int $id = null);
 
     /**
      * Creates new element in data source

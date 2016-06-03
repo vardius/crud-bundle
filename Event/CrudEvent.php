@@ -51,7 +51,7 @@ class CrudEvent extends Event
      * @param mixed $source
      * @return CrudEvent
      */
-    public function setSource($source)
+    public function setSource($source):self
     {
         $this->source = $source;
         return $this;
@@ -61,7 +61,7 @@ class CrudEvent extends Event
      * @param mixed $data
      * @return CrudEvent
      */
-    public function setData($data)
+    public function setData($data):self
     {
         $this->data = $data;
         return $this;
@@ -78,9 +78,8 @@ class CrudEvent extends Event
     /**
      * @return CrudController
      */
-    public function getController()
+    public function getController():CrudController
     {
         return $this->controller;
     }
-
 }

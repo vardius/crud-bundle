@@ -24,5 +24,5 @@ interface ActionsProviderInterface
      *
      * @return ArrayCollection
      */
-    public function getActions();
+    public function getActions():ArrayCollection;
 }

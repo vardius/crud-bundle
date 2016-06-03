@@ -30,7 +30,7 @@ class ExportAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event, $format)
+    public function call(ActionEvent $event, string $format)
     {
         $controller = $event->getController();
 
@@ -140,7 +140,7 @@ class ExportAction extends Action
 
         $resolver->setDefault('pattern', '/export/{type}/{id}');
 
-        $resolver->setDefault('methods', function (Options $options, $previousValue) {
+        $resolver->setDefault('methods', function (Options $options, array $previousValue) {
             if ($options['rest_route']) {
                 return ['GET'];
             }
@@ -162,9 +162,8 @@ class ExportAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName():string
     {
         return 'export';
     }
-
 }

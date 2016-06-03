@@ -10,9 +10,9 @@
 
 namespace Vardius\Bundle\CrudBundle\Response;
 
-use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
 
 /**
@@ -30,16 +30,15 @@ interface ResponseHandlerInterface
      * @param int $status The response status code
      * @param array $headers An array of response headers
      * @param array $context An context array for serialization
-     * @return JsonResponse|Response
+     * @return Response
      */
-    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $context = []);
+    public function getResponse(string $format, string $view, string $templateName, array $params, int $status = 200, array $headers = [], array $context = []):Response;
 
     /**
      * @param CrudController $controller
      * @param Request $request
      * @param array $params
-     * @return mixed
+     * @return string
      */
-    public function getRefererUrl(CrudController $controller, Request $request, $params = []);
-
+    public function getRefererUrl(CrudController $controller, Request $request, array $params = []):string;
 }

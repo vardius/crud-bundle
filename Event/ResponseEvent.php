@@ -32,7 +32,7 @@ class ResponseEvent
     /**
      * @return array
      */
-    public function getParams()
+    public function getParams():array
     {
         return $this->params;
     }
@@ -41,10 +41,9 @@ class ResponseEvent
      * @param array $params
      * @return ResponseEvent
      */
-    public function setParams($params)
+    public function setParams(array $params):self
     {
         $this->params = $params;
         return $this;
     }
-
 }

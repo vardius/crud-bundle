@@ -38,7 +38,7 @@ class FormProvider
 
     /**
      * @param AbstractType $formType
-     * @param null $data
+     * @param mixed $data
      * @param array $options
      * @return \Symfony\Component\Form\Form |\Symfony\Component\Form\FormInterface
      */

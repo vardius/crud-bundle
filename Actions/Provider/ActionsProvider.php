@@ -38,9 +38,9 @@ abstract class ActionsProvider implements ActionsProviderInterface
     /**
      * @param string $type
      * @param array $options
-     * @return $this
+     * @return ActionsProvider
      */
-    protected function addAction($type, array $options = [])
+    protected function addAction(string $type, array $options = []):self
     {
         $action = $this->actionFactory->get($type, $options);
         $suffix = $action->getOptions()['route_suffix'];
@@ -51,14 +51,13 @@ abstract class ActionsProvider implements ActionsProviderInterface
     }
 
     /**
-     * @param $key
-     * @return $this
+     * @param string $key
+     * @return ActionsProvider
      */
-    protected function removeAction($key)
+    protected function removeAction(string $key):self
     {
         $this->actions->remove($key);
 
         return $this;
     }
-
 }

@@ -10,8 +10,8 @@
 
 namespace Vardius\Bundle\CrudBundle\Data\Provider\Propel;
 
-use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\DataProviderInterface;
+use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 
 /**
  * DataProvider
@@ -47,10 +47,10 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      * @return mixed
      */
-    public function get($id = null)
+    public function get(int $id = null)
     {
         if ($id !== null) {
 

@@ -10,8 +10,8 @@
 
 namespace Vardius\Bundle\CrudBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +46,7 @@ class CrudController extends Controller
      * @param AbstractType $formType
      * @param string $view
      */
-    function __construct(DataProviderInterface $dataProvider, $routePrefix = '', AbstractType $formType = null, $view = null)
+    function __construct(DataProviderInterface $dataProvider, string $routePrefix = '', AbstractType $formType = null, string $view = null)
     {
         $this->dataProvider = $dataProvider;
         $this->routePrefix = $routePrefix;
@@ -56,11 +56,12 @@ class CrudController extends Controller
     }
 
     /**
-     * @param $_action
+     * @param string $_action
      * @param Request $request
      * @return mixed
+     * @throws NotFoundHttpException
      */
-    public function callAction($_action, Request $request)
+    public function callAction(string $_action, Request $request)
     {
         $event = new ActionEvent($this, $request);
         $action = $this->getAction($_action);
@@ -74,42 +75,48 @@ class CrudController extends Controller
     /**
      * @return ArrayCollection
      */
-    public function getActions()
+    public function getActions():ArrayCollection
     {
         return $this->actions;
     }
 
     /**
      * @param ArrayCollection $actions
+     * @return CrudController
      */
-    public function setActions(ArrayCollection $actions)
+    public function setActions(ArrayCollection $actions):self
     {
         $this->actions = $actions;
+        return $this;
     }
 
     /**
-     * @param $key
+     * @param string $key
      * @param ActionInterface $action
+     * @return CrudController
      */
-    public function addAction($key, ActionInterface $action)
+    public function addAction(string $key, ActionInterface $action):self
     {
         $this->actions->set($key, $action);
+        return $this;
     }
 
     /**
-     * @param $key
+     * @param string $key
+     * @return CrudController
      */
-    public function removeAction($key)
+    public function removeAction(string $key):self
     {
         $this->actions->remove($key);
+        return $this;
     }
 
     /**
-     * @param $key
+     * @param string $key
      *
      * @return ActionInterface
      */
-    public function getAction($key)
+    public function getAction(string $key):ActionInterface
     {
         return $this->actions->get($key);
     }
@@ -117,7 +124,7 @@ class CrudController extends Controller
     /**
      * @return DataProviderInterface
      */
-    public function getDataProvider()
+    public function getDataProvider():DataProviderInterface
     {
         return $this->dataProvider;
     }
@@ -125,7 +132,7 @@ class CrudController extends Controller
     /**
      * @return string
      */
-    public function getRoutePrefix()
+    public function getRoutePrefix():string
     {
         return $this->routePrefix;
     }
@@ -133,7 +140,7 @@ class CrudController extends Controller
     /**
      * @return string
      */
-    public function getView()
+    public function getView():string
     {
         return $this->view;
     }
@@ -141,7 +148,7 @@ class CrudController extends Controller
     /**
      * @return AbstractType
      */
-    public function getFormType()
+    public function getFormType():AbstractType
     {
         return $this->formType;
     }
@@ -153,7 +160,7 @@ class CrudController extends Controller
      * @param $entity
      * @return array
      */
-    public function getRow($entity)
+    public function getRow($entity):array
     {
         return method_exists($entity, 'toArray') ? $entity->toArray() : [];
     }
@@ -163,12 +170,12 @@ class CrudController extends Controller
      *
      * @return array
      */
-    public function getHeaders()
+    public function getHeaders():array
     {
         return [];
     }
 
-    public function redirectToPath($routeName, array $params)
+    public function redirectToPath(string $routeName, array $params)
     {
         return $this->redirect($this->generateUrl($routeName, $params));
     }
@@ -183,7 +190,7 @@ class CrudController extends Controller
      *
      * @throws AccessDeniedException
      */
-    public function checkAccess($attributes, $object = null, $message = 'Access Denied.')
+    public function checkAccess($attributes, $object = null, string $message = 'Access Denied.')
     {
         $this->denyAccessUnlessGranted($attributes, $object, $message);
     }
@@ -195,7 +202,7 @@ class CrudController extends Controller
      *
      * @return object The service
      */
-    public function get($id)
+    public function get(string $id)
     {
         return $this->container->get($id);
     }
@@ -207,7 +214,7 @@ class CrudController extends Controller
      *
      * @return bool true if the service id is defined, false otherwise
      */
-    public function has($id)
+    public function has(string $id)
     {
         return $this->container->has($id);
     }
@@ -223,7 +230,7 @@ class CrudController extends Controller
      *
      * @see UrlGeneratorInterface
      */
-    public function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generateUrl(string $route, array $parameters = array(), int $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         return $this->container->get('router')->generate($route, $parameters, $referenceType);
     }
@@ -236,9 +243,8 @@ class CrudController extends Controller
      *
      * @return RedirectResponse
      */
-    public function redirect($url, $status = 302)
+    public function redirect($url, $status = 302):RedirectResponse
     {
         return new RedirectResponse($url, $status);
     }
-
 }

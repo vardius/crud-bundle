@@ -35,11 +35,11 @@ class FormErrorHandler
      * Returns an array with form fields errors
      *
      * @param FormInterface $form
-     * @param bool|false $useLabels
+     * @param bool $useLabels
      * @param array $errors
      * @return array
      */
-    public function getErrorMessages(FormInterface $form, $useLabels = false, $errors = array())
+    public function getErrorMessages(FormInterface $form, bool $useLabels = false, array $errors = []):array
     {
         if ($form->count() > 0) {
             foreach ($form->all() as $child) {
@@ -77,7 +77,7 @@ class FormErrorHandler
      * @param  FormInterface $form
      * @return array
      */
-    protected function getErrorFormLabel(FormInterface $form)
+    protected function getErrorFormLabel(FormInterface $form):array
     {
         $vars = $form->createView()->vars;
 
@@ -104,7 +104,7 @@ class FormErrorHandler
      * @param  FormInterface $form
      * @return string
      */
-    protected function getErrorFormId(FormInterface $form)
+    protected function getErrorFormId(FormInterface $form):string
     {
         $vars = $form->createView()->vars;
         return $vars['id'];

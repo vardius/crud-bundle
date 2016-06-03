@@ -13,7 +13,6 @@ namespace Vardius\Bundle\CrudBundle\Actions;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
-use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 
 /**
  * Action
@@ -46,7 +45,7 @@ abstract class Action implements ActionInterface
     /**
      * @inheritDoc
      */
-    public function getOptions()
+    public function getOptions():array
     {
         return $this->options;
     }
@@ -92,9 +91,9 @@ abstract class Action implements ActionInterface
     /**
      * Returns template name
      *
-     * @return bool
+     * @return string
      */
-    protected function getTemplate()
+    protected function getTemplate():string
     {
         return !empty($this->options['template']) ? $this->options['template'] : $this->getName();
     }
@@ -122,5 +121,4 @@ abstract class Action implements ActionInterface
             }
         }
     }
-
 }

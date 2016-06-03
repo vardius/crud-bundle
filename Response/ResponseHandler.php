@@ -45,7 +45,7 @@ class ResponseHandler implements ResponseHandlerInterface
     /**
      * @inheritDoc
      */
-    public function getResponse($format, $view, $templateName, $params, $status = 200, $headers = [], $context = [])
+    public function getResponse(string $format, string $view, string $templateName, array $params, int $status = 200, array $headers = [], array $context = []):Response
     {
         if ($format === 'html') {
             $response = $this->getHtml($view, $templateName, $params);
@@ -61,12 +61,13 @@ class ResponseHandler implements ResponseHandlerInterface
     }
 
     /**
-     * @param string $view controller event view
-     * @param string $templateName action template name
+     * @param string $view
+     * @param string $templateName
      * @param array $params
      * @return string
+     * @throws ResourceNotFoundException
      */
-    protected function getHtml($view, $templateName, $params)
+    protected function getHtml(string $view, string $templateName, array $params):string
     {
         $template = null;
         if ($this->templating->exists($templateName)) {
@@ -107,7 +108,7 @@ class ResponseHandler implements ResponseHandlerInterface
     /**
      * @inheritDoc
      */
-    public function getRefererUrl(CrudController $controller, Request $request, $params = [])
+    public function getRefererUrl(CrudController $controller, Request $request, array $params = []):string
     {
         $referer = $request->headers->get('referer');
         $baseUrl = $request->getBaseUrl();
@@ -119,5 +120,4 @@ class ResponseHandler implements ResponseHandlerInterface
 
         return $controller->generateUrl($route, $params);
     }
-
 }

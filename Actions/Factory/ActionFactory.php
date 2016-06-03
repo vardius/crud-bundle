@@ -11,6 +11,7 @@
 namespace Vardius\Bundle\CrudBundle\Actions\Factory;
 
 use Vardius\Bundle\CrudBundle\Actions\Action;
+use Vardius\Bundle\CrudBundle\Actions\ActionInterface;
 use Vardius\Bundle\CrudBundle\Actions\ActionPool;
 
 /**
@@ -32,18 +33,18 @@ class ActionFactory
     }
 
     /**
-     * @param $action
+     * @param mixed $action
      * @param array $options
-     * @return Action
+     * @return ActionInterface
      */
-    public function get($action, array $options = [])
+    public function get($action, array $options = []):ActionInterface
     {
         if (is_string($action)) {
             $action = $this->actionPool->getAction($action);
         }
 
-        if (!$action instanceof Action) {
-            throw new \InvalidArgumentException('The $action mast be instance of Action. ' . $action . ' given');
+        if (!$action instanceof ActionInterface) {
+            throw new \InvalidArgumentException('The $action mast be instance of ActionInterface. ' . $action . ' given');
         }
 
         $action = clone $action;
@@ -51,5 +52,4 @@ class ActionFactory
 
         return $action;
     }
-
 }

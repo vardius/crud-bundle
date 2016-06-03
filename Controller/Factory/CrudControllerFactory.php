@@ -16,8 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Form\AbstractType;
 use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProviderInterface;
 use Vardius\Bundle\CrudBundle\Controller\CrudController;
-use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\CrudBundle\Data\Provider;
+use Vardius\Bundle\CrudBundle\Manager\CrudManagerInterface;
 use Vardius\Bundle\SecurityBundle\Security\Authorization\Voter\SupportedClassPool;
 
 /**
@@ -54,9 +54,16 @@ class CrudControllerFactory
         }
     }
 
+    protected function registerSupportedClass($class)
+    {
+        if ($this->securityClassPool) {
+            $this->securityClassPool->addClass($class);
+        }
+    }
+
     /**
-     * @param $routePrefix
-     * @param $entityName
+     * @param string $entityName
+     * @param string $routePrefix
      * @param AbstractType $formType
      * @param CrudManagerInterface $crudManager
      * @param string $view
@@ -66,7 +73,7 @@ class CrudControllerFactory
      * @throws \Exception
      * @return CrudController
      */
-    public function get($entityName, $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [], $controller = 'Vardius\Bundle\CrudBundle\Controller\CrudController')
+    public function get(string $entityName, string $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, string $view = null, $actions = [], string $controller = 'Vardius\Bundle\CrudBundle\Controller\CrudController'):CrudController
     {
         switch ($this->container->getParameter('vardius_crud.db_driver')) {
             case 'propel':
@@ -107,12 +114,5 @@ class CrudControllerFactory
         }
 
         return $controller;
-    }
-
-    protected function registerSupportedClass($class)
-    {
-        if ($this->securityClassPool) {
-            $this->securityClassPool->addClass($class);
-        }
     }
 }

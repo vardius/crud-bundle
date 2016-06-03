@@ -34,7 +34,7 @@ abstract class SaveAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event, $format)
+    public function call(ActionEvent $event, string $format)
     {
         $controller = $event->getController();
         $dataProvider = $event->getDataProvider();
@@ -133,5 +133,4 @@ abstract class SaveAction extends Action
 
         return $responseHandler->getResponse($format, $event->getView(), $this->getTemplate(), $paramsEvent->getParams(), 200, [], ['groups' => ['update']]);
     }
-
 }

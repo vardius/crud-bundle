@@ -50,10 +50,10 @@ class DataProvider implements DataProviderInterface
     }
 
     /**
-     * @param integer $id
+     * @param int $id
      * @return mixed
      */
-    public function get($id = null)
+    public function get(int $id = null)
     {
         if ($id !== null) {
 
@@ -87,7 +87,7 @@ class DataProvider implements DataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function remove($data, $flush = true)
+    public function remove($data, bool $flush = true)
     {
         $entity = null;
         if (is_object($data)) {
