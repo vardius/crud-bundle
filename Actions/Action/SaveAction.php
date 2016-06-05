@@ -79,24 +79,23 @@ abstract class SaveAction extends Action
 
                 $dispatcher->dispatch(CrudEvents::CRUD_POST_SAVE, $crudEvent);
 
-                $routeName = rtrim(rtrim($request->get('_route'), 'edit'), 'add') . 'show';
-                if (!$controller->get('router')->getRouteCollection()->get($routeName)) {
-                    $routeName = rtrim($routeName, 'show') . 'list';
-                }
-
-                if (!$controller->get('router')->getRouteCollection()->get($routeName)) {
-                    /** @var Session $session */
-                    $session = $request->getSession();
-                    /** @var FlashBagInterface $flashBag */
-                    $flashBag = $session->getFlashBag();
-                    $flashBag->add('success', 'save.success');
-
-                    return $controller->redirect($responseHandler->getRefererUrl($controller, $request, [
-                        'id' => $data->getId()
-                    ]));
-                }
-
                 if ($format === 'html') {
+                    $routeName = rtrim(rtrim($request->get('_route'), 'edit'), 'add') . 'show';
+                    if (!$controller->get('router')->getRouteCollection()->get($routeName)) {
+                        $routeName = rtrim($routeName, 'show') . 'list';
+                    }
+
+                    if (!$controller->get('router')->getRouteCollection()->get($routeName)) {
+                        /** @var Session $session */
+                        $session = $request->getSession();
+                        /** @var FlashBagInterface $flashBag */
+                        $flashBag = $session->getFlashBag();
+                        $flashBag->add('success', 'save.success');
+
+                        return $controller->redirect($responseHandler->getRefererUrl($controller, $request, [
+                            'id' => $data->getId()
+                        ]));
+                    }
 
                     return $controller->redirect($controller->generateUrl($routeName, [
                         'id' => $data->getId()

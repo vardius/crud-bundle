@@ -53,6 +53,7 @@ class DeleteAction extends Action
 
             $response = [
                 'success' => true,
+                'data' => $data,
             ];
         } catch (\Exception $e) {
             $message = null;
@@ -67,11 +68,13 @@ class DeleteAction extends Action
                 'error' => $message,
             ];
 
-            /** @var Session $session */
-            $session = $request->getSession();
-            /** @var FlashBagInterface $flashBag */
-            $flashBag = $session->getFlashBag();
-            $flashBag->add('error', $message);
+            if ($format === 'html') {
+                /** @var Session $session */
+                $session = $request->getSession();
+                /** @var FlashBagInterface $flashBag */
+                $flashBag = $session->getFlashBag();
+                $flashBag->add('error', $message);
+            }
         }
 
         $dispatcher->dispatch(CrudEvents::CRUD_POST_DELETE, $crudEvent);
