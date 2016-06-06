@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
@@ -28,7 +29,7 @@ class ListAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event, string $format)
+    public function call(ActionEvent $event, string $format):Response
     {
         $controller = $event->getController();
 

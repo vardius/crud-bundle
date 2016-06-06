@@ -10,6 +10,7 @@
 
 namespace Vardius\Bundle\CrudBundle\Actions;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
 
@@ -25,9 +26,9 @@ interface ActionInterface
      *
      * @param ActionEvent $event
      * @param string $format
-     * @return mixed
+     * @return Response
      */
-    public function call(ActionEvent $event, string $format);
+    public function call(ActionEvent $event, string $format):Response;
 
     /**
      * Adjust the configuration of the options

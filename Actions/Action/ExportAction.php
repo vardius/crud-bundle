@@ -30,7 +30,7 @@ class ExportAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event, string $format)
+    public function call(ActionEvent $event, string $format):Response
     {
         $controller = $event->getController();
 

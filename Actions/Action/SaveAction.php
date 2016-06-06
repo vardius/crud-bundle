@@ -11,9 +11,9 @@
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Vardius\Bundle\CrudBundle\Actions\Action;
 use Vardius\Bundle\CrudBundle\Event\ActionEvent;
@@ -36,7 +36,7 @@ abstract class SaveAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event, string $format)
+    public function call(ActionEvent $event, string $format):Response
     {
         $controller = $event->getController();
         $dataProvider = $event->getDataProvider();

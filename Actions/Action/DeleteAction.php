@@ -11,6 +11,7 @@
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\OptionsResolver\Options;
@@ -30,7 +31,7 @@ class DeleteAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event, string $format)
+    public function call(ActionEvent $event, string $format):Response
     {
         $controller = $event->getController();
         $dataProvider = $event->getDataProvider();
