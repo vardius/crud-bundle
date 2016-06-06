@@ -95,7 +95,7 @@ abstract class Action implements ActionInterface
      */
     protected function getTemplate():string
     {
-        return !empty($this->options['template']) ? $this->options['template'] : $this->getName();
+        return $this->options['template'];
     }
 
     /**

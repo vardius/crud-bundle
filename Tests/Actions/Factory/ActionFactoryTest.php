@@ -38,13 +38,13 @@ class ActionFactoryTest extends \PHPUnit_Framework_TestCase
 
         $factory = new ActionFactory($pool);
 
-        $this->assertInstanceOf('Vardius\Bundle\CrudBundle\Actions\Action\ShowAction', $factory->get($action->getName()));
+        $this->assertInstanceOf('Vardius\Bundle\CrudBundle\Actions\Action\ShowAction', $factory->get(get_class($action)));
     }
 
     public function testGetObjectAction()
     {
         $factory = new ActionFactory(new ActionPool());
 
-        $this->assertInstanceOf('Vardius\Bundle\CrudBundle\Actions\Action', $factory->get(new ShowAction()));
+        $this->assertInstanceOf('Vardius\Bundle\CrudBundle\Actions\Action', $factory->get(ShowAction::class));
     }
 }

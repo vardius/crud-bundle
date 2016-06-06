@@ -44,16 +44,16 @@ class ActionPool
      */
     public function addAction(ActionInterface $action):self
     {
-        $this->actions->set($action->getName(), $action);
+        $this->actions->set(get_class($action), $action);
         return $this;
     }
 
     /**
-     * @param string $id
+     * @param string $class
      * @return ActionInterface
      */
-    public function getAction(string $id):ActionInterface
+    public function getAction(string $class):ActionInterface
     {
-        return $this->actions->get($id);
+        return $this->actions->get($class);
     }
 }

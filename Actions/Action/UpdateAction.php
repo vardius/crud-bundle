@@ -85,6 +85,8 @@ class UpdateAction extends Action
     {
         parent::configureOptions($resolver);
 
+        $resolver->remove('template');
+
         $resolver->setDefault('allow', []);
         $resolver->setAllowedTypes('allow', 'array');
 
@@ -109,13 +111,5 @@ class UpdateAction extends Action
         $resolver->setDefault('parameters', [
             ['name' => 'data', 'dataType' => 'json', "required" => true, 'description' => 'Array of properties to change'],
         ]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'update';
     }
 }

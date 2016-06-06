@@ -158,12 +158,4 @@ class ExportAction extends Action
             "id" => null
         ]);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'export';
-    }
 }

@@ -48,12 +48,12 @@ services:
     app.form.type.product:
         class: App\MainBundle\Form\Type\ProductType
         tags:
-            - { name: form.type, alias: product }
+            - { name: form.type }
 ```
 ##### XML
 ``` xml
     <service id="app.form.type.product" class="App\MainBundle\Form\Type\ProductType">
-        <tag name="form.type" alias="product"/>
+        <tag name="form.type"/>
     </service>
 ```
 

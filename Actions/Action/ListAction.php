@@ -64,6 +64,8 @@ class ListAction extends Action
     {
         parent::configureOptions($resolver);
 
+        $resolver->setDefault('template', 'delete');
+
         $resolver->setDefault('pattern', function (Options $options) {
             return $options['rest_route'] ? '.{_format}' : '/list.{_format}';
         });
@@ -79,13 +81,5 @@ class ListAction extends Action
         $resolver->setDefault('methods', function (Options $options, array $previousValue) {
             return $options['rest_route'] ? ['GET'] : $previousValue;
         });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'list';
     }
 }

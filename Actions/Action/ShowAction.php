@@ -85,6 +85,8 @@ class ShowAction extends Action
     {
         parent::configureOptions($resolver);
 
+        $resolver->setDefault('template', 'show');
+
         $resolver->setDefault('requirements', ['id' => '\d+']);
 
         $resolver->setDefault('pattern', function (Options $options) {
@@ -105,13 +107,5 @@ class ShowAction extends Action
 
         $resolver->setDefault('toArray', false);
         $resolver->addAllowedTypes('toArray', 'bool');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'show';
     }
 }

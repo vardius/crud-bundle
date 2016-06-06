@@ -96,6 +96,8 @@ class DeleteAction extends Action
     {
         parent::configureOptions($resolver);
 
+        $resolver->setDefault('template', 'delete');
+
         $resolver->setDefault('requirements', [
             'id' => '\d+'
         ]);
@@ -115,13 +117,5 @@ class DeleteAction extends Action
         $resolver->setDefault('methods', function (Options $options, array $previousValue) {
             return $options['rest_route'] ? ['DELETE'] : $previousValue;
         });
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'delete';
     }
 }

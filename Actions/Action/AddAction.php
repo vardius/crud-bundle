@@ -48,12 +48,4 @@ class AddAction extends SaveAction
             ];
         });
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'add';
-    }
 }

@@ -49,11 +49,4 @@ interface ActionInterface
      * @param array $options
      */
     public function setOptions(array $options = []);
-
-    /**
-     * Returns action name
-     *
-     * @return string
-     */
-    public function getName():string;
 }

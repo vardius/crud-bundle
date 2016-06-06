@@ -45,12 +45,4 @@ class EditAction extends SaveAction
             return $options['rest_route'] ? ['PUT'] : $previousValue;
         });
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getName():string
-    {
-        return 'edit';
-    }
 }
