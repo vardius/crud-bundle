@@ -11,6 +11,7 @@
 namespace Vardius\Bundle\CrudBundle\Actions\Action;
 
 use Doctrine\ORM\EntityNotFoundException;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Exception\MethodNotImplementedException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -30,7 +31,7 @@ class ShowAction extends Action
     /**
      * {@inheritdoc}
      */
-    public function call(ActionEvent $event, string $format)
+    public function call(ActionEvent $event, string $format):Response
     {
         $controller = $event->getController();
         $dataProvider = $event->getDataProvider();
