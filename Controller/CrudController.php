@@ -201,7 +201,7 @@ class CrudController extends Controller
      *
      * @return object The service
      */
-    public function get(string $id)
+    public function get($id)
     {
         return $this->container->get($id);
     }
@@ -213,7 +213,7 @@ class CrudController extends Controller
      *
      * @return bool true if the service id is defined, false otherwise
      */
-    public function has(string $id)
+    public function has($id)
     {
         return $this->container->has($id);
     }
