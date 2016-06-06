@@ -147,7 +147,7 @@ class CrudController extends Controller
     /**
      * @return AbstractType
      */
-    public function getFormType():AbstractType
+    public function getFormType()
     {
         return $this->formType;
     }
