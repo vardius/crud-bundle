@@ -15,15 +15,15 @@ Manage your controller's actions
 By default there is 5 basic crud actions enabled:
 ##### YML
 ``` yml
-    arguments: { list: '@vardius_crud.action_list', show: '@vardius_crud.action_show', add: '@vardius_crud.action_add', edit: '@vardius_crud.action_edit', delete: '@vardius_crud.action_delete' }
+    arguments: { '@vardius_crud.action_list', '@vardius_crud.action_show', '@vardius_crud.action_add', '@vardius_crud.action_edit', '@vardius_crud.action_delete' }
 ```
 ##### XML
 ``` xml
-    <argument type="service" key="list" id="vardius_crud.action_list"/>
-    <argument type="service" key="show" id="vardius_crud.action_show"/>
-    <argument type="service" key="add" id="vardius_crud.action_add"/>
-    <argument type="service" key="edit" id="vardius_crud.action_edit"/>
-    <argument type="service" key="delete" id="vardius_crud.action_delete"/>
+    <argument type="service" id="vardius_crud.action_list"/>
+    <argument type="service" id="vardius_crud.action_show"/>
+    <argument type="service" id="vardius_crud.action_add"/>
+    <argument type="service" id="vardius_crud.action_edit"/>
+    <argument type="service" id="vardius_crud.action_delete"/>
 ```
 
 Default disabled actions:
@@ -34,8 +34,8 @@ Default disabled actions:
 ```
 ##### XML
 ``` xml
-    <argument type="service" key="export" id="vardius_crud.action_export"/>
-    <argument type="service" key="update" id="vardius_crud.action_update"/>
+    <argument type="service" id="vardius_crud.action_export"/>
+    <argument type="service" id="vardius_crud.action_update"/>
 ```
 
 If it is enough for you you don't have to tell your controller nothing
@@ -91,7 +91,7 @@ services:
         <argument>NULL</argument>
         <argument>NULL</argument>
         <argument type="collection">
-            <argument type="service" key="add" id="vardius_crud.action_show"/>
+            <argument type="service" id="vardius_crud.action_show"/>
         </argument>
 
         <tag name="vardius_crud.controller" />
@@ -113,7 +113,7 @@ services:
         factory_service: vardius_crud.controller.factory
         arguments: ['AppMainBundle:Product', /products, '@app_main.product.list_view', '@app_main.form.type.product']
         calls:
-            - [addAction, [export, '@vardius_crud.action_export']]
+            - [addAction, ['@vardius_crud.action_export']]
 ```
 ##### XML
 ``` xml
@@ -124,7 +124,6 @@ services:
         <argument type="service" id="app_main.form.type.product"/>
 
         <call method="addAction">
-            <argument>export</argument>
             <argument type="service" id="vardius_crud.action_export"/>
         </call>
         
@@ -142,6 +141,8 @@ Here is a simple example explaining how to add actions and provide custom config
     namespace App\DemoBundle\Actions;
 
     use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider as BaseProvider;
+    use Vardius\Bundle\CrudBundle\Actions\Action\ListAction;
+    use Vardius\Bundle\CrudBundle\Actions\Action\EditAction;
 
     class ProductActionsProvider extends BaseProvider
     {
@@ -152,7 +153,7 @@ Here is a simple example explaining how to add actions and provide custom config
         {
             //actions: list,show,edit,add,delete,export
             $this
-                ->addAction('list', [
+                ->addAction(ListAction::class, [
                     'route_suffix' => 'somesuffix' //default action name
                     'rest_route' => false,
                     'defaults' => [
@@ -176,7 +177,7 @@ Here is a simple example explaining how to add actions and provide custom config
                     ],
                     'toArray' => false, //Default false, available only for show action, determine if use to Array method for data serialization (rest api)
                 ])
-                ->addAction('edit', [])
+                ->addAction(EditAction::class, [])
             ;
             
             return $this->actions;
@@ -214,7 +215,7 @@ You can override this options as follows:
         {
             //actions: list,show,edit,add,delete,export
             $this
-                ->addAction('list', [
+                ->addAction(ListAction::class, [
                     'defaults' => [
                         '_format' => 'json' //default format
                     ],
@@ -290,13 +291,14 @@ Example of `Update action` usage:
     namespace App\DemoBundle\Actions;
 
     use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider as BaseProvider;
+    use Vardius\Bundle\CrudBundle\Actions\Action\UpdateAction;
 
     class ProductActionsProvider extends BaseProvider
     {
         public function getActions()
         {
             $this
-                ->addAction('update', [
+                ->addAction(UpdateAction::class, [
                     'allow' => ["name"], //define fields allowed to be update by PATCH request
                 ])
             ;

@@ -33,11 +33,11 @@
     <services>
         <service id="vardius_crud.controller.factory" class="%vardius_crud.controller.factory.class%">
             <argument type="collection">
-                <argument type="service" key="list" id="vardius_crud.action_list"/>
-                <argument type="service" key="show" id="vardius_crud.action_show"/>
-                <argument type="service" key="add" id="vardius_crud.action_add"/>
-                <argument type="service" key="edit" id="vardius_crud.action_edit"/>
-                <argument type="service" key="delete" id="vardius_crud.action_delete"/>
+                <argument type="service" id="vardius_crud.action_list"/>
+                <argument type="service" id="vardius_crud.action_show"/>
+                <argument type="service" id="vardius_crud.action_add"/>
+                <argument type="service" id="vardius_crud.action_edit"/>
+                <argument type="service" id="vardius_crud.action_delete"/>
             </argument>
             <argument type="service" id="service_container"/>
         </service>

@@ -91,34 +91,33 @@ class CrudController extends Controller
     }
 
     /**
-     * @param string $key
      * @param ActionInterface $action
      * @return CrudController
      */
-    public function addAction(string $key, ActionInterface $action):self
+    public function addAction(ActionInterface $action):self
     {
-        $this->actions->set($key, $action);
+        $this->actions->set(get_class($action), $action);
         return $this;
     }
 
     /**
-     * @param string $key
+     * @param string $class
      * @return CrudController
      */
-    public function removeAction(string $key):self
+    public function removeAction(string $class):self
     {
-        $this->actions->remove($key);
+        $this->actions->remove($class);
         return $this;
     }
 
     /**
-     * @param string $key
+     * @param string $class
      *
      * @return ActionInterface
      */
-    public function getAction(string $key):ActionInterface
+    public function getAction(string $class):ActionInterface
     {
-        return $this->actions->get($key);
+        return $this->actions->get($class);
     }
 
     /**
