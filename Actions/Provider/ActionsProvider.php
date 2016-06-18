@@ -44,8 +44,8 @@ abstract class ActionsProvider implements ActionsProviderInterface
     {
         $action = $this->actionFactory->get($type, $options);
         $suffix = $action->getOptions()['route_suffix'];
-        $key = (empty($suffix) ? rtrim(substr(get_class($action), strrpos(get_class($action), '\\') + 1), 'Action') : $suffix);
-        $this->actions->set($key, $action);
+        $key = (empty($suffix) ? rtrim(substr($type, strrpos($type, '\\') + 1), 'Action') : $suffix);
+        $this->actions->set(strtolower($key), $action);
 
         return $this;
     }
