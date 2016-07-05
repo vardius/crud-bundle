@@ -56,6 +56,7 @@ class DeleteAction extends Action
                 'success' => true,
                 'data' => $data,
             ];
+            $status = 200;
         } catch (\Exception $e) {
             $message = null;
             if (is_object($data) && method_exists($data, '__toString')) {
@@ -68,6 +69,7 @@ class DeleteAction extends Action
                 'success' => false,
                 'error' => $message,
             ];
+            $status = 400;
 
             if ($format === 'html') {
                 /** @var Session $session */
@@ -86,7 +88,7 @@ class DeleteAction extends Action
             return $controller->redirect($responseHandler->getRefererUrl($controller, $request));
         } else {
 
-            return $responseHandler->getResponse($format, '', '', $response);
+            return $responseHandler->getResponse($format, '', '', $response, $status);
         }
     }
 

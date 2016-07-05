@@ -111,7 +111,7 @@ abstract class Action implements ActionInterface
                 $attributes = $role['attributes'];
             }
 
-            $message = null;
+            $message = 'Access Denied.';
             if (array_key_exists('message', $role)) {
                 $message = (string)$role['message'];
             }
