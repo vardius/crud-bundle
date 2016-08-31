@@ -45,7 +45,7 @@ class ResponseHandler implements ResponseHandlerInterface
     /**
      * @inheritDoc
      */
-    public function getResponse(string $format, string $view, string $templateName, array $params, int $status = 200, array $headers = [], array $context = []):Response
+    public function getResponse(string $format, string $view, string $templateName, $params, int $status = 200, array $headers = [], array $context = []):Response
     {
         if ($format === 'html') {
             $response = $this->getHtml($view, $templateName, $params);

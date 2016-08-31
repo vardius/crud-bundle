@@ -32,7 +32,7 @@ interface ResponseHandlerInterface
      * @param array $context An context array for serialization
      * @return Response
      */
-    public function getResponse(string $format, string $view, string $templateName, array $params, int $status = 200, array $headers = [], array $context = []):Response;
+    public function getResponse(string $format, string $view, string $templateName, $params, int $status = 200, array $headers = [], array $context = []):Response;
 
     /**
      * @param CrudController $controller
@@ -40,5 +40,5 @@ interface ResponseHandlerInterface
      * @param array $params
      * @return string
      */
-    public function getRefererUrl(CrudController $controller, Request $request, array $params = []):string;
+    public function getRefererUrl(CrudController $controller, Request $request, $params = []):string;
 }
