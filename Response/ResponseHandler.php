@@ -108,7 +108,7 @@ class ResponseHandler implements ResponseHandlerInterface
     /**
      * @inheritDoc
      */
-    public function getRefererUrl(CrudController $controller, Request $request, array $params = []):string
+    public function getRefererUrl(CrudController $controller, Request $request, $params = []):string
     {
         $referer = $request->headers->get('referer');
         $baseUrl = $request->getBaseUrl();
