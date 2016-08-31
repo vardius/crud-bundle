@@ -73,7 +73,7 @@ class CrudControllerFactory
      * @throws \Exception
      * @return CrudController
      */
-    public function get(string $entityName, string $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, string $view = null, $actions = [], string $controller = 'Vardius\Bundle\CrudBundle\Controller\CrudController'):CrudController
+    public function get(string $entityName, string $routePrefix = '', AbstractType $formType = null, CrudManagerInterface $crudManager = null, $view = null, $actions = [], string $controller = 'Vardius\Bundle\CrudBundle\Controller\CrudController'):CrudController
     {
         switch ($this->container->getParameter('vardius_crud.db_driver')) {
             case 'propel':
@@ -98,6 +98,9 @@ class CrudControllerFactory
                 break;
         }
 
+        if(!$view){
+            $view = '';
+        }
         $controller = new $controller($dataProvider, $routePrefix, $formType, $view);
         if (!$controller instanceof CrudController) {
             throw new \Exception('CrudFactory: Invalid controller class "' . get_class($controller) . '"');

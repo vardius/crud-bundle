@@ -46,7 +46,7 @@ class CrudController extends Controller
      * @param AbstractType $formType
      * @param string $view
      */
-    function __construct(DataProviderInterface $dataProvider, string $routePrefix = '', AbstractType $formType = null, string $view = null)
+    function __construct(DataProviderInterface $dataProvider, string $routePrefix = '', AbstractType $formType = null, string $view = '')
     {
         $this->dataProvider = $dataProvider;
         $this->routePrefix = $routePrefix;
