@@ -104,9 +104,7 @@ abstract class SaveAction extends Action
                     ]));
                 } else {
 
-                    return $responseHandler->getResponse($format, '', '', [
-                        'data' => $data,
-                    ], self::ACTION_CODE, [], ['groups' => ['update']]);
+                    return $responseHandler->getResponse($format, '', '', $data, self::ACTION_CODE, [], ['groups' => ['update']]);
                 }
             } elseif ($format === 'json') {
                 $formErrorHandler = $controller->get('vardius_crud.form.error_handler');
@@ -118,9 +116,7 @@ abstract class SaveAction extends Action
             }
         }
 
-        $params = [
-            'data' => $data,
-        ];
+        $params = $data;
 
         if ($format === 'html') {
             $params = array_merge($params, [

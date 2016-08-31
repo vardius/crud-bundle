@@ -73,9 +73,7 @@ class UpdateAction extends Action
             $dataProvider->update($data);
             $dispatcher->dispatch(CrudEvents::CRUD_POST_UPDATE, $crudEvent);
 
-            return $responseHandler->getResponse($format, '', '', [
-                'data' => $data,
-            ], 200, [], ['groups' => ['update']]);
+            return $responseHandler->getResponse($format, '', '', $data, 200, [], ['groups' => ['update']]);
         }
     }
 

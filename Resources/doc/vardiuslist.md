@@ -131,9 +131,7 @@ class ListAction extends Action\ListAction
             $results = $listView->getData($listDataEvent, true);
             $results = $this->parseResults($results, $columns, $format);
 
-            $params = [
-                'data' => $results,
-            ];
+            $params = $results
         }
 
         $routeName = $request->get('_route');

@@ -46,9 +46,7 @@ class ShowAction extends Action
         $this->checkRole($controller, $data);
 
         if ($format === 'html') {
-            $params = [
-                'data' => $data,
-            ];
+            $params = $data;
         } else {
             if ($this->options['toArray']) {
                 if (method_exists($data, 'toArray')) {
@@ -58,9 +56,7 @@ class ShowAction extends Action
                 }
             }
 
-            $params = [
-                'data' => $data,
-            ];
+            $params = $data;
         }
 
         $routeName = $request->get('_route');

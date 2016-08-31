@@ -36,9 +36,7 @@ class ListAction extends Action
         $this->checkRole($controller);
 
         $dataProvider = $event->getDataProvider();
-        $params = [
-            'data' => $dataProvider->findAll(),
-        ];
+        $params = $dataProvider->findAll();
 
         $request = $event->getRequest();
         $routeName = $request->get('_route');

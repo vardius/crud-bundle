@@ -52,10 +52,6 @@ class DeleteAction extends Action
         try {
             $dataProvider->remove($data->getId());
 
-            $response = [
-                'success' => true,
-                'data' => $data,
-            ];
             $status = 200;
         } catch (\Exception $e) {
             $message = null;
