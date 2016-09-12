@@ -22,26 +22,23 @@ class ResponseEvent
 
     /**
      * ResponseEvent constructor.
-     * @param array $params
+     * @param mixed $params
      */
-    public function __construct(array $params = [])
+    public function __construct($params = [])
     {
         $this->params = $params;
     }
 
-    /**
-     * @return array
-     */
-    public function getParams():array
+    public function getParams()
     {
         return $this->params;
     }
 
     /**
-     * @param array $params
+     * @param $params
      * @return ResponseEvent
      */
-    public function setParams(array $params):self
+    public function setParams($params):self
     {
         $this->params = $params;
         return $this;
