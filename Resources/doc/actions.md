@@ -291,7 +291,7 @@ Example of `Update action` usage:
     namespace App\DemoBundle\Actions;
 
     use Vardius\Bundle\CrudBundle\Actions\Provider\ActionsProvider as BaseProvider;
-    use Vardius\Bundle\CrudBundle\Actions\Action\UpdateAction;
+    use CrudBundle\Actions\Action\UpdateAction;
 
     class ProductActionsProvider extends BaseProvider
     {
