@@ -51,8 +51,8 @@ class DeleteAction extends Action
 
         try {
             $dataProvider->remove($data->getId());
-
             $status = 200;
+            $response = $data;
         } catch (\Exception $e) {
             $message = null;
             if (is_object($data) && method_exists($data, '__toString')) {
@@ -80,7 +80,6 @@ class DeleteAction extends Action
         $responseHandler = $controller->get('vardius_crud.response.handler');
 
         if ($format === 'html') {
-
             return $controller->redirect($responseHandler->getRefererUrl($controller, $request));
         } else {
 
