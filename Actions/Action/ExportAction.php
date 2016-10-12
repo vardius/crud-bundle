@@ -113,7 +113,7 @@ class ExportAction extends Action
                             $element = $controller->getRow($row[0]);
                             $entityManager->detach($row[0]);
 
-                            if($element)    
+                            if(count($element))    
                                 fputcsv($handle, $element);
                         }
 
