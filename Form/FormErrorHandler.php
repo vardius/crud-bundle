@@ -1,6 +1,6 @@
 <?php
 /**
- * This file is part of the tactic-api package.
+ * This file is part of the vardius/crud-bundle package.
  *
  * (c) Rafał Lorenz <vardius@gmail.com>
  *
