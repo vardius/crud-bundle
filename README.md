@@ -32,3 +32,8 @@ License
 This bundle is released under the MIT license. See the complete license in the bundle:
 
 [LICENSE](LICENSE)
+
+## Support on Beerpay
+Hey dude! Help me out for a couple of :beers:!
+
+[![Beerpay](https://beerpay.io/vardius/crud-bundle/badge.svg?style=beer-square)](https://beerpay.io/vardius/crud-bundle)  [![Beerpay](https://beerpay.io/vardius/crud-bundle/make-wish.svg?style=flat-square)](https://beerpay.io/vardius/crud-bundle?focus=wish)
