@@ -224,7 +224,7 @@ You have to also override class parameter. This way your `ListAction` class will
 
 Override `list` action view as follow:
 
-```
+```twig
 <!--//CrudBundle/Resources/views/Actions/list.html.twig-->
 {% extends 'VardiusCrudBundle::layout.html.twig' %}
 
