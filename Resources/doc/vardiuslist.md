@@ -228,7 +228,7 @@ Override `list` action view as follow:
 <!--//CrudBundle/Resources/views/Actions/list.html.twig-->
 { % extends 'VardiusCrudBundle::layout.html.twig' %}
 
-{ % block title %}{{ title }}{% endblock %}
+{ % block title %}{{ title }}{ % endblock %}
 
 { % block content %}
     {{ list|raw }}
