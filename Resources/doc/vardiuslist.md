@@ -226,17 +226,17 @@ Override `list` action view as follow:
 
 ```twig
 <!--//CrudBundle/Resources/views/Actions/list.html.twig-->
-{% extends 'VardiusCrudBundle::layout.html.twig' %}
+{ % extends 'VardiusCrudBundle::layout.html.twig' %}
 
-{% block title %}{{ title }}{% endblock %}
+{ % block title %}{{ title }}{% endblock %}
 
-{% block content %}
+{ % block content %}
     {{ list|raw }}
-{% endblock %}
+{ % endblock %}
 
-{% block javascripts %}
+{ % block javascripts %}
     {{ parent() }}
-{% endblock %}
+{ % endblock %}
 ```
 
 You are done. Now `VardiusListBundle` will be used for **list action**. You are also able to use it all futures.
