@@ -2,7 +2,7 @@
 /**
  * This file is part of the vardius/crud-bundle package.
  *
- * (c) Rafał Lorenz <vardius@gmail.com>
+ * (c) Rafał Lorenz <support@vardius.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  *
- * @author Rafał Lorenz <vardius@gmail.com>
+ * @author Rafał Lorenz <support@vardius.dev>
  */
 class VardiusCrudExtension extends Extension
 {

@@ -2,7 +2,7 @@
 /**
  * This file is part of the vardius/crud-bundle package.
  *
- * (c) Rafał Lorenz <vardius@gmail.com>
+ * (c) Rafał Lorenz <support@vardius.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@ use Vardius\Bundle\CrudBundle\Controller\Factory\CrudControllerFactory;
 /**
  * Class CrudControllerFactoryTest
  * @package Vardius\Bundle\CrudBundle\Tests\Controller\Factory
- * @author Rafał Lorenz <vardius@gmail.com>
+ * @author Rafał Lorenz <support@vardius.dev>
  */
 class CrudControllerFactoryTest extends \PHPUnit_Framework_TestCase
 {
